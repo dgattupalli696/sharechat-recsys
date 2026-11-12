@@ -1,0 +1,76 @@
+{
+  "rows": 307528,
+  "standalone_scores": {
+    "tabm-no-high-cardinality": 0.8334188579528072,
+    "lightgbm-full-local": 0.8255838642764893
+  },
+  "best_single": "tabm-no-high-cardinality",
+  "best_blend": {
+    "models": [
+      "tabm-no-high-cardinality",
+      "lightgbm-full-local"
+    ],
+    "weights": [
+      0.75,
+      0.25
+    ],
+    "validation_auc": 0.8343357592059927
+  },
+  "grid": [
+    {
+      "models": [
+        "tabm-no-high-cardinality",
+        "lightgbm-full-local"
+      ],
+      "weights": [
+        0.25,
+        0.75
+      ],
+      "validation_auc": 0.8307118728000842
+    },
+    {
+      "models": [
+        "tabm-no-high-cardinality",
+        "lightgbm-full-local"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "validation_auc": 0.8334741757407319
+    },
+    {
+      "models": [
+        "tabm-no-high-cardinality",
+        "lightgbm-full-local"
+      ],
+      "weights": [
+        0.75,
+        0.25
+      ],
+      "validation_auc": 0.8343357592059927
+    }
+  ],
+  "candidate_artifacts": {
+    "tabm-no-high-cardinality": {
+      "path": "artifacts/kaggle-t008/without-high-cardinality/validation_predictions.npz",
+      "sha256": "2df189c29418f20dc84839a3458396736b8316a93339d8d65d2459b5d9ea3b7c"
+    },
+    "lightgbm-full-local": {
+      "path": "artifacts/local-t011/lightgbm/validation_predictions.npz",
+      "sha256": "5c0e34623a95d98c3e6eb822794677324f9e0aac6449c3d4272ac3f4f0d72416"
+    }
+  },
+  "paired_bootstrap_vs_best_single": {
+    "group_count": 85985,
+    "repetitions": 500,
+    "excluded_single_class_draws": 0,
+    "mean_delta": 0.0009185679025137146,
+    "percentile_95_interval": [
+      0.0006141632014696613,
+      0.00124408259944844
+    ],
+    "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+  },
+  "competition_submission": false
+}

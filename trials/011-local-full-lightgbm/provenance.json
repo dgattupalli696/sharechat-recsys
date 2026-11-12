@@ -4,8 +4,27 @@
   "source_sha256": {
     "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
     "local_tree_experiment.py": "a8aab28d676eb253e214f25954d5b8c2b7bff3216cedffb985cbd4a4c4c9b08f",
-    "lightgbm_worker.py": "98e1ef1f264f8710991ce7f4ff02c94fe4a1d4b251397cf40f84dde8ccb54af9"
+    "lightgbm_worker.py": "98e1ef1f264f8710991ce7f4ff02c94fe4a1d4b251397cf40f84dde8ccb54af9",
+    "experiment_analysis.py": "67c07820fdae56e5b8ad1895be89ef816a0c338db3fdcb39b9d7efd4e73a5326"
   },
   "notebook_sha256": "92f39850ec89764a0a53751a4c5570760f68691a5721a209e8da5535580880bc",
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "571e5c3",
+  "status": "COMPLETE",
+  "validation_labels_match_t008": true,
+  "validation_identities_match_t008": true,
+  "artifact_sha256": {
+    "category-vocabularies.json": "2457e990201159ddcf100bbcad04f8fb44a2ee4871c9c86c526720f7cdbac07d",
+    "lightgbm/model.txt": "80d7e530329f3caa849b1d56e6a88ed2260754727eb5d647e0066b0e4a907ce2",
+    "lightgbm/results.json": "93431f92b6e18b54d11d61d1a87e75f89a56dc336bf4abd00db2f1442b015ca3",
+    "lightgbm/validation_predictions.npz": "5c0e34623a95d98c3e6eb822794677324f9e0aac6449c3d4272ac3f4f0d72416",
+    "lightgbm/worker-results.json": "8870b3e05408022677444273dc57d249d46b127909f342a04c04ed6e0bc34fc9",
+    "preliminary-blend/results.json": "2844c1fb54ed9c436ff529fed97bf4353c63f7a9cd199dd5aff6e2b2480abcea",
+    "preliminary-blend/validation_predictions.npz": "1b2cd5c0a338e65d2e4e8227fed29dd3b8f4aff75abf606f6404028eba6a44ad",
+    "protocol.json": "63661fbc48cfb28a3c6cccd3eb73e0990b3848e157f166aedfbbeb80e390394d",
+    "results.json": "7294945714617c08b26d195e2e15d89f470876ce6597d99cf18c6fd46d8b7120",
+    "run.log": "93b0b1d2576a48f378f6ff20487522e7d9a91c85d422832dc0224a85907bcd49",
+    "validation-identities.parquet": "a41bfe35ea9827fa6e4f595e952c29faad0213a9c41d5197ff160111aad5b80f"
+  },
+  "blend_notebook_sha256": "2e780b51588e7caeb167a142b700333511b02743d6a607731177fd5ec5e04925"
 }
