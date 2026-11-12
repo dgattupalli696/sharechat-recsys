@@ -6,5 +6,11 @@
   "environment_lock_sha256": "b5ec8e50a2667ed4d17f2a4b3d927b895fb340e849dc531ff56d81710ee7b7ff",
   "reference_trial": "T002-A",
   "scope": "local subset, summary-based features, validation only",
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "a70a07a9a07a3faad116174536ffa812b951d4b8",
+  "sample_sha256": "c82b7230bd0864219c739ff7a8e9597fbb26ba9301dbe73ea80a329de2a2e195",
+  "model_sha256": "5d6f21790dd9e6496f01c16111851321b2f97a0a2c7136174404c505c21643f3",
+  "preprocessor_sha256": "7c291d92e133454853f29f345fb85ea38a70da0fcc1a9c7c850ba79d1a522a16",
+  "predictions_sha256": "65b84ef7c17181de8615ca92889656f388d721ad3e48d02aa251a8a4032e2451",
+  "results_sha256": "a6fc708dbe826df761c76b1e109b66f2aa3541134a5c74154ebb2a0f96d81842"
 }

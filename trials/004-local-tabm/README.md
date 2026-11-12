@@ -32,9 +32,30 @@ not change at the same time as the algorithm.
 
 ## Results
 
-Pending local execution. Reference T002-A validation AUC: 0.8208754309.
-The best checkpoint is reloaded and its validation AUC checked before results
-are finalized. No test predictions or competition submission are generated.
+| Model | Validation ROC AUC | Selected training point | Fit wall time |
+| --- | ---: | --- | ---: |
+| T002-A: CatBoost summaries, CPU | 0.8208754309 | 298 trees | 49.61 s |
+| T004: TabM summaries, Apple GPU | 0.8091940040 | Epoch 1 | 27.66 s |
+
+TabM changed AUC by **-0.0116814269** on the exact same sampled rows and holdout.
+It stopped after six epochs and restored epoch 1. Preparation took 14.67 seconds.
+The timing comparison uses different backends (CPU versus Apple GPU), so it is
+not a controlled algorithm-throughput benchmark.
+
+The run showed strong overfitting: training loss fell from 0.19969 at epoch 1
+to 0.00484 at epoch 6, while validation AUC fell from 0.80919 to 0.67334.
+High-cardinality categorical IDs are a possible contributor, but this trial did
+not isolate that cause. This is one small, untuned neural configuration, not
+evidence that TabM cannot work on the problem. It does not justify full-data
+promotion on its own.
+
+The 656 numerical inputs became 971 channels after adding 315 missingness
+indicators. Together with 23 eight-dimensional categorical embeddings, the
+backbone received 1,155 numerical channels. No infinite inputs were found.
+
+The selected checkpoint was reloaded and its AUC reproduced; saved validation
+probabilities independently reproduce the recorded score. No test predictions,
+Kaggle run, or competition submission were generated.
 
 ## Reproduction and tracking
 
@@ -50,10 +71,16 @@ the seed-42 summary-feature subset from `data/train.parquet`. The notebook freez
 the feature helpers and neural runner used for this trial; later edits to shared
 scripts do not change the recorded notebook.
 
+Source revision: `a70a07a9a07a3faad116174536ffa812b951d4b8`.
+
 Outputs are stored in ignored `artifacts/local-tabm-v1/`: best model, fitted
-preprocessor, validation probabilities, and results. Small metrics, logs, source
-and data checksums, and environment versions will be archived beside this README.
-This trial does not run Kaggle compute or submit anything.
+preprocessor, validation probabilities, and results. `results.json`, `run.log`,
+and `provenance.json` archive the original metrics, training history, source/data
+checksums, and environment versions alongside this README.
+
+Environment: Python 3.12, PyTorch 2.15.0, TabM 0.0.3, NumPy 2.5.4, Polars 1.44.2,
+scikit-learn 1.9.1. Apple GPU training can be nondeterministic; the exact original
+cached sample is identified by its SHA-256 in the results.
 
 References: official implementation and training guidance in
 `yandex-research/tabm`; package version pinned in `pyproject.toml` and `uv.lock`.

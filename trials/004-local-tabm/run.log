@@ -1,0 +1,8 @@
+Device: mps; sample: 150,000; train: 119,999; valid: 30,001; features: 679; cutoff: 2026-10-28 08:06:29.680000; preparation: 14.7s
+{"epoch": 1, "training_loss": 0.1996931899607339, "validation_auc": 0.8091940040383642, "seconds": 6.040212000021711}
+{"epoch": 2, "training_loss": 0.1569349721335746, "validation_auc": 0.7957884063827723, "seconds": 4.230724583962001}
+{"epoch": 3, "training_loss": 0.07181853604737275, "validation_auc": 0.7493653022028106, "seconds": 4.318617917015217}
+{"epoch": 4, "training_loss": 0.016576606042025047, "validation_auc": 0.7160145531026335, "seconds": 4.326104916050099}
+{"epoch": 5, "training_loss": 0.008030922393774455, "validation_auc": 0.6895404765728061, "seconds": 4.388905875035562}
+{"epoch": 6, "training_loss": 0.004844151183158894, "validation_auc": 0.6733400112701293, "seconds": 4.340759707964025}
+Best validation ROC AUC: 0.809194; epoch: 1; training: 27.7s; no submission performed
