@@ -1,0 +1,27 @@
+{
+  "sample_rows": 150000,
+  "seed": 42,
+  "training_rows": 119999,
+  "validation_rows": 30001,
+  "cutoff": "2026-10-28 08:06:29.680000",
+  "preparation_seconds": 13.155660415999591,
+  "task_type": "CPU",
+  "threads": 4,
+  "max_iterations": 400,
+  "results": [
+    {
+      "experiment": "summary_baseline",
+      "validation_auc": 0.8208754309007352,
+      "training_seconds": 49.613633959088475,
+      "iterations": 298,
+      "features": 679
+    },
+    {
+      "experiment": "expanded_embeddings",
+      "validation_auc": 0.8194781205232295,
+      "training_seconds": 71.72378041699994,
+      "iterations": 400,
+      "features": 1127
+    }
+  ]
+}

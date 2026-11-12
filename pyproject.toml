@@ -1,0 +1,13 @@
+[project]
+name = "sharechat-recsys"
+version = "0.1.0"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "catboost>=1.2.8,<2",
+    "polars>=1.30,<2",
+    "pyarrow>=20,<24",
+    "scikit-learn>=1.6,<2",
+]
+
+[project.optional-dependencies]
+notebooks = ["jupyterlab>=4,<5"]

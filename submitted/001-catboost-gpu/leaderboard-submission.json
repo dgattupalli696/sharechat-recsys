@@ -1,0 +1,9 @@
+{
+  "ref": "58271142",
+  "fileName": "submission.csv",
+  "date": "2026-11-12 11:25:57.533000",
+  "description": "Baseline: CatBoost GPU, 679 features, chronological validation AUC 0.816026, 21 trees; full-data refit",
+  "status": "SubmissionStatus.COMPLETE",
+  "publicScore": "0.80699",
+  "privateScore": ""
+}

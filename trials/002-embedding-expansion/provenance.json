@@ -1,0 +1,8 @@
+{
+  "run_id": "T002",
+  "training_source_sha256": "66c4cf2535258e2c4a5936ec6a7a504fa57212a7be6db75973be41cdf7c217fa",
+  "experiment_source_sha256": "80e611a729f6141cd35dd271440daf64df1546d235616c0a7ac0f5243ad6ea64",
+  "frozen_notebook_definitions": "train.py and experiments.py copied into code cells; main guards removed; experiments.py imports from train removed so frozen definitions are used",
+  "results_sha256": "aceb27608c918033d90aa708fbf6ef03d8644b284bf9ca9075429f11463178b3",
+  "local_environment_lock": "uv.lock"
+}

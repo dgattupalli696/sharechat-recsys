@@ -1,0 +1,14 @@
+{
+  "run_id": "B001",
+  "submission_id": "58271142",
+  "kaggle_kernel": "dheerajgattupalli/sharechat-catboost-gpu-baseline",
+  "kaggle_kernel_version": 2,
+  "source_filename": "sharechat-catboost-gpu-baseline.py",
+  "source_sha256": "30d8547f46c4ae9fbd79a55b0814a555b0b1b664882e9cfe4146789a2b412cde",
+  "prediction_filename": "submission.csv",
+  "prediction_bytes": 27963171,
+  "prediction_sha256": "e557809e3f5c79d3aace0001dfffef6ea3d7d78e4b0ecb9729fbc8e45ec07a53",
+  "prediction_rows": 1037090,
+  "local_environment_lock": "uv.lock",
+  "kaggle_environment": "image digest in kernel-metadata.json; package versions not enumerated"
+}

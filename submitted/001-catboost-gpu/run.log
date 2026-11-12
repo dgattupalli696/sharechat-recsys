@@ -1,0 +1,21 @@
+[{"stream_name":"stdout","time":6.362458555,"data":"Compute: GPU; input: /kaggle/input/competitions/sharechat; output: /kaggle/working\n"}
+,{"stream_name":"stdout","time":59.223073653,"data":"Training: 1,230,110; validation: 307,528; features: 679; cutoff: 2026-10-28 08:06:52.397000\n"}
+,{"stream_name":"stderr","time":83.922476498,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stdout","time":90.655886459,"data":"0:\ttest: 0.7765936\tbest: 0.7765936 (0)\ttotal: 233ms\tremaining: 1m 33s\n"}
+,{"stream_name":"stdout","time":93.747544298,"data":"50:\ttest: 0.8106462\tbest: 0.8160261 (20)\ttotal: 3.32s\tremaining: 22.7s\n"}
+,{"stream_name":"stdout","time":95.54268928,"data":"bestTest = 0.8160261214\n"}
+,{"stream_name":"stdout","time":95.54272165,"data":"bestIteration = 20\n"}
+,{"stream_name":"stdout","time":95.542914383,"data":"Shrink model to first 21 iterations.\n"}
+,{"stream_name":"stdout","time":97.731251296,"data":"Validation ROC AUC: 0.816026\n"}
+,{"stream_name":"stdout","time":98.206327574,"data":"Refitting on the full sample\n"}
+,{"stream_name":"stderr","time":125.408778057,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stdout","time":132.779920951,"data":"0:\ttotal: 124ms\tremaining: 2.47s\n"}
+,{"stream_name":"stdout","time":134.191925991,"data":"20:\ttotal: 1.53s\tremaining: 0us\n"}
+,{"stream_name":"stdout","time":172.133615607,"data":"Saved 1,037,090 predictions to /kaggle/working/submission.csv\n"}
+,{"stream_name":"stderr","time":176.181622797,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":176.181652047,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":176.462372538,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":176.462397502,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":178.2754472,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":178.798689555,"data":"[NbConvertApp] Writing 318836 bytes to __results__.html\n"}
+]

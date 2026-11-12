@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+data/
+artifacts/
+.ipynb_checkpoints/
+.DS_Store
+.env
+.env.*
+*.cbm
+*.parquet
+*.partial
+submission*.csv
+kaggle.json
+access_token
