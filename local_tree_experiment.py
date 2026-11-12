@@ -126,7 +126,7 @@ def prepare_arrays(
 
 def run(
     path, output, *, iterations=1000, threads=2, reference_identity=None,
-    cutoff_string=CUTOFF, validation_end=None,
+    cutoff_string=CUTOFF, validation_end=None, fixed_budget=False,
 ):
     output.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
@@ -149,6 +149,7 @@ def run(
             sys.executable, str(Path(__file__).with_name("lightgbm_worker.py")),
             "--array-dir", str(cache), "--output-dir", str(destination),
             "--iterations", str(iterations), "--threads", str(threads),
+            *(["--fixed-budget"] if fixed_budget else []),
         ], check=True)
         predictions = np.load(destination / "validation_predictions.npz")
         probabilities = predictions["probabilities"]
@@ -181,6 +182,7 @@ def main():
     parser.add_argument("--reference-identities", type=Path)
     parser.add_argument("--cutoff", default=CUTOFF)
     parser.add_argument("--validation-end")
+    parser.add_argument("--fixed-budget", action="store_true")
     args = parser.parse_args()
     if min(args.iterations, args.threads) <= 0:
         parser.error("Iterations and CPU threads must be positive")
@@ -189,6 +191,7 @@ def main():
         iterations=args.iterations, threads=args.threads,
         reference_identity=args.reference_identities,
         cutoff_string=args.cutoff, validation_end=args.validation_end,
+        fixed_budget=args.fixed_budget,
     )
 
 

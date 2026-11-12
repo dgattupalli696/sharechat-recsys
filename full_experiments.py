@@ -367,6 +367,15 @@ def fit_stacking_base(path, output, plan, cutoff, end, base, *, device="cuda"):
         raise ValueError(f"Unknown stacking base: {base}")
     tree_output = output / "tree"
     tree_output.mkdir(exist_ok=True)
+    if plan["tree_kind"] == "lightgbm":
+        from local_tree_experiment import run as run_local_tree
+
+        identity = output / "validation-identities.parquet"
+        return run_local_tree(
+            path, tree_output, iterations=plan["tree_iterations"],
+            reference_identity=identity if identity.is_file() else None,
+            cutoff_string=cutoff, validation_end=end, fixed_budget=True,
+        )
     return run_trees(
         path, tree_output, cutoff, device=device,
         iterations=plan["tree_iterations"], light_iterations=plan["tree_iterations"],

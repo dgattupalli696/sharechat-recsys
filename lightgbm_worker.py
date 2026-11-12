@@ -22,7 +22,7 @@ class ArraySequence(lgb.Sequence):
         return np.asarray(self.values[index], dtype=np.float64)
 
 
-def train_arrays(directory, output, iterations, threads):
+def train_arrays(directory, output, iterations, threads, *, fixed_budget=False):
     metadata = json.loads((directory / "metadata.json").read_text())
     labels = np.load(directory / "labels.npz")
     train_sequence = ArraySequence(directory / "train.npy")
@@ -38,20 +38,24 @@ def train_arrays(directory, output, iterations, threads):
         train_sequence, label=labels["train"], feature_name=metadata["columns"],
         categorical_feature=metadata["categories"], params=params,
     )
-    validation = lgb.Dataset(
-        valid_sequence, label=labels["valid"], reference=training,
-        feature_name=metadata["columns"], categorical_feature=metadata["categories"],
-    )
-    booster = lgb.train(
-        params, training, num_boost_round=iterations,
-        valid_sets=[validation], valid_names=["validation"],
-        callbacks=[lgb.early_stopping(60), lgb.log_evaluation(50)],
-    )
+    if fixed_budget:
+        booster = lgb.train(params, training, num_boost_round=iterations)
+    else:
+        validation = lgb.Dataset(
+            valid_sequence, label=labels["valid"], reference=training,
+            feature_name=metadata["columns"], categorical_feature=metadata["categories"],
+        )
+        booster = lgb.train(
+            params, training, num_boost_round=iterations,
+            valid_sets=[validation], valid_names=["validation"],
+            callbacks=[lgb.early_stopping(60), lgb.log_evaluation(50)],
+        )
+    selected_iteration = iterations if fixed_budget else booster.best_iteration
     probabilities = np.empty(len(valid_sequence), dtype=np.float64)
     for start in range(0, len(valid_sequence), valid_sequence.batch_size):
         end = min(start + valid_sequence.batch_size, len(valid_sequence))
         probabilities[start:end] = booster.predict(
-            valid_sequence[start:end], num_iteration=booster.best_iteration,
+            valid_sequence[start:end], num_iteration=selected_iteration,
             num_threads=threads,
         )
     np.savez_compressed(
@@ -61,7 +65,8 @@ def train_arrays(directory, output, iterations, threads):
     booster.save_model(str(output / "model.txt"))
     peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     (output / "worker-results.json").write_text(json.dumps({
-        "best_iteration": booster.best_iteration, "library_version": lgb.__version__,
+        "best_iteration": selected_iteration, "library_version": lgb.__version__,
+        "selection_mode": "fixed_budget" if fixed_budget else "validation",
         "backend": "CPU isolated disk-backed process", "parameters": params,
         "peak_rss_bytes": peak if sys.platform == "darwin" else peak * 1024,
     }, indent=2) + "\n")
@@ -78,9 +83,10 @@ def main():
     parser.add_argument("--fixed-budget", action="store_true")
     args = parser.parse_args()
     if args.array_dir is not None:
-        if args.fixed_budget:
-            parser.error("--fixed-budget is supported only with --input-dir")
-        train_arrays(args.array_dir, args.output_dir, args.iterations, args.threads)
+        train_arrays(
+            args.array_dir, args.output_dir, args.iterations, args.threads,
+            fixed_budget=args.fixed_budget,
+        )
         return
     train = pd.read_parquet(args.input_dir / "train.parquet")
     valid = pd.read_parquet(args.input_dir / "valid.parquet")

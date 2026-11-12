@@ -1,0 +1,182 @@
+[{"stream_name":"stderr","time":6.749731332,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.749786094,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.749791762,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.749794674,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":7.329762123,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.329789362,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.329797801,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.329800596,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":9.188579272,"data":"Processing /tmp/tmp_kw4kj2c/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.196350259999999,"data":"Processing /tmp/tmp_kw4kj2c/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.220415963,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":9.277953452,"data":"\n"}
+,{"stream_name":"stdout","time":9.356993642,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":9.391231428,"data":"Processing /tmp/tmp_kw4kj2c/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.391258321,"data":"Processing /tmp/tmp_kw4kj2c/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.391263461,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":9.391267783,"data":"\n"}
+,{"stream_name":"stdout","time":9.391271703,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":9.425833216000001,"data":"Pinned offline TabM dependencies verified\n"}
+,{"stream_name":"stdout","time":350.627793745,"data":"START neural-fixed-budget: {\"name\": \"neural-fixed-budget\", \"vector_crosses\": true, \"drop_high\": true, \"numerical_encoding\": \"plr\", \"fixed_budget\": true}\n"}
+,{"stream_name":"stdout","time":350.835938208,"data":"START neural-fixed-budget: {\"name\": \"neural-fixed-budget\", \"vector_crosses\": true, \"drop_high\": true, \"numerical_encoding\": \"plr\", \"fixed_budget\": true}\n"}
+,{"stream_name":"stdout","time":638.645891358,"data":"{\"epoch\": 8, \"global_step\": 9616, \"fractional_epoch\": 8.0, \"validation_auc\": 0.8392367454775698, \"validation_logloss\": 0.15562406800412765, \"training_probe_auc\": 0.8585626170385143, \"training_probe_logloss\": 0.1526555155240696, \"learning_rate\": 0.0005, \"seconds\": 287.9812968179999}\n"}
+,{"stream_name":"stdout","time":638.852709496,"data":"{\"epoch\": 8, \"global_step\": 9616, \"fractional_epoch\": 8.0, \"validation_auc\": 0.8392367454775698, \"validation_logloss\": 0.15562406800412765, \"training_probe_auc\": 0.8585626170385143, \"training_probe_logloss\": 0.1526555155240696, \"learning_rate\": 0.0005, \"seconds\": 287.9812968179999}\n"}
+,{"stream_name":"stdout","time":642.16962073,"data":"RESULT neural-fixed-budget: AUC=0.8392367455\n"}
+,{"stream_name":"stdout","time":642.372682853,"data":"RESULT neural-fixed-budget: AUC=0.8392367455\n"}
+,{"stream_name":"stdout","time":718.266472756,"data":"START lightgbm: 1230110 train / 307528 holdout\n"}
+,{"stream_name":"stdout","time":718.477526695,"data":"START lightgbm: 1230110 train / 307528 holdout\n"}
+,{"stream_name":"stderr","time":868.24598495,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":868.249167481,"data":"  File \"/tmp/tmpy0k_d3ex/full_experiments.py\", line 581, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":868.24918888,"data":"    main()\n"}
+,{"stream_name":"stderr","time":868.2491947,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":868.249199353,"data":"  File \"/tmp/tmpy0k_d3ex/full_experiments.py\", line 530, in main\n"}
+,{"stream_name":"stderr","time":868.249203988,"data":"    fit_stacking_base(\n"}
+,{"stream_name":"stderr","time":868.249208322,"data":"    ~~~~~~~~~~~~~~~~~^\n"}
+,{"stream_name":"stderr","time":868.249212346,"data":"        args.stacking_input_file or args.data_dir / \"train.parquet\",\n"}
+,{"stream_name":"stderr","time":868.249216688,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.249222282,"data":"        args.output_dir, plan,\n"}
+,{"stream_name":"stderr","time":868.249227632,"data":"        ^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.249231988,"data":"        args.cutoff, args.validation_end, args.stacking_base, device=args.device,\n"}
+,{"stream_name":"stderr","time":868.24923652,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.249241349,"data":"    )\n"}
+,{"stream_name":"stderr","time":868.249245693,"data":"    ^\n"}
+,{"stream_name":"stderr","time":868.249250266,"data":"  File \"/tmp/tmpy0k_d3ex/full_experiments.py\", line 370, in fit_stacking_base\n"}
+,{"stream_name":"stderr","time":868.249254937,"data":"    return run_trees(\n"}
+,{"stream_name":"stderr","time":868.249259722,"data":"        path, tree_output, cutoff, device=device,\n"}
+,{"stream_name":"stderr","time":868.24926419,"data":"        iterations=plan[\"tree_iterations\"], light_iterations=plan[\"tree_iterations\"],\n"}
+,{"stream_name":"stderr","time":868.249269522,"data":"        only=[plan[\"tree_kind\"]], valid_end=end, fixed_budget=True,\n"}
+,{"stream_name":"stderr","time":868.249274714,"data":"    )\n"}
+,{"stream_name":"stderr","time":868.249279514,"data":"  File \"/tmp/tmpy0k_d3ex/tree_experiments.py\", line 130, in run_trees\n"}
+,{"stream_name":"stderr","time":868.249283814,"data":"    subprocess.run([\n"}
+,{"stream_name":"stderr","time":868.249288319,"data":"    ~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":868.249292769,"data":"        sys.executable, str(worker_path or Path(__file__).with_name(\"lightgbm_worker.py\")),\n"}
+,{"stream_name":"stderr","time":868.249298266,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.249302667,"data":"    ...\u003c2 lines\u003e...\n"}
+,{"stream_name":"stderr","time":868.249307718,"data":"        *([\"--fixed-budget\"] if fixed_budget else []),\n"}
+,{"stream_name":"stderr","time":868.249312784,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.249317046,"data":"    ], check=True)\n"}
+,{"stream_name":"stderr","time":868.249321808,"data":"    ^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.24932596,"data":"  File \"/usr/lib/python3.13/subprocess.py\", line 578, in run\n"}
+,{"stream_name":"stderr","time":868.249330337,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":868.24933477,"data":"                             output=stdout, stderr=stderr)\n"}
+,{"stream_name":"stderr","time":868.249339664,"data":"subprocess.CalledProcessError: Command '['/usr/bin/python3', '/tmp/tmpy0k_d3ex/lightgbm_worker.py', '--input-dir', '/tmp/tmp83v4kd0v', '--output-dir', '/kaggle/working/outer/tree/lightgbm', '--iterations', '140', '--fixed-budget']' died with \u003cSignals.SIGKILL: 9\u003e.\n"}
+,{"stream_name":"stderr","time":868.469368622,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":868.469394769,"data":"  File \"/tmp/tmpy0k_d3ex/full_experiments.py\", line 581, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":868.469399997,"data":"    main()\n"}
+,{"stream_name":"stderr","time":868.469403646,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":868.469407096,"data":"  File \"/tmp/tmpy0k_d3ex/full_experiments.py\", line 530, in main\n"}
+,{"stream_name":"stderr","time":868.469410897,"data":"    fit_stacking_base(\n"}
+,{"stream_name":"stderr","time":868.469414573,"data":"    ~~~~~~~~~~~~~~~~~^\n"}
+,{"stream_name":"stderr","time":868.469418103,"data":"        args.stacking_input_file or args.data_dir / \"train.parquet\",\n"}
+,{"stream_name":"stderr","time":868.469421978,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469425905,"data":"        args.output_dir, plan,\n"}
+,{"stream_name":"stderr","time":868.46942954,"data":"        ^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469433092,"data":"        args.cutoff, args.validation_end, args.stacking_base, device=args.device,\n"}
+,{"stream_name":"stderr","time":868.469436981,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469440652,"data":"    )\n"}
+,{"stream_name":"stderr","time":868.469444197,"data":"    ^\n"}
+,{"stream_name":"stderr","time":868.469447816,"data":"  File \"/tmp/tmpy0k_d3ex/full_experiments.py\", line 370, in fit_stacking_base\n"}
+,{"stream_name":"stderr","time":868.469451931,"data":"    return run_trees(\n"}
+,{"stream_name":"stderr","time":868.469456352,"data":"        path, tree_output, cutoff, device=device,\n"}
+,{"stream_name":"stderr","time":868.469460002,"data":"        iterations=plan[\"tree_iterations\"], light_iterations=plan[\"tree_iterations\"],\n"}
+,{"stream_name":"stderr","time":868.46946396,"data":"        only=[plan[\"tree_kind\"]], valid_end=end, fixed_budget=True,\n"}
+,{"stream_name":"stderr","time":868.469467703,"data":"    )\n"}
+,{"stream_name":"stderr","time":868.469471593,"data":"  File \"/tmp/tmpy0k_d3ex/tree_experiments.py\", line 130, in run_trees\n"}
+,{"stream_name":"stderr","time":868.469475458,"data":"    subprocess.run([\n"}
+,{"stream_name":"stderr","time":868.469478912,"data":"    ~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":868.469482508,"data":"        sys.executable, str(worker_path or Path(__file__).with_name(\"lightgbm_worker.py\")),\n"}
+,{"stream_name":"stderr","time":868.469486685,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469490537,"data":"    ...\u003c2 lines\u003e...\n"}
+,{"stream_name":"stderr","time":868.469494443,"data":"        *([\"--fixed-budget\"] if fixed_budget else []),\n"}
+,{"stream_name":"stderr","time":868.469498281,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469502184,"data":"    ], check=True)\n"}
+,{"stream_name":"stderr","time":868.469506307,"data":"    ^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469510136,"data":"  File \"/usr/lib/python3.13/subprocess.py\", line 578, in run\n"}
+,{"stream_name":"stderr","time":868.469514061,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":868.469529575,"data":"                             output=stdout, stderr=stderr)\n"}
+,{"stream_name":"stderr","time":868.469533792,"data":"subprocess.CalledProcessError: Command '['/usr/bin/python3', '/tmp/tmpy0k_d3ex/lightgbm_worker.py', '--input-dir', '/tmp/tmp83v4kd0v', '--output-dir', '/kaggle/working/outer/tree/lightgbm', '--iterations', '140', '--fixed-budget']' died with \u003cSignals.SIGKILL: 9\u003e.\n"}
+,{"stream_name":"stderr","time":868.469538503,"data":"\n"}
+,{"stream_name":"stderr","time":868.469542643,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":868.469546535,"data":"  File \"/tmp/tmpy0k_d3ex/full_experiments.py\", line 581, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":868.469550983,"data":"    main()\n"}
+,{"stream_name":"stderr","time":868.469554634,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":868.469558233,"data":"  File \"/tmp/tmpy0k_d3ex/full_experiments.py\", line 530, in main\n"}
+,{"stream_name":"stderr","time":868.469561831,"data":"    fit_stacking_base(\n"}
+,{"stream_name":"stderr","time":868.469566728,"data":"    ~~~~~~~~~~~~~~~~~^\n"}
+,{"stream_name":"stderr","time":868.469570416,"data":"        args.stacking_input_file or args.data_dir / \"train.parquet\",\n"}
+,{"stream_name":"stderr","time":868.469574377,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469578498,"data":"        args.output_dir, plan,\n"}
+,{"stream_name":"stderr","time":868.469582002,"data":"        ^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469585631,"data":"        args.cutoff, args.validation_end, args.stacking_base, device=args.device,\n"}
+,{"stream_name":"stderr","time":868.469589511,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469593315,"data":"    )\n"}
+,{"stream_name":"stderr","time":868.469596715,"data":"    ^\n"}
+,{"stream_name":"stderr","time":868.46960025,"data":"  File \"/tmp/tmpy0k_d3ex/full_experiments.py\", line 370, in fit_stacking_base\n"}
+,{"stream_name":"stderr","time":868.469604052,"data":"    return run_trees(\n"}
+,{"stream_name":"stderr","time":868.469607917,"data":"        path, tree_output, cutoff, device=device,\n"}
+,{"stream_name":"stderr","time":868.469611656,"data":"        iterations=plan[\"tree_iterations\"], light_iterations=plan[\"tree_iterations\"],\n"}
+,{"stream_name":"stderr","time":868.4696162,"data":"        only=[plan[\"tree_kind\"]], valid_end=end, fixed_budget=True,\n"}
+,{"stream_name":"stderr","time":868.469620012,"data":"    )\n"}
+,{"stream_name":"stderr","time":868.469623506,"data":"  File \"/tmp/tmpy0k_d3ex/tree_experiments.py\", line 130, in run_trees\n"}
+,{"stream_name":"stderr","time":868.469627265,"data":"    subprocess.run([\n"}
+,{"stream_name":"stderr","time":868.469630837,"data":"    ~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":868.469634317,"data":"        sys.executable, str(worker_path or Path(__file__).with_name(\"lightgbm_worker.py\")),\n"}
+,{"stream_name":"stderr","time":868.469638407,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469642422,"data":"    ...\u003c2 lines\u003e...\n"}
+,{"stream_name":"stderr","time":868.469646852,"data":"        *([\"--fixed-budget\"] if fixed_budget else []),\n"}
+,{"stream_name":"stderr","time":868.469650764,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469654423,"data":"    ], check=True)\n"}
+,{"stream_name":"stderr","time":868.469657963,"data":"    ^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":868.469666462,"data":"  File \"/usr/lib/python3.13/subprocess.py\", line 578, in run\n"}
+,{"stream_name":"stderr","time":868.469670662,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":868.469674249,"data":"                             output=stdout, stderr=stderr)\n"}
+,{"stream_name":"stderr","time":868.469678191,"data":"subprocess.CalledProcessError: Command '['/usr/bin/python3', '/tmp/tmpy0k_d3ex/lightgbm_worker.py', '--input-dir', '/tmp/tmp83v4kd0v', '--output-dir', '/kaggle/working/outer/tree/lightgbm', '--iterations', '140', '--fixed-budget']' died with \u003cSignals.SIGKILL: 9\u003e.\n"}
+,{"stream_name":"stderr","time":874.104963899,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":874.105652416,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":874.105663702,"data":"    import sys;import papermill as pm;pm.execute_notebook(\"__notebook__.ipynb\",\"__notebook__.ipynb\",progress_bar=False,log_output=True,stdout_file=sys.stdout,stderr_file=sys.stderr,allow_errors=False,timeout=43200)\n"}
+,{"stream_name":"stderr","time":874.105670695,"data":"                                      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":874.105675642,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":874.105679469,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":874.105682923,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":874.105687357,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":874.105692069,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":874.105699591,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":874.10570328,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":874.105707178,"data":"Exception encountered at \"In [11]\":\n"}
+,{"stream_name":"stderr","time":874.105712531,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":874.105716369,"data":"CalledProcessError                        Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":874.105722071,"data":"/kaggle/working/full_experiments.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":874.105726467,"data":"----\u003e 1 main()\n"}
+,{"stream_name":"stderr","time":874.105730902,"data":"\n"}
+,{"stream_name":"stderr","time":874.105753768,"data":"/kaggle/working/full_experiments.py in main()\n"}
+,{"stream_name":"stderr","time":874.105758629,"data":"    529                 )\n"}
+,{"stream_name":"stderr","time":874.105762184,"data":"    530             else:\n"}
+,{"stream_name":"stderr","time":874.10576576,"data":"--\u003e 531                 run_stacking(\n"}
+,{"stream_name":"stderr","time":874.105769427,"data":"    532                     args.data_dir / \"train.parquet\", args.output_dir, plan,\n"}
+,{"stream_name":"stderr","time":874.10577334,"data":"    533                     device=args.device, outer_only=args.outer_only,\n"}
+,{"stream_name":"stderr","time":874.105777045,"data":"\n"}
+,{"stream_name":"stderr","time":874.105780521,"data":"/kaggle/working/full_experiments.py in run_stacking(path, output, plan, device, outer_only)\n"}
+,{"stream_name":"stderr","time":874.105797297,"data":"    455         destination.mkdir(parents=True, exist_ok=True)\n"}
+,{"stream_name":"stderr","time":874.105800073,"data":"    456         for base in [\"neural\", \"tree\"]:\n"}
+,{"stream_name":"stderr","time":874.105802717,"data":"--\u003e 457             subprocess.run([\n"}
+,{"stream_name":"stderr","time":874.105805195,"data":"    458                 sys.executable, str(worker), \"--data-dir\", str(path.parent),\n"}
+,{"stream_name":"stderr","time":874.105807825,"data":"    459                 \"--output-dir\", str(destination), \"--device\", device,\n"}
+,{"stream_name":"stderr","time":874.105810495,"data":"\n"}
+,{"stream_name":"stderr","time":874.105812817,"data":"/usr/lib/python3.13/subprocess.py in run(input, capture_output, timeout, check, *popenargs, **kwargs)\n"}
+,{"stream_name":"stderr","time":874.105815361,"data":"    576         retcode = process.poll()\n"}
+,{"stream_name":"stderr","time":874.105817805,"data":"    577         if check and retcode:\n"}
+,{"stream_name":"stderr","time":874.105820227,"data":"--\u003e 578             raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":874.105823213,"data":"    579                                      output=stdout, stderr=stderr)\n"}
+,{"stream_name":"stderr","time":874.105840588,"data":"    580     return CompletedProcess(process.args, retcode, stdout, stderr)\n"}
+,{"stream_name":"stderr","time":874.105845193,"data":"\n"}
+,{"stream_name":"stderr","time":874.10584955,"data":"CalledProcessError: Command '['/usr/bin/python3', '/tmp/tmpy0k_d3ex/full_experiments.py', '--data-dir', '/kaggle/input/competitions/sharechat', '--output-dir', '/kaggle/working/outer', '--device', 'cuda', '--stage', 'stacking', '--spec-file', '/kaggle/working/stacking-plan.json', '--stacking-base', 'tree', '--stacking-input-file', '/kaggle/input/competitions/sharechat/train.parquet', '--cutoff', '2026-10-28T08:06:52.397000']' returned non-zero exit status 1.\n"}
+,{"stream_name":"stderr","time":874.105857039,"data":"\n"}
+,{"stream_name":"stderr","time":876.944978156,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":876.945029272,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":877.240773891,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":877.240814514,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":878.78769775,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":878.877909773,"data":"[NbConvertApp] Writing 288703 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":881.642963307,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":883.009519584,"data":"[NbConvertApp] Writing 1053928 bytes to __results__.html\n"}
+]

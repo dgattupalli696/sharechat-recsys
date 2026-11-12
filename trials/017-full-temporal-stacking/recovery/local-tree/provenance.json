@@ -1,0 +1,20 @@
+{
+  "status": "FROZEN",
+  "run_id": "T017-local-tree-recovery",
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "local_tree_experiment.py": "47fe22d6635a2b61d35e62008d0629a8408b843883dbcc91c80d7cd64a002ab5",
+    "lightgbm_worker.py": "c149ead477061216d744a19f26b3b0d1b68a38c8c5bbc49418b140aceb0fd3bd"
+  },
+  "iterations": 140,
+  "threads": 2,
+  "selection_mode": "fixed_budget",
+  "reference_identity_sha256": "e4882e41b3e8a039308fcba4dec2e75b503c15c6d2a0dcd182a6876f3369d77e",
+  "versions": {
+    "lightgbm": "4.6.0",
+    "numpy": "2.5.4",
+    "polars": "1.44.2",
+    "scikit-learn": "1.9.1"
+  },
+  "competition_submission": false
+}

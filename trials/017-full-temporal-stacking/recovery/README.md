@@ -19,3 +19,8 @@ on the 943,867 OOF rows; the initial 286,243 warmup training rows are
 excluded. Record the local meta-model library version and both source
 notebook versions. Do not retrain already completed bases, use subsets
 or submit to the competition.
+
+Version 8 completed the neural endpoint, but its in-memory LightGBM worker
+was killed by SIGKILL. Only the remaining tree fit moves to the
+[local disk-backed path](local-tree/README.md); the seventh completed base
+fit is preserved as well.

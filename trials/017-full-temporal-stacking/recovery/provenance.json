@@ -29,5 +29,22 @@
     }
   },
   "scope": "isolated complete outer neural/tree fits; prior forward OOF fits are preserved separately",
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "d96f4a1",
+  "kaggle_kernel_version": 8,
+  "kaggle_status": "ERROR",
+  "completed_base_fits": 1,
+  "failure": "LightGBM worker SIGKILL after complete outer neural",
+  "artifact_sha256": {
+    "experiment-specs.json": "ef6985dd5d730027cec0e3322b271864dffa4c0327726b55c0e04a127c98df9c",
+    "outer/neural-fixed-budget/best_model.pt": "c6995a33fce19bf03d8cdc347297b6dc4e0df0a259630b1429475739ff7c8170",
+    "outer/neural-fixed-budget/category-remappings.joblib": "85c099fbded3f62bc0c52eb7ef97e2499f68fc27061654a41190aaf2bf698aff",
+    "outer/neural-fixed-budget/results.json": "0c66546e5d26e077925a33b49b351afa37f00537a06e7b4dfb806b710e123858",
+    "outer/neural-fixed-budget/validation_predictions.npz": "5596daa1df473d390b97378444714264f2a7486d18e0af6cc2e97de511124441",
+    "outer/preprocessing.joblib": "9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983",
+    "outer/protocol.json": "9bdb10e9a1db0b2895806b0c54e85c609948644c4aed44c0c35ac318bf9f59f5",
+    "outer/validation-identities.parquet": "e4882e41b3e8a039308fcba4dec2e75b503c15c6d2a0dcd182a6876f3369d77e",
+    "sharechat-model-experiments-gpu.log": "146bbc89628b34efb1ee4e7edceb9c09cc9b23e279e8974a3a905fd2f30efaa2",
+    "stacking-plan.json": "ef6985dd5d730027cec0e3322b271864dffa4c0327726b55c0e04a127c98df9c"
+  }
 }
