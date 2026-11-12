@@ -5,6 +5,8 @@ from importlib.metadata import version
 import json
 import math
 from pathlib import Path
+import subprocess
+import sys
 import time
 
 import joblib
@@ -349,67 +351,67 @@ def run_confirmation(path, output, specs, *, device="cuda", epochs=30, interval=
     return report
 
 
-def run_stacking(path, output, plan, *, device="cuda"):
+def fit_stacking_base(path, output, plan, cutoff, end, base, *, device="cuda"):
+    output.mkdir(parents=True, exist_ok=True)
+    if base == "neural":
+        data = prepare_data(path, output, cutoff_override=cutoff, end_override=end)
+        recipe = {
+            **plan["neural_recipe"], "name": "neural-fixed-budget", "fixed_budget": True,
+        }
+        return run_tabm(
+            data, recipe, output, device=device,
+            epochs=max(1, int(math.ceil(plan["fixed_neural_epochs"]))),
+            interval=300, seed=42,
+        )
+    if base != "tree":
+        raise ValueError(f"Unknown stacking base: {base}")
+    tree_output = output / "tree"
+    tree_output.mkdir(exist_ok=True)
+    return run_trees(
+        path, tree_output, cutoff, device=device,
+        iterations=plan["tree_iterations"], light_iterations=plan["tree_iterations"],
+        only=[plan["tree_kind"]], valid_end=end, fixed_budget=True,
+    )
+
+
+def finish_stacking(output, report):
     from sklearn.linear_model import LogisticRegression
     from sklearn.metrics import log_loss, roc_auc_score
 
-    periods = [
+    features, labels, identities, outer = [], [], [], None
+    expected_periods = [
         ("2026-10-26T12:00:00", "2026-10-27T00:00:00"),
         ("2026-10-27T00:00:00", "2026-10-27T12:00:00"),
         ("2026-10-27T12:00:00", PRIMARY_CUTOFF),
         (PRIMARY_CUTOFF, None),
     ]
-    features, labels, identities, outer = [], [], [], None
-    report = {"stage": "stacking", "folds": [], "competition_submission": False}
-    recipe = {**plan["neural_recipe"], "name": "neural-fixed-budget", "fixed_budget": True}
-    fixed_epochs = max(1, int(math.ceil(plan["fixed_neural_epochs"])))
-    for index, (cutoff, end) in enumerate(periods):
-        destination = output / ("outer" if end is None else f"oof-{index + 1}")
-        destination.mkdir(parents=True, exist_ok=True)
-        data = prepare_data(path, destination, cutoff_override=cutoff, end_override=end)
-        protocol = data["protocol"]
-        neural = run_tabm(
-            data, recipe, destination, device=device, epochs=fixed_epochs,
-            interval=300, seed=42,
-        )
-        neural_predictions = np.load(destination / recipe["name"] / "validation_predictions.npz")
-        target = neural_predictions["y_true"].copy()
-        neural_probabilities = neural_predictions["probabilities"].copy()
-        row_ids = neural_predictions["row_ids"].copy()
-        del data, neural_predictions
-        gc.collect()
-        tree_output = destination / "tree"
-        tree_output.mkdir(exist_ok=True)
-        tree_report = run_trees(
-            path, tree_output, cutoff, device=device,
-            iterations=plan["tree_iterations"], light_iterations=plan["tree_iterations"],
-            only=[plan["tree_kind"]], worker_path=globals().get("FROZEN_LIGHTGBM_WORKER_FILE"),
-            valid_end=end, fixed_budget=True,
-        )
-        tree_predictions = np.load(
-            tree_output / plan["tree_kind"] / "validation_predictions.npz"
-        )
-        np.testing.assert_array_equal(target, tree_predictions["y_true"])
-        np.testing.assert_array_equal(row_ids, tree_predictions["row_ids"])
-        probability_matrix = np.column_stack([
-            neural_probabilities, tree_predictions["probabilities"]
-        ])
+    if [(fold["cutoff"], fold["end"]) for fold in report["folds"]] != expected_periods:
+        raise ValueError("Stacking requires all three forward OOF blocks and the outer holdout")
+    for index, fold in enumerate(report["folds"]):
+        destination = output / ("outer" if fold["end"] is None else f"oof-{index + 1}")
+        with (
+            np.load(destination / fold["neural"]["name"] / "validation_predictions.npz") as neural,
+            np.load(destination / "tree" / fold["tree"]["name"] / "validation_predictions.npz") as tree,
+        ):
+            np.testing.assert_array_equal(neural["y_true"], tree["y_true"])
+            np.testing.assert_array_equal(neural["row_ids"], tree["row_ids"])
+            target, row_ids = neural["y_true"].copy(), neural["row_ids"].copy()
+            probability_matrix = np.column_stack([
+                neural["probabilities"], tree["probabilities"],
+            ])
         clipped = np.clip(probability_matrix, 1e-6, 1 - 1e-6)
         logits = np.log(clipped / (1 - clipped))
-        if end is None:
+        if fold["end"] is None:
             outer = (logits, target, row_ids, probability_matrix)
         else:
             features.append(logits)
             labels.append(target)
             identities.append(row_ids)
-        report["folds"].append({
-            "cutoff": cutoff, "end": end, "protocol": protocol,
-            "neural": neural, "tree": tree_report["results"][0],
-        })
-        (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
     combined_ids = np.concatenate(identities)
     if len(np.unique(combined_ids)) != len(combined_ids):
         raise ValueError("OOF prediction blocks overlap")
+    if len(np.unique(outer[2])) != len(outer[2]) or np.intersect1d(combined_ids, outer[2]).size:
+        raise ValueError("Outer holdout identities duplicate or overlap OOF rows")
     meta = LogisticRegression(C=1.0, max_iter=1000, random_state=42)
     meta.fit(np.concatenate(features), np.concatenate(labels))
     joblib.dump(meta, output / "meta-model.joblib")
@@ -423,18 +425,61 @@ def run_stacking(path, output, plan, *, device="cuda"):
         y_true=np.concatenate(labels), row_ids=combined_ids,
     )
     report.update({
-        "status": "COMPLETE", "oof_rows": len(combined_ids),
+        "stage": "stacking", "status": "COMPLETE", "oof_rows": len(combined_ids),
         "validation_rows": len(outer[1]),
         "validation_auc": float(roc_auc_score(outer[1], probabilities)),
         "validation_logloss": float(log_loss(outer[1], probabilities, labels=[0, 1])),
         "matched_neural_auc": float(roc_auc_score(outer[1], outer[3][:, 0])),
         "matched_tree_auc": float(roc_auc_score(outer[1], outer[3][:, 1])),
         "matched_equal_blend_auc": float(roc_auc_score(outer[1], outer[3].mean(axis=1))),
-        "fixed_neural_epochs": fixed_epochs,
         "meta_coefficients": meta.coef_.tolist(), "meta_intercept": meta.intercept_.tolist(),
     })
     (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
     return report
+
+
+def run_stacking(path, output, plan, *, device="cuda", outer_only=False):
+    periods = [
+        ("2026-10-26T12:00:00", "2026-10-27T00:00:00"),
+        ("2026-10-27T00:00:00", "2026-10-27T12:00:00"),
+        ("2026-10-27T12:00:00", PRIMARY_CUTOFF),
+        (PRIMARY_CUTOFF, None),
+    ]
+    fixed_epochs = max(1, int(math.ceil(plan["fixed_neural_epochs"])))
+    report = {
+        "stage": "stacking-base-fits" if outer_only else "stacking",
+        "folds": [], "competition_submission": False, "fixed_neural_epochs": fixed_epochs,
+    }
+    plan_path = output / "stacking-plan.json"
+    plan_path.write_text(json.dumps(plan, indent=2) + "\n")
+    worker = globals().get("FROZEN_EXPERIMENT_FILE", Path(__file__).resolve())
+    for index, (cutoff, end) in enumerate(periods):
+        if outer_only and end is not None:
+            continue
+        destination = output / ("outer" if end is None else f"oof-{index + 1}")
+        destination.mkdir(parents=True, exist_ok=True)
+        for base in ["neural", "tree"]:
+            subprocess.run([
+                sys.executable, str(worker), "--data-dir", str(path.parent),
+                "--output-dir", str(destination), "--device", device,
+                "--stage", "stacking", "--spec-file", str(plan_path),
+                "--stacking-base", base, "--stacking-input-file", str(path),
+                "--cutoff", cutoff,
+                *(["--validation-end", end] if end else []),
+            ], check=True)
+        protocol = json.loads((destination / "protocol.json").read_text())
+        neural = json.loads((destination / "neural-fixed-budget/results.json").read_text())
+        tree_report = json.loads((destination / "tree/results.json").read_text())
+        report["folds"].append({
+            "cutoff": cutoff, "end": end, "protocol": protocol,
+            "neural": neural, "tree": tree_report["results"][0],
+        })
+        (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+    if outer_only:
+        report["status"] = "COMPLETE"
+        (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+        return report
+    return finish_stacking(output, report)
 
 
 def main():
@@ -452,6 +497,11 @@ def main():
     parser.add_argument("--only", action="append")
     parser.add_argument("--epochs", type=int, default=30)
     parser.add_argument("--validation-interval", type=int, default=300)
+    parser.add_argument("--stacking-base", choices=["neural", "tree"])
+    parser.add_argument("--stacking-input-file", type=Path)
+    parser.add_argument("--cutoff")
+    parser.add_argument("--validation-end")
+    parser.add_argument("--outer-only", action="store_true")
     args = parser.parse_args()
     if args.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("The full Kaggle experiment requires CUDA")
@@ -474,7 +524,19 @@ def main():
                 device=args.device, epochs=args.epochs, interval=args.validation_interval,
             )
         else:
-            run_stacking(args.data_dir / "train.parquet", args.output_dir, plan, device=args.device)
+            if args.stacking_base:
+                if args.cutoff is None:
+                    parser.error("--cutoff is required with --stacking-base")
+                fit_stacking_base(
+                    args.stacking_input_file or args.data_dir / "train.parquet",
+                    args.output_dir, plan,
+                    args.cutoff, args.validation_end, args.stacking_base, device=args.device,
+                )
+            else:
+                run_stacking(
+                    args.data_dir / "train.parquet", args.output_dir, plan,
+                    device=args.device, outer_only=args.outer_only,
+                )
         return
     data = prepare_data(
         args.data_dir / "train.parquet", args.output_dir, secondary=args.secondary

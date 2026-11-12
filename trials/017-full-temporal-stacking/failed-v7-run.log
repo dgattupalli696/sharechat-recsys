@@ -1,0 +1,97 @@
+[{"stream_name":"stderr","time":8.677230493,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.677275803,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.67729553,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.677299768,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.353781931,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.353810383999999,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.353827474,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.353830013,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":11.463921717,"data":"Processing /tmp/tmpfzs3pfc1/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.473245147,"data":"Processing /tmp/tmpfzs3pfc1/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.504702406,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":11.563901781,"data":"\n"}
+,{"stream_name":"stdout","time":11.641445887,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":11.6669034,"data":"Processing /tmp/tmpfzs3pfc1/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.666924819,"data":"Processing /tmp/tmpfzs3pfc1/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.666929722999999,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":11.666933223000001,"data":"\n"}
+,{"stream_name":"stdout","time":11.666936515,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":11.710079688,"data":"Pinned offline TabM dependencies verified\n"}
+,{"stream_name":"stdout","time":146.110101667,"data":"START neural-fixed-budget: {\"name\": \"neural-fixed-budget\", \"vector_crosses\": true, \"drop_high\": true, \"numerical_encoding\": \"plr\", \"fixed_budget\": true}\n"}
+,{"stream_name":"stdout","time":208.750543857,"data":"{\"epoch\": 8, \"global_step\": 2240, \"fractional_epoch\": 8.0, \"validation_auc\": 0.8294168350667043, \"validation_logloss\": 0.16004069652468753, \"training_probe_auc\": 0.846768681980324, \"training_probe_logloss\": 0.15985011901688723, \"learning_rate\": 0.0005, \"seconds\": 62.638139695999996}\n"}
+,{"stream_name":"stdout","time":211.229297571,"data":"RESULT neural-fixed-budget: AUC=0.8294168351\n"}
+,{"stream_name":"stdout","time":261.232175458,"data":"START lightgbm: 286243 train / 237336 holdout\n"}
+,{"stream_name":"stdout","time":446.315553145,"data":"RESULT lightgbm: AUC=0.8093736905\n"}
+,{"stream_name":"stdout","time":601.644739825,"data":"START neural-fixed-budget: {\"name\": \"neural-fixed-budget\", \"vector_crosses\": true, \"drop_high\": true, \"numerical_encoding\": \"plr\", \"fixed_budget\": true}\n"}
+,{"stream_name":"stdout","time":719.987028846,"data":"{\"epoch\": 8, \"global_step\": 4096, \"fractional_epoch\": 8.0, \"validation_auc\": 0.8348554812005098, \"validation_logloss\": 0.1594345567767132, \"training_probe_auc\": 0.8452539106354314, \"training_probe_logloss\": 0.16360957036791912, \"learning_rate\": 0.0005, \"seconds\": 118.309833475}\n"}
+,{"stream_name":"stdout","time":723.082566874,"data":"RESULT neural-fixed-budget: AUC=0.8348554812\n"}
+,{"stream_name":"stdout","time":772.008150092,"data":"START lightgbm: 523579 train / 280396 holdout\n"}
+,{"stream_name":"stdout","time":1042.68738818,"data":"RESULT lightgbm: AUC=0.8176632396\n"}
+,{"stream_name":"stdout","time":1257.466130677,"data":"START neural-fixed-budget: {\"name\": \"neural-fixed-budget\", \"vector_crosses\": true, \"drop_high\": true, \"numerical_encoding\": \"plr\", \"fixed_budget\": true}\n"}
+,{"stream_name":"stdout","time":1438.557007845,"data":"{\"epoch\": 8, \"global_step\": 6288, \"fractional_epoch\": 8.0, \"validation_auc\": 0.8364913444323189, \"validation_logloss\": 0.15541181608508745, \"training_probe_auc\": 0.8496019301319229, \"training_probe_logloss\": 0.154044056033193, \"learning_rate\": 0.0005, \"seconds\": 181.06894855600012}\n"}
+,{"stream_name":"stdout","time":1443.208160981,"data":"RESULT neural-fixed-budget: AUC=0.8364913444\n"}
+,{"stream_name":"stdout","time":1490.471837925,"data":"START lightgbm: 803975 train / 426135 holdout\n"}
+,{"stream_name":"stdout","time":1886.106536623,"data":"RESULT lightgbm: AUC=0.8191231843\n"}
+,{"stream_name":"stderr","time":2075.797476602,"data":"Kernel died while waiting for execute reply.\n"}
+,{"stream_name":"stderr","time":2076.87604938,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":2076.881631866,"data":"  File \"/usr/local/lib/python3.13/dist-packages/nbclient/client.py\", line 949, in async_execute_cell\n"}
+,{"stream_name":"stderr","time":2076.881654007,"data":"    exec_reply = await self.task_poll_for_reply\n"}
+,{"stream_name":"stderr","time":2076.881659986,"data":"                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":2076.881664626,"data":"  File \"/usr/local/lib/python3.13/dist-packages/nbclient/client.py\", line 730, in _async_poll_for_reply\n"}
+,{"stream_name":"stderr","time":2076.881669553,"data":"    msg = await ensure_async(self.kc.shell_channel.get_msg(timeout=new_timeout))\n"}
+,{"stream_name":"stderr","time":2076.881678536,"data":"          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":2076.881681941,"data":"  File \"/usr/local/lib/python3.13/dist-packages/nbclient/util.py\", line 96, in ensure_async\n"}
+,{"stream_name":"stderr","time":2076.881685207,"data":"    result = await obj\n"}
+,{"stream_name":"stderr","time":2076.881688111,"data":"             ^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":2076.88169115,"data":"  File \"/usr/local/lib/python3.13/dist-packages/jupyter_client/channels.py\", line 224, in get_msg\n"}
+,{"stream_name":"stderr","time":2076.881694414,"data":"    ready = await self.socket.poll(timeout)\n"}
+,{"stream_name":"stderr","time":2076.881697605,"data":"            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":2076.881700535,"data":"asyncio.exceptions.CancelledError\n"}
+,{"stream_name":"stderr","time":2076.881798267,"data":"\n"}
+,{"stream_name":"stderr","time":2076.881808099,"data":"During handling of the above exception, another exception occurred:\n"}
+,{"stream_name":"stderr","time":2076.881813684,"data":"\n"}
+,{"stream_name":"stderr","time":2076.881817938,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":2076.884431388,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":2076.884451913,"data":"    import sys;import papermill as pm;pm.execute_notebook(\"__notebook__.ipynb\",\"__notebook__.ipynb\",progress_bar=False,log_output=True,stdout_file=sys.stdout,stderr_file=sys.stderr,allow_errors=False,timeout=43200)\n"}
+,{"stream_name":"stderr","time":2076.884472334,"data":"                                      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":2076.884492452,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 116, in execute_notebook\n"}
+,{"stream_name":"stderr","time":2076.884497323,"data":"    nb = papermill_engines.execute_notebook_with_engine(\n"}
+,{"stream_name":"stderr","time":2076.884501136,"data":"        engine_name,\n"}
+,{"stream_name":"stderr","time":2076.884504886,"data":"    ...\u003c9 lines\u003e...\n"}
+,{"stream_name":"stderr","time":2076.884513419,"data":"        **engine_kwargs,\n"}
+,{"stream_name":"stderr","time":2076.884516301,"data":"    )\n"}
+,{"stream_name":"stderr","time":2076.884518741,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/engines.py\", line 49, in execute_notebook_with_engine\n"}
+,{"stream_name":"stderr","time":2076.884521439,"data":"    return self.get_engine(engine_name).execute_notebook(nb, kernel_name, **kwargs)\n"}
+,{"stream_name":"stderr","time":2076.884523984,"data":"           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":2076.884526798,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/engines.py\", line 371, in execute_notebook\n"}
+,{"stream_name":"stderr","time":2076.884529415,"data":"    cls.execute_managed_notebook(nb_man, kernel_name, log_output=log_output, **kwargs)\n"}
+,{"stream_name":"stderr","time":2076.884531968,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":2076.884534525,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/engines.py\", line 443, in execute_managed_notebook\n"}
+,{"stream_name":"stderr","time":2076.884537226,"data":"    return PapermillNotebookClient(nb_man, **final_kwargs).execute()\n"}
+,{"stream_name":"stderr","time":2076.884539711,"data":"           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":2076.884542171,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/clientwrap.py\", line 45, in execute\n"}
+,{"stream_name":"stderr","time":2076.884544796,"data":"    self.papermill_execute_cells()\n"}
+,{"stream_name":"stderr","time":2076.884547338,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":2076.884549796,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/clientwrap.py\", line 72, in papermill_execute_cells\n"}
+,{"stream_name":"stderr","time":2076.884552393,"data":"    self.execute_cell(cell, index)\n"}
+,{"stream_name":"stderr","time":2076.884555938,"data":"    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":2076.884570516,"data":"  File \"/usr/local/lib/python3.13/dist-packages/nbclient/util.py\", line 84, in wrapped\n"}
+,{"stream_name":"stderr","time":2076.884575421,"data":"    return just_run(coro(*args, **kwargs))\n"}
+,{"stream_name":"stderr","time":2076.884580431,"data":"  File \"/usr/local/lib/python3.13/dist-packages/nbclient/util.py\", line 62, in just_run\n"}
+,{"stream_name":"stderr","time":2076.884585296,"data":"    return loop.run_until_complete(coro)\n"}
+,{"stream_name":"stderr","time":2076.88458966,"data":"           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^\n"}
+,{"stream_name":"stderr","time":2076.884594,"data":"  File \"/usr/lib/python3.13/asyncio/base_events.py\", line 726, in run_until_complete\n"}
+,{"stream_name":"stderr","time":2076.884598649,"data":"    return future.result()\n"}
+,{"stream_name":"stderr","time":2076.884602411,"data":"           ~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":2076.884606437,"data":"  File \"/usr/local/lib/python3.13/dist-packages/nbclient/client.py\", line 953, in async_execute_cell\n"}
+,{"stream_name":"stderr","time":2076.884616053,"data":"    raise DeadKernelError(\"Kernel died\")\n"}
+,{"stream_name":"stderr","time":2076.884620087,"data":"nbclient.exceptions.DeadKernelError: Kernel died\n"}
+,{"stream_name":"stderr","time":2080.544200052,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":2080.544228493,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":2080.923347987,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":2080.923376661,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":2082.951369392,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":2083.038861912,"data":"[NbConvertApp] Writing 171197 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":2085.653419206,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":2086.146477649,"data":"[NbConvertApp] Writing 822982 bytes to __results__.html\n"}
+]

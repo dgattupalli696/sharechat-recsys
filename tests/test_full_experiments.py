@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import json
 from pathlib import Path
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -9,7 +10,7 @@ import numpy as np
 import polars as pl
 import torch
 
-from full_experiments import PRIMARY_CUTOFF, category_view, feature_specs, prepare_data, run_confirmation, run_stacking, run_tabm
+from full_experiments import PRIMARY_CUTOFF, category_view, feature_specs, finish_stacking, prepare_data, run_confirmation, run_stacking, run_tabm
 from tree_experiments import run_trees
 from tabm_experiment import TabMClassifier, fit_model, fit_model_steps
 
@@ -119,6 +120,7 @@ class FullExperimentTests(unittest.TestCase):
     def test_temporal_stacking_uses_disjoint_oof_blocks_and_fixed_training(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            path = root / "chronological.parquet"
             n = 400
             start = datetime(2026, 10, 25, 18)
             vectors = np.random.default_rng(42).normal(size=(n, 32)).astype(np.float32)
@@ -129,12 +131,12 @@ class FullExperimentTests(unittest.TestCase):
                 "feature33": [float(i % 30) for i in range(n)],
                 "feature26": vectors.tolist(),
                 "watched": [i % 2 for i in range(n)],
-            }).write_parquet(root / "train.parquet")
+            }).write_parquet(path)
             output = root / "stack"
             output.mkdir()
             recipe = {"name": "reference", "members": 2, "width": 8}
             report = run_stacking(
-                root / "train.parquet", output,
+                path, output,
                 {"neural_recipe": recipe, "fixed_neural_epochs": 1,
                  "tree_kind": "catboost-expanded", "tree_iterations": 2},
                 device="cpu",
@@ -148,14 +150,52 @@ class FullExperimentTests(unittest.TestCase):
             outer = np.load(output / "validation_predictions.npz")
             self.assertEqual(len(oof["row_ids"]), len(np.unique(oof["row_ids"])))
             self.assertFalse(np.intersect1d(oof["row_ids"], outer["row_ids"]).size)
+            recovery = root / "outer-only"
+            recovery.mkdir()
+            recovered = run_stacking(
+                path, recovery,
+                {"neural_recipe": recipe, "fixed_neural_epochs": 1,
+                 "tree_kind": "catboost-expanded", "tree_iterations": 2},
+                device="cpu", outer_only=True,
+            )
+            self.assertEqual(recovered["stage"], "stacking-base-fits")
+            self.assertEqual(len(recovered["folds"]), 1)
+            self.assertEqual(recovered["folds"][0]["cutoff"], PRIMARY_CUTOFF)
+            repeated = np.load(
+                recovery / "outer/neural-fixed-budget/validation_predictions.npz"
+            )
+            original = np.load(output / "outer/neural-fixed-budget/validation_predictions.npz")
+            np.testing.assert_array_equal(repeated["probabilities"], original["probabilities"])
+            self.assertFalse((recovery / "meta-model.joblib").exists())
+            with self.assertRaisesRegex(ValueError, "all three forward OOF"):
+                finish_stacking(recovery, recovered)
             confirmation = root / "confirmation"
             confirmation.mkdir()
             checked = run_confirmation(
-                root / "train.parquet", confirmation, [recipe],
+                path, confirmation, [recipe],
                 device="cpu", epochs=1, interval=300,
             )
             self.assertEqual(len(checked["results"]), 6)
             self.assertEqual(len(checked["summary"]), 2)
+
+    def test_stacking_surfaces_isolated_fit_failure(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            with patch(
+                "full_experiments.subprocess.run",
+                side_effect=subprocess.CalledProcessError(1, ["failed-worker"]),
+            ) as worker:
+                with self.assertRaises(subprocess.CalledProcessError):
+                    run_stacking(
+                        output / "train.parquet", output,
+                        {"neural_recipe": {"name": "reference"},
+                         "fixed_neural_epochs": 8, "tree_kind": "lightgbm",
+                         "tree_iterations": 140},
+                        device="cpu",
+                    )
+            worker.assert_called_once()
+            self.assertTrue(worker.call_args.kwargs["check"])
+            self.assertFalse((output / "results.json").exists())
 
 
 if __name__ == "__main__":

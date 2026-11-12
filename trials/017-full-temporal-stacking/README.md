@@ -36,3 +36,11 @@ this experiment is not a retroactively untouched evaluation.
 Reuse canonical Kaggle notebook versioning. The existing conditional positive
 gain from cross-model blending motivates this full OOF experiment. Earlier
 time-fold and multi-seed confirmation remain separate work.
+
+## Recovery
+
+Version 7 completed all three OOF periods (943,867 validation predictions
+per base in total), then the kernel died during outer-fold preparation.
+All six base fits were preserved. The [recovery notebook](recovery/README.md)
+isolates the two remaining full outer fits into fresh processes. No OOF
+block is reduced, discarded or selected based on its AUC.
