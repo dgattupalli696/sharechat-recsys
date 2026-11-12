@@ -1,0 +1,36 @@
+FULL DATA READY: {"source_rows": 1537638, "training_rows": 710330, "validation_rows": 299969, "cutoff": "2026-10-27T08:06:52.397000", "validation_end": "2026-10-27T18:00:00", "input_features": 1127, "validation_labels_sha256": "23f425902a04199b9357b778f71fd2c620e90ce8b5a4e70a35b8ccd7f4a9f6db", "scope": "all rows in both full temporal partitions; no training subset", "platform": "macOS-26.5-arm64-arm-64bit", "competition_submission": false}
+[LightGBM] [Warning] Categorical features with more bins than the configured maximum bin number found.
+[LightGBM] [Warning] For categorical features, max_bin and max_bin_by_feature may be ignored with a large number of categories.
+Training until validation scores don't improve for 60 rounds
+[50]	validation's auc: 0.817003
+[100]	validation's auc: 0.818775
+[150]	validation's auc: 0.818606
+Early stopping, best iteration is:
+[113]	validation's auc: 0.818814
+{
+  "name": "lightgbm",
+  "best_iteration": 113,
+  "library_version": "4.6.0",
+  "backend": "CPU isolated disk-backed process",
+  "parameters": {
+    "objective": "binary",
+    "metric": "auc",
+    "learning_rate": 0.03,
+    "num_leaves": 31,
+    "max_depth": -1,
+    "min_data_in_leaf": 100,
+    "feature_fraction": 0.8,
+    "lambda_l2": 1,
+    "seed": 42,
+    "num_threads": 2,
+    "verbosity": -1,
+    "device_type": "cpu",
+    "force_col_wise": true,
+    "histogram_pool_size": 512
+  },
+  "peak_rss_bytes": 4739022848,
+  "validation_auc": 0.818814477569946,
+  "validation_logloss": 0.16833644378964385,
+  "training_and_prediction_seconds": 300.428433541907,
+  "preparation_seconds": 45.273091792012565
+}

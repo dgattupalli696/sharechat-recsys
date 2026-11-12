@@ -7,5 +7,19 @@
     "lightgbm_worker.py": "98e1ef1f264f8710991ce7f4ff02c94fe4a1d4b251397cf40f84dde8ccb54af9"
   },
   "notebook_sha256": "b5454ef650b6a2a0a49c3da580d5805b0fa6de10aef236c3f8bfb932a2e2a045",
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "db475b9",
+  "status": "COMPLETE",
+  "full_temporal_partitions_verified": true,
+  "artifact_sha256": {
+    "category-vocabularies.json": "49b9a31c2c5a2edb44a161148d4244edcc086a256a75cb282a9c4ad7c9e3f217",
+    "lightgbm/model.txt": "27fb26722de6b33e4334167197b6de25452bddce70a9f7feb53975fe753dc9d1",
+    "lightgbm/results.json": "989a964568514e41ed31cf63db7fe1189aa9cb7e31a8736e8d19f6f768b332da",
+    "lightgbm/validation_predictions.npz": "600bca7aa5a999f70f782a3d18f4ea5fe5c9c7d9d42c5f0f562ef6b11aea737b",
+    "lightgbm/worker-results.json": "16165c0e6ce58aa307767daf5d5981496e3a7a1c61b013f81544bed1d820c034",
+    "protocol.json": "1f7cb72eeae7c67c849333d186adb1672f39872749f51d8ff43c9204763f4d11",
+    "results.json": "401cfebbb714db5aa95ed8fa4198154feb9ef702c5e9e81a752e10e1d178b6a2",
+    "run.log": "116cd5c7ec92119d363e0a97e601e52cd1a0c422ed7d13ed735583d57e5a4c9d",
+    "validation-identities.parquet": "fa12461fc588e9aea2c8c6ea6e9b5f25b8c073f73d9435152755a4f4281c6bb7"
+  }
 }

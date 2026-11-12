@@ -56,8 +56,7 @@ def paired_group_bootstrap(labels, reference, candidate, groups, repetitions=500
     }
 
 
-def analyze(candidates, identity_path, output, *, repetitions=500):
-    output.mkdir(parents=True, exist_ok=True)
+def load_candidates(candidates, identity_path):
     identity = pl.read_parquet(identity_path)
     row_ids = identity["_row_id"].to_numpy()
     if len(np.unique(row_ids)) != len(row_ids) or identity["request_id"].null_count():
@@ -89,6 +88,13 @@ def analyze(candidates, identity_path, output, *, repetitions=500):
             }
     if len(values) < 2:
         raise ValueError("Blending requires at least two candidates")
+    return identity, reference_y, values, fingerprints
+
+
+def analyze(candidates, identity_path, output, *, repetitions=500):
+    output.mkdir(parents=True, exist_ok=True)
+    identity, reference_y, values, fingerprints = load_candidates(candidates, identity_path)
+    row_ids = identity["_row_id"].to_numpy()
     scores = {
         name: float(roc_auc_score(reference_y, probabilities))
         for name, probabilities in values.items()

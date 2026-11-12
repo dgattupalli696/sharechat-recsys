@@ -19,3 +19,11 @@ Disk-backed streaming keeps memory bounded while Kaggle neural jobs continue.
 This is a temporal robustness backtest, not a retroactively untouched test
 set. No primary-holdout result or subset score eliminates an algorithm.
 Artifacts live in `artifacts/local-t012/`. No competition submission.
+
+## Completed result
+
+Used all **710,330 training rows and 299,969 validation rows** in this fold.
+Validation AUC is **0.8188144776**, selecting 113 trees.
+Preparation took 45.3 seconds; training/prediction took 300.4 seconds.
+Worker peak resident memory was 4.41 GiB. Keep this score separate from the
+primary fold's 0.8255838643: these are different validation populations.

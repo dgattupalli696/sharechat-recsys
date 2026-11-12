@@ -1,0 +1,12 @@
+{
+  "source_rows": 1537638,
+  "training_rows": 710330,
+  "validation_rows": 299969,
+  "cutoff": "2026-10-27T08:06:52.397000",
+  "validation_end": "2026-10-27T18:00:00",
+  "input_features": 1127,
+  "validation_labels_sha256": "23f425902a04199b9357b778f71fd2c620e90ce8b5a4e70a35b8ccd7f4a9f6db",
+  "scope": "all rows in both full temporal partitions; no training subset",
+  "platform": "macOS-26.5-arm64-arm-64bit",
+  "competition_submission": false
+}

@@ -30,3 +30,24 @@ shared feature-model source for subsequent full-data architecture experiments;
 those models are not executed in this ablation batch.
 
 No test predictions or competition submissions.
+
+## Completed full-data results
+
+Kaggle notebook version 4 completed all seven variants. Independently
+recomputed every AUC and verified labels against T007's full holdout.
+
+| Variant | Validation AUC |
+| --- | ---: |
+| reference | 0.8292340756 |
+| ple-16bins-d8 | 0.8292880922 |
+| plr-d8 | 0.8297544465 |
+| quantile-normal | 0.8267457317 |
+| vector-projection-ln | 0.8296233539 |
+| vector-dropout-01 | 0.8290760722 |
+| vector-crosses | **0.8353494632** |
+
+Exploratory vector crosses improve AUC by 0.0061153876 over the reference,
+without proving semantic alignment of anonymous embedding spaces.
+The best checkpoint is at epoch 1; training/prediction took 134.7 seconds.
+The next batch tests crosses jointly with high-cardinality masking and
+other independently evaluated changes.

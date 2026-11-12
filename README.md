@@ -21,10 +21,11 @@ submission unless it has an entry in `submitted/`.
 | T007-A | [Updated standalone TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | 0.829229 | Not submitted | +0.002205 vs T006; 80.8 s fit |
 | T007-B | [Attention encoder + TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | 0.827934 | Not submitted | +0.000910 vs T006; epoch 1; 104.4 s fit |
 | T008 | [Full TabM controls](trials/008-full-gpu-tabm-controls/README.md) | Kaggle T4 / 1,537,638 | **0.833419** | Not submitted | All 12 completed; removing high-cardinality fields wins; best at 7.74 epochs |
-| T009 | [Full feature encodings](trials/009-full-gpu-feature-encodings/README.md) | Kaggle T4 / all rows | Pending | Not submitted | PLE, PLR, quantiles, vector projection/dropout/crosses; all full runs |
+| T009 | [Full feature encodings](trials/009-full-gpu-feature-encodings/README.md) | Kaggle T4 / 1,537,638 | **0.835349** | Not submitted | All seven completed; exploratory vector crosses win |
 | T010 | [Full tree/vector comparisons](trials/010-full-tree-vector-models/README.md) | Kaggle GPU/CPU / all rows | Pending | Not submitted | Five expanded/PCA/cross/native-embedding CatBoost paths |
 | T011 | [Full local LightGBM](trials/011-local-full-lightgbm/README.md) | Local CPU / 1,537,638 | 0.825584 | Not submitted | 10.6 min total; preliminary 75% T008 / 25% tree blend: **0.834336** |
-| T012 | [LightGBM temporal backtest](trials/012-local-lightgbm-temporal-backtest/README.md) | Local CPU / full earlier fold | Pending | Not submitted | Predeclared earlier cutoff/end; same recipe; parallel with Kaggle |
+| T012 | [LightGBM temporal backtest](trials/012-local-lightgbm-temporal-backtest/README.md) | Local CPU / 710,330 train + 299,969 valid | 0.818814 | Not submitted | Earlier fold, not directly comparable to primary AUC |
+| T013 | [Existing-model ensembles](trials/013-existing-model-ensembles/README.md) | Local CPU / full primary holdout | Pending | Not submitted | Equal averaging and bounded pair/triple mixtures |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 

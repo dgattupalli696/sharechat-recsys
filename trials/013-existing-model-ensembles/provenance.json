@@ -1,0 +1,11 @@
+{
+  "run_id": "T013",
+  "execution": "local full-holdout prediction ensembles",
+  "source_sha256": {
+    "experiment_analysis.py": "874538102bba33e3d9114c957fd106f72cd7828551fd78ff14963db80d10bd3d",
+    "ensemble_experiment.py": "14301ffebc53c29b4f0da913b1f5097d9f58caac0de4a56258ee38d60fb4eaf1"
+  },
+  "input_preparation_sha256": "d322cb8e70a20666ee34d62a7e1d9660a84eb5aab1bd1e5f5b2b6e8501cf84cc",
+  "notebook_sha256": "3c4366fc36f17b05490eb26251a806b9ab838d2bf81906433c4fe656fd551155",
+  "competition_submission": false
+}

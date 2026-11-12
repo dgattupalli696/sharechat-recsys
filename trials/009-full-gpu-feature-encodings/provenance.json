@@ -30,5 +30,81 @@
     }
   },
   "scope": "all variants use all available training rows and the fixed full temporal holdout",
-  "competition_submission": false
+  "competition_submission": false,
+  "kaggle_kernel_version": 4,
+  "kaggle_kernel_id": 144588605,
+  "kaggle_status": "COMPLETE",
+  "artifact_sha256": {
+    "reference/best_model.pt": "bc8062701278ec79ef414594e79c02770c5e2ce292613534a1e9b83e84daf50e",
+    "reference/validation_predictions.npz": "67787bec80f851d2dfd7e60d1f9f5413ab58e84df8258972b066d3b1903f280f",
+    "ple-16bins-d8/best_model.pt": "f277da496b7850a7c5bcf9f472c14000282405570ad99e0a161ec3519e0e0baf",
+    "ple-16bins-d8/validation_predictions.npz": "ecdb29c4908756eb20996dab1faea0e93feb7520ef1a16e4ef13afea80498052",
+    "plr-d8/best_model.pt": "bb00362feeba457a6c42827eeea8c7d628cceb043984ed2dbdcee4cf747bc9da",
+    "plr-d8/validation_predictions.npz": "a450fa4809c90926aa72e22d1a3184abcf1d84a2dc2e6510ad63829ee5054266",
+    "quantile-normal/best_model.pt": "65a0787c9a627002ae982b9b83a008d4453dbab81f5523adf50f9f5cd819196b",
+    "quantile-normal/validation_predictions.npz": "a348c359bf059e7f3610e4c49f5b639829190497e9eb58a230d2c2979103146d",
+    "vector-projection-ln/best_model.pt": "49d83f8968f984920b8f240ca8d2f5bdb9273c1e0f6d3e55fe612a6284911040",
+    "vector-projection-ln/validation_predictions.npz": "d3386d7a55aa701c4d0273cc132c4e180ce46d225e3c7edb33dc821ca3de3cca",
+    "vector-dropout-01/best_model.pt": "842f32b47cff1d87d01e28738a79f29225bdcd0db930598edbf8f3049cd8b55f",
+    "vector-dropout-01/validation_predictions.npz": "0ad6045d760ef2f285ea700a257068d5f1c18cf161d5cd1f4e5e552a6f046998",
+    "vector-crosses/best_model.pt": "71cbec12041e4af07b91a7bb051e93d742f52613c1ab884f45d88b56f96fae64",
+    "vector-crosses/validation_predictions.npz": "56f07010afbfa37033f0501dbe9263abe571f5e4d844b1be7e2be22e3f04834f",
+    "ple-16bins-d8/results.json": "61332b8268261a8af9ed141a5551eb0aa72ff5e2267193f340ece37b392d6300",
+    "plr-d8/results.json": "cbc5b6ccf556f3e92cf961c9a77ec435a08f7ca0d030dafc743a27a16fa33d77",
+    "preprocessing.joblib": "9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983",
+    "protocol.json": "0a452dc206112b24bec1314a395ae7973b47e3a2514680926dad6eb9f55dc96c",
+    "quantile-normal/quantile-transformer.joblib": "d8d142593d05f965afa343a5643ec4193e72e14a3c3a6e1f73dfded8e94d5ace",
+    "quantile-normal/results.json": "861be6f5a7a702566c9d14be6ea41bb27b47277471317d07f1b33389683ef34e",
+    "reference/results.json": "89b6edf651fee4c57dca1a77f115a1e02f0bba724c7e467c898be29954be90ba",
+    "results.json": "311f8b825aa18b56bec67b578b06c306da8fc91e78738ac82c49005bc4672309",
+    "validation-identities.parquet": "e4882e41b3e8a039308fcba4dec2e75b503c15c6d2a0dcd182a6876f3369d77e",
+    "vector-crosses/results.json": "fb156e86381cde331ae9c50727ffabdfcc7488190ba889c42cafebfecbc96fb6",
+    "vector-dropout-01/results.json": "3d28611262f4152263419d2284a30df32f657f13fb79bfe984bf2232e48e75c4",
+    "vector-projection-ln/results.json": "ae2ced326f031b4b7aa4021029fd022e75ef3ec9dd0cd3e2aea78775ff7f4dd3"
+  },
+  "validation_labels_match_t007": true,
+  "results": [
+    {
+      "name": "reference",
+      "validation_auc": 0.8292340756398013,
+      "best_fractional_epoch": 0.9983361064891847,
+      "training_seconds": 114.57772290599996
+    },
+    {
+      "name": "ple-16bins-d8",
+      "validation_auc": 0.829288092159466,
+      "best_fractional_epoch": 1.0,
+      "training_seconds": 305.23252138500004
+    },
+    {
+      "name": "plr-d8",
+      "validation_auc": 0.8297544464654592,
+      "best_fractional_epoch": 1.0,
+      "training_seconds": 287.8117606819999
+    },
+    {
+      "name": "quantile-normal",
+      "validation_auc": 0.8267457316699929,
+      "best_fractional_epoch": 1.2479201331114809,
+      "training_seconds": 119.81691012399983
+    },
+    {
+      "name": "vector-projection-ln",
+      "validation_auc": 0.8296233539326733,
+      "best_fractional_epoch": 1.0,
+      "training_seconds": 124.15099185999998
+    },
+    {
+      "name": "vector-dropout-01",
+      "validation_auc": 0.8290760721691182,
+      "best_fractional_epoch": 0.9983361064891847,
+      "training_seconds": 145.55464052299976
+    },
+    {
+      "name": "vector-crosses",
+      "validation_auc": 0.835349463230155,
+      "best_fractional_epoch": 1.0,
+      "training_seconds": 134.7241876310004
+    }
+  ]
 }
