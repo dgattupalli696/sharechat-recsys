@@ -1,0 +1,92 @@
+{
+  "candidates": {
+    "t008-epoch-checkpoint-control": "artifacts/kaggle-t008/epoch-checkpoint-control/validation_predictions.npz",
+    "t008-reference": "artifacts/kaggle-t008/reference/validation_predictions.npz",
+    "t008-learning-rate-1e4": "artifacts/kaggle-t008/learning-rate-1e4/validation_predictions.npz",
+    "t008-dropout-035": "artifacts/kaggle-t008/dropout-035/validation_predictions.npz",
+    "t008-weight-decay-003": "artifacts/kaggle-t008/weight-decay-003/validation_predictions.npz",
+    "t008-width-64": "artifacts/kaggle-t008/width-64/validation_predictions.npz",
+    "t008-numeric-dropout-01": "artifacts/kaggle-t008/numeric-dropout-01/validation_predictions.npz",
+    "t008-cosine-two-epochs": "artifacts/kaggle-t008/cosine-two-epochs/validation_predictions.npz",
+    "t008-minimum-category-50": "artifacts/kaggle-t008/minimum-category-50/validation_predictions.npz",
+    "t008-embedding-dim-4": "artifacts/kaggle-t008/embedding-dim-4/validation_predictions.npz",
+    "t008-adaptive-category-dims": "artifacts/kaggle-t008/adaptive-category-dims/validation_predictions.npz",
+    "t008-without-high-cardinality": "artifacts/kaggle-t008/without-high-cardinality/validation_predictions.npz",
+    "t009-reference": "artifacts/kaggle-t009/reference/validation_predictions.npz",
+    "t009-ple-16bins-d8": "artifacts/kaggle-t009/ple-16bins-d8/validation_predictions.npz",
+    "t009-plr-d8": "artifacts/kaggle-t009/plr-d8/validation_predictions.npz",
+    "t009-quantile-normal": "artifacts/kaggle-t009/quantile-normal/validation_predictions.npz",
+    "t009-vector-projection-ln": "artifacts/kaggle-t009/vector-projection-ln/validation_predictions.npz",
+    "t009-vector-dropout-01": "artifacts/kaggle-t009/vector-dropout-01/validation_predictions.npz",
+    "t009-vector-crosses": "artifacts/kaggle-t009/vector-crosses/validation_predictions.npz",
+    "t006-attention": "artifacts/local-t013/aligned-legacy/t006-attention/validation_predictions.npz",
+    "t007-standalone": "artifacts/local-t013/aligned-legacy/t007-standalone/validation_predictions.npz",
+    "t007-hybrid": "artifacts/local-t013/aligned-legacy/t007-hybrid/validation_predictions.npz",
+    "t011-lightgbm": "artifacts/local-t011/lightgbm/validation_predictions.npz"
+  },
+  "families": {
+    "t008-epoch-checkpoint-control": "TabM",
+    "t008-reference": "TabM",
+    "t008-learning-rate-1e4": "TabM",
+    "t008-dropout-035": "TabM",
+    "t008-weight-decay-003": "TabM",
+    "t008-width-64": "TabM",
+    "t008-numeric-dropout-01": "TabM",
+    "t008-cosine-two-epochs": "TabM",
+    "t008-minimum-category-50": "TabM",
+    "t008-embedding-dim-4": "TabM",
+    "t008-adaptive-category-dims": "TabM",
+    "t008-without-high-cardinality": "TabM",
+    "t009-reference": "TabM",
+    "t009-ple-16bins-d8": "TabM",
+    "t009-plr-d8": "TabM",
+    "t009-quantile-normal": "TabM",
+    "t009-vector-projection-ln": "TabM",
+    "t009-vector-dropout-01": "TabM",
+    "t009-vector-crosses": "TabM",
+    "t006-attention": "Attention",
+    "t007-standalone": "TabM",
+    "t007-hybrid": "Attention",
+    "t011-lightgbm": "LightGBM"
+  },
+  "core_names": [
+    "t009-vector-crosses",
+    "t008-without-high-cardinality",
+    "t008-cosine-two-epochs",
+    "t009-plr-d8",
+    "t009-vector-projection-ln",
+    "t006-attention",
+    "t007-hybrid",
+    "t011-lightgbm"
+  ],
+  "legacy_alignment_certificates": {
+    "t006-attention": {
+      "original_path": "artifacts/kaggle-t006/attention/validation_predictions.npz",
+      "original_sha256": "72c4edcf384fe50b1e6a893e80a945855294524798ce6d100c95a01412d96849",
+      "aligned_sha256": "5d223cbbd9b1f5d9c505c9a36f506fe0bef71c2f547996cbdc208113d9f355ef",
+      "canonical_identity_sha256": "e4882e41b3e8a039308fcba4dec2e75b503c15c6d2a0dcd182a6876f3369d77e",
+      "common_ordered_loader_sha256": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+      "common_preprocessing_sha256": "9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983",
+      "method": "Derived IDs: same archived full-data ordered loader, cutoff, image and byte-identical fitted preprocessing; labels checked. Legacy IDs were not stored originally."
+    },
+    "t007-standalone": {
+      "original_path": "artifacts/kaggle-t007/standalone/validation_predictions.npz",
+      "original_sha256": "1c6d74fb77a653374711a5ccdc0e29acca5ed23e1c67156744e7db9dccae3858",
+      "aligned_sha256": "2c71525c3d489f9d00180ba925729fc5ea5fc4ae7b898d75b948be23a5e3a588",
+      "canonical_identity_sha256": "e4882e41b3e8a039308fcba4dec2e75b503c15c6d2a0dcd182a6876f3369d77e",
+      "common_ordered_loader_sha256": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+      "common_preprocessing_sha256": "9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983",
+      "method": "Derived IDs: same archived full-data ordered loader, cutoff, image and byte-identical fitted preprocessing; labels checked. Legacy IDs were not stored originally."
+    },
+    "t007-hybrid": {
+      "original_path": "artifacts/kaggle-t007/hybrid/validation_predictions.npz",
+      "original_sha256": "f3b6dd33a8e0ee91bbe0aa069fd2933cceaa408e655ba2ec38af8fa0e5773c48",
+      "aligned_sha256": "6931f13737f274ecbc44c38f9138c8c29fc0522f95bc518825a01973acdfcf2c",
+      "canonical_identity_sha256": "e4882e41b3e8a039308fcba4dec2e75b503c15c6d2a0dcd182a6876f3369d77e",
+      "common_ordered_loader_sha256": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+      "common_preprocessing_sha256": "9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983",
+      "method": "Derived IDs: same archived full-data ordered loader, cutoff, image and byte-identical fitted preprocessing; labels checked. Legacy IDs were not stored originally."
+    }
+  },
+  "scope": "all currently archived full-data models with available validation predictions; never subset or earlier-fold predictions"
+}

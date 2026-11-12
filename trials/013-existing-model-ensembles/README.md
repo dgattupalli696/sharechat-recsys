@@ -30,3 +30,25 @@ certificates rather than claiming the IDs came from original legacy outputs.
 
 Run the frozen notebook from the repository. Large predictions remain in
 `artifacts/local-t013/`. No competition submission.
+
+## Completed full-holdout results
+
+Evaluated 883 configurations from 23 inputs / 21 distinct prediction arrays.
+Removed the duplicate T009 reference and T007 standalone copies.
+
+| Ensemble | Validation AUC |
+| --- | ---: |
+| Best single: vector-cross TabM | 0.8353494632 |
+| Equal average of all 21 distinct models | 0.8317015472 |
+| Family-balanced average | 0.8317370591 |
+| Best equal mean: masked-category TabM + vector-cross TabM | **0.8366686874** |
+| 25% masked-category TabM + 50% vector-cross TabM + 25% LightGBM | **0.8368991177** |
+
+The three-model blend gains 0.0015496544 over the best current single model
+and 0.0025633585 over the preceding two-model blend. A 500-replicate paired
+request bootstrap gives a conditional 95% delta interval of
+[+0.000995, +0.002088] against the best single. Membership and weights were
+selected on this holdout; this is not selection-adjusted confirmation.
+
+Blindly adding models reduced AUC. The bounded search prefers complementary
+strong neural recipes plus a smaller tree contribution, not the largest bag.

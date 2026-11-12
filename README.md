@@ -25,7 +25,7 @@ submission unless it has an entry in `submitted/`.
 | T010 | [Full tree/vector comparisons](trials/010-full-tree-vector-models/README.md) | Kaggle GPU/CPU / all rows | Pending | Not submitted | Five expanded/PCA/cross/native-embedding CatBoost paths |
 | T011 | [Full local LightGBM](trials/011-local-full-lightgbm/README.md) | Local CPU / 1,537,638 | 0.825584 | Not submitted | 10.6 min total; preliminary 75% T008 / 25% tree blend: **0.834336** |
 | T012 | [LightGBM temporal backtest](trials/012-local-lightgbm-temporal-backtest/README.md) | Local CPU / 710,330 train + 299,969 valid | 0.818814 | Not submitted | Earlier fold, not directly comparable to primary AUC |
-| T013 | [Existing-model ensembles](trials/013-existing-model-ensembles/README.md) | Local CPU / full primary holdout | Pending | Not submitted | Equal averaging and bounded pair/triple mixtures |
+| T013 | [Existing-model ensembles](trials/013-existing-model-ensembles/README.md) | Local CPU / full primary holdout | **0.836899** | Not submitted | 21 unique models, 883 configurations; best equal mean 0.836669 |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 

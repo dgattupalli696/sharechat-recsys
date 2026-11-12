@@ -1,0 +1,13 @@
+[
+  {"name": "vector-cross-control", "vector_crosses": true},
+  {"name": "masked-category-control", "drop_high": true},
+  {"name": "cross-masked", "vector_crosses": true, "drop_high": true},
+  {"name": "cross-masked-lr1e4", "vector_crosses": true, "drop_high": true, "learning_rate": 0.0001},
+  {"name": "cross-masked-cosine", "vector_crosses": true, "drop_high": true, "cosine": true},
+  {"name": "cross-masked-min50", "vector_crosses": true, "drop_high": true, "minimum": 50},
+  {"name": "cross-masked-plr", "vector_crosses": true, "drop_high": true, "numerical_encoding": "plr"},
+  {"name": "cross-masked-projection", "vector_crosses": true, "drop_high": true, "vector_projection": true},
+  {"name": "cross-masked-fusion", "vector_crosses": true, "drop_high": true, "numerical_encoding": "plr", "vector_projection": true},
+  {"name": "cross-masked-fusion-lr1e4", "vector_crosses": true, "drop_high": true, "numerical_encoding": "plr", "vector_projection": true, "learning_rate": 0.0001},
+  {"name": "cross-masked-fusion-cosine", "vector_crosses": true, "drop_high": true, "numerical_encoding": "plr", "vector_projection": true, "cosine": true}
+]
