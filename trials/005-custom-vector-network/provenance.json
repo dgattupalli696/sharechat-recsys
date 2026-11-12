@@ -13,5 +13,15 @@
     "T004"
   ],
   "scope": "paired local three-branch networks, with versus without vector attention",
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "08e1b805f09aa5c9e614a5d5b6c331ac117d4dfa",
+  "sample_sha256": "c82b7230bd0864219c739ff7a8e9597fbb26ba9301dbe73ea80a329de2a2e195",
+  "artifact_sha256": {
+    "preprocessing.joblib": "2c9c3970835a7bb780eb4cee2d7dd9a9499089956deea5852afc2b32e40ed71b",
+    "results.json": "e7b012a00a99ae3268f30e0940527294055d222cfb3f0df2fe7e104e4eca9d16",
+    "control/best_model.pt": "e509450d1f386b15e57a1339cf5561c339660ea60f6cdc110b83939a63e65861",
+    "control/validation_predictions.npz": "17fc315da001506797ccf0f4ed5974334d4c27d653394a1e5fe53ca02dc91c15",
+    "attention/best_model.pt": "fba26b718be4ece545a080755d50f8d0bba00d9c07cb3a0212b8bf05cb43e501",
+    "attention/validation_predictions.npz": "584a8ef1a1aaaa51620160d378d3903478b4aec8f855e18d6ec993b2e61c2071"
+  }
 }

@@ -1,0 +1,19 @@
+Variant: control; device: mps; train: 119,999; valid: 30,001; parameters: 276,665; cutoff: 2026-10-28 08:06:29.680000
+{"epoch": 1, "training_loss": 0.17112264094613971, "validation_auc": 0.810037547840277, "seconds": 4.121889875037596}
+{"epoch": 2, "training_loss": 0.16340907905470117, "validation_auc": 0.8139920305213907, "seconds": 2.3051272919401526}
+{"epoch": 3, "training_loss": 0.15870405780089786, "validation_auc": 0.8055040538690851, "seconds": 2.482659750035964}
+{"epoch": 4, "training_loss": 0.15406080167919245, "validation_auc": 0.7959962277853919, "seconds": 2.5125942500308156}
+{"epoch": 5, "training_loss": 0.15085055849013404, "validation_auc": 0.7908022728291718, "seconds": 2.440335875027813}
+{"epoch": 6, "training_loss": 0.1489323816172087, "validation_auc": 0.7804132148685912, "seconds": 2.4568916669813916}
+{"epoch": 7, "training_loss": 0.1455332776858086, "validation_auc": 0.7803774155179766, "seconds": 2.395848207990639}
+control: AUC=0.813992; epoch=2; training=18.7s
+Variant: attention; device: mps; train: 119,999; valid: 30,001; parameters: 280,953; cutoff: 2026-10-28 08:06:29.680000
+{"epoch": 1, "training_loss": 0.17138601043292206, "validation_auc": 0.8104373401744165, "seconds": 4.238616875023581}
+{"epoch": 2, "training_loss": 0.16326558740699057, "validation_auc": 0.814560573587565, "seconds": 3.1484611670020968}
+{"epoch": 3, "training_loss": 0.15859325857192536, "validation_auc": 0.8065870336035914, "seconds": 3.1802043329225853}
+{"epoch": 4, "training_loss": 0.154485971333464, "validation_auc": 0.7977573212881603, "seconds": 3.1698347920319065}
+{"epoch": 5, "training_loss": 0.1511409071124569, "validation_auc": 0.7906964055081818, "seconds": 3.1765006250934675}
+{"epoch": 6, "training_loss": 0.14859306227851757, "validation_auc": 0.7796666255838258, "seconds": 3.1972966250032187}
+{"epoch": 7, "training_loss": 0.1461981274562891, "validation_auc": 0.7822764599666479, "seconds": 3.1598410420119762}
+attention: AUC=0.814561; epoch=2; training=23.3s
+Both results saved; no Kaggle run or competition submission performed

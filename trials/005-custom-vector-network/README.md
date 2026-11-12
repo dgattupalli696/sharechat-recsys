@@ -61,17 +61,37 @@ numerically defined.
 
 ## Results
 
-Pending local execution. References on this subset:
+| Trial | Validation ROC AUC | Selected training point | Fit wall time |
+| --- | ---: | --- | ---: |
+| T002-A: CatBoost summaries, CPU | 0.8208754309 | 298 trees | 49.61 s |
+| T002-B: CatBoost expanded vectors, CPU | 0.8194781205 | 400 trees | 71.72 s |
+| T004: TabM summaries, Apple GPU | 0.8091940040 | Epoch 1 | 27.66 s |
+| T005-A: custom control, Apple GPU | 0.8139920305 | Epoch 2 | 18.75 s |
+| T005-B: custom attention, Apple GPU | 0.8145605736 | Epoch 2 | 23.30 s |
 
-| Prior trial | Validation ROC AUC |
-| --- | ---: |
-| T002-A: CatBoost summaries | 0.8208754309 |
-| T002-B: CatBoost expanded vectors | 0.8194781205 |
-| T004: TabM summaries | 0.8091940040 |
+Both custom models stopped after seven epochs and restored epoch 2. Shared
+preparation took 14.96 seconds. The control has 276,665 parameters; attention adds
+4,288, for 280,953 total.
+
+Attention changed AUC by **+0.0005685431** versus the matched custom control,
+and by **+0.0053665695** versus T004. It remains **0.0063148573 below T002-A**.
+These are single exploratory runs, not statistically established improvements.
+There is no full-data GPU result or public leaderboard score for either model.
+
+The numerical branch received 971 channels after train-only missingness
+indicators. Rare pooling removed all learnable `feature5` category IDs in this
+subset: its 95,210 training levels became the reserved unknown entry. Other
+categorical vocabulary sizes are recorded in the results. This is a deliberate
+cold-start defense, not a claim that the field is globally useless.
+
+Overfitting was reduced relative to T004's training-loss collapse but not
+eliminated. Both models' holdout AUC declined after epoch 2. Raw vector
+interactions and stronger regularization alone did not beat the tree baseline.
 
 T005-A versus T005-B isolates the added attention block. Comparisons against
 earlier trials also change preprocessing, regularization, optimizer, and/or
-vector representation; they do not isolate architecture alone.
+vector representation; they do not isolate architecture alone. Runtime
+comparisons against T002 also use different compute backends.
 
 ## Reproduction and tracking
 
@@ -89,7 +109,13 @@ features from `data/train.parquet`. Use `--device cpu` when Apple MPS is absent.
 The notebook freezes feature preparation, the reused neural training/checkpoint
 helpers, and the custom model/runner. Original model, preprocessor and validation
 prediction files remain under ignored `artifacts/local-custom-v1/`; small results,
-logs, environment and source/data/artifact checksums will be archived here.
+logs, environment and source/data/artifact checksums are archived here.
+
+Source revision: `08e1b805f09aa5c9e614a5d5b6c331ac117d4dfa`.
+The original cached sample SHA-256 matches T004. Both checkpoints were reloaded;
+their saved validation probabilities independently reproduce the recorded AUCs.
+Environment: Python 3.12, PyTorch 2.15.0 on Apple MPS, NumPy 2.5.4, Polars 1.44.2,
+scikit-learn 1.9.1. GPU operations can be nondeterministic.
 
 Original T004 notebooks remain frozen; extracting shared training code does not
 alter the historical trial. Neither this trial nor its notebooks run Kaggle
