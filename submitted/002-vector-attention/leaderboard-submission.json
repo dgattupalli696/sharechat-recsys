@@ -1,0 +1,9 @@
+{
+  "ref": "58275874",
+  "fileName": "submission.csv",
+  "date": "2026-11-12 14:29:42.673000",
+  "description": "T006 custom vector attention: unchanged epoch-1 checkpoint; validation AUC 0.827024; 1,230,110 training rows; no refit",
+  "status": "SubmissionStatus.COMPLETE",
+  "publicScore": "0.81905",
+  "privateScore": ""
+}

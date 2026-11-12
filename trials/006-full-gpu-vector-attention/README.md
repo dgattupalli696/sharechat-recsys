@@ -64,6 +64,11 @@ T005-B's 0.8145605736 used a different, smaller holdout and is not directly
 comparable. One GPU run cannot establish statistical significance or guarantee a
 public leaderboard improvement.
 
+Subsequently, the user approved one separate checkpoint-only inference and
+submission. The unchanged best checkpoint scored **0.81905 public AUC** as
+[S002](../../submitted/002-vector-attention/README.md), without refitting. The
+T006 training notebook itself still performed no test prediction or submission.
+
 ## Reproduction and tracking
 
 Kaggle kernel: `dheerajgattupalli/sharechat-custom-vector-attention-gpu`, version 1.

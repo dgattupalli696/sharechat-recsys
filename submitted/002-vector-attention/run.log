@@ -1,0 +1,54 @@
+[{"stream_name":"stderr","time":6.332532556,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.332570337,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.332576674,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.332580583,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":6.892597488,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.892621217,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.892624632,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.892627126,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":8.762169944,"data":"Original T006 checkpoint, preprocessor, and results checksums verified\n"}
+,{"stream_name":"stdout","time":18.002776103,"data":"Inference device: cuda; unchanged best epoch: 1; training rows: 1,230,110; no retraining\n"}
+,{"stream_name":"stdout","time":95.465523591,"data":"Replayed validation ROC AUC: 0.827023891\n"}
+,{"stream_name":"stdout","time":135.436450435,"data":"Predicted 204,800/1,037,090 test rows\n"}
+,{"stream_name":"stdout","time":169.782316938,"data":"Predicted 409,600/1,037,090 test rows\n"}
+,{"stream_name":"stdout","time":203.97689393,"data":"Predicted 614,400/1,037,090 test rows\n"}
+,{"stream_name":"stdout","time":237.944847799,"data":"Predicted 819,200/1,037,090 test rows\n"}
+,{"stream_name":"stdout","time":270.929744027,"data":"Predicted 1,024,000/1,037,090 test rows\n"}
+,{"stream_name":"stdout","time":273.393632765,"data":"Saved 1,037,090 predictions; no retraining or automatic submission\n"}
+,{"stream_name":"stdout","time":273.418633879,"data":"{\n"}
+,{"stream_name":"stdout","time":273.418670462,"data":"  \"checkpoint_best_epoch\": 1,\n"}
+,{"stream_name":"stdout","time":273.418676031,"data":"  \"training_rows\": 1230110,\n"}
+,{"stream_name":"stdout","time":273.418680584,"data":"  \"validation_rows\": 307528,\n"}
+,{"stream_name":"stdout","time":273.418684857,"data":"  \"training_validation_auc\": 0.8270238903953564,\n"}
+,{"stream_name":"stdout","time":273.418689127,"data":"  \"replayed_validation_auc\": 0.8270238905091831,\n"}
+,{"stream_name":"stdout","time":273.418693408,"data":"  \"test_rows\": 1037090,\n"}
+,{"stream_name":"stdout","time":273.418697536,"data":"  \"prediction_min\": 3.68462351616472e-05,\n"}
+,{"stream_name":"stdout","time":273.418701704,"data":"  \"prediction_mean\": 0.052693940699100494,\n"}
+,{"stream_name":"stdout","time":273.418705865,"data":"  \"prediction_max\": 0.4790189266204834,\n"}
+,{"stream_name":"stdout","time":273.418710179,"data":"  \"checkpoint_sha256\": \"454a93210a7ae5408fbaf92828e74e010f26f041ace3939d8fde3a10ebd74f3f\",\n"}
+,{"stream_name":"stdout","time":273.418714944,"data":"  \"preprocessor_sha256\": \"9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983\",\n"}
+,{"stream_name":"stdout","time":273.418719283,"data":"  \"training_results_sha256\": \"2c4d911a2f992aa69cae2357373adb326d5f457e7d7ed90c96913575df63d09e\",\n"}
+,{"stream_name":"stdout","time":273.418725261,"data":"  \"submission_sha256\": \"a6112f0a970e7a6a2e5f005e66c72da7cccbae1845b49cadc0759bed9e55c8ac\",\n"}
+,{"stream_name":"stdout","time":273.418733516,"data":"  \"submission_bytes\": 19479611,\n"}
+,{"stream_name":"stdout","time":273.418736531,"data":"  \"device\": \"cuda\",\n"}
+,{"stream_name":"stdout","time":273.418748521,"data":"  \"batch_size\": 1024,\n"}
+,{"stream_name":"stdout","time":273.418750963,"data":"  \"versions\": {\n"}
+,{"stream_name":"stdout","time":273.418753206,"data":"    \"torch\": \"2.11.0+cu130\",\n"}
+,{"stream_name":"stdout","time":273.41875556,"data":"    \"numpy\": \"2.1.3\",\n"}
+,{"stream_name":"stdout","time":273.418757808,"data":"    \"polars\": \"1.35.2\",\n"}
+,{"stream_name":"stdout","time":273.41876014,"data":"    \"scikit-learn\": \"1.6.1\"\n"}
+,{"stream_name":"stdout","time":273.418762401,"data":"  },\n"}
+,{"stream_name":"stdout","time":273.418764533,"data":"  \"inference_seconds\": 256.352481356,\n"}
+,{"stream_name":"stdout","time":273.418766821,"data":"  \"refit\": false,\n"}
+,{"stream_name":"stdout","time":273.418769131,"data":"  \"automatic_competition_submission\": false\n"}
+,{"stream_name":"stdout","time":273.418771461,"data":"}\n"}
+,{"stream_name":"stdout","time":273.418773544,"data":"\n"}
+,{"stream_name":"stderr","time":278.680507753,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":278.68053629999997,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":278.825781039,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":278.825807227,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":279.574690094,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":279.648743251,"data":"[NbConvertApp] Writing 66401 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":282.201257526,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":282.88130868,"data":"[NbConvertApp] Writing 523359 bytes to __results__.html\n"}
+]

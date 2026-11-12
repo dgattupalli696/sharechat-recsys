@@ -1,0 +1,12 @@
+{
+  "ref": "58275874",
+  "description": "T006 custom vector attention: unchanged epoch-1 checkpoint; validation AUC 0.827024; 1,230,110 training rows; no refit",
+  "model_trial": "T006",
+  "checkpoint_best_epoch": 1,
+  "training_rows": 1230110,
+  "refit": false,
+  "submission_sha256": "a6112f0a970e7a6a2e5f005e66c72da7cccbae1845b49cadc0759bed9e55c8ac",
+  "inference_kernel": "dheerajgattupalli/sharechat-vector-attention-inference",
+  "inference_kernel_version": 1,
+  "user_approved_once": true
+}

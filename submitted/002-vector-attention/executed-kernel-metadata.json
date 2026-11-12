@@ -1,0 +1,23 @@
+{
+  "id": "dheerajgattupalli/sharechat-vector-attention-inference",
+  "id_no": 144610171,
+  "title": "ShareChat Vector Attention Inference",
+  "code_file": "sharechat-vector-attention-inference.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [],
+  "kernel_sources": [
+    "dheerajgattupalli/sharechat-custom-vector-attention-gpu"
+  ],
+  "competition_sources": [
+    "sharechat"
+  ],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:de153e6d303881930c51286216393d56f56b26458d0661350305a1e8144eea01",
+  "machine_shape": "NvidiaTeslaT4"
+}

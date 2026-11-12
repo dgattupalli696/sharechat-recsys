@@ -20,5 +20,16 @@
   "configuration_sha256": "80085e3384246e05acf308851356201a725d40cae08048d1dd3dbab18d86ee6c",
   "refit": false,
   "scope": "exact saved epoch-1 T006 checkpoint; one user-approved competition submission",
-  "automatic_competition_submission": false
+  "automatic_competition_submission": false,
+  "inference_source_revision": "19e849b0a3ad0c6129917d4c0ec4f8b52e5f228f",
+  "inference_kaggle_kernel_version": 1,
+  "inference_kaggle_status": "COMPLETE",
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:de153e6d303881930c51286216393d56f56b26458d0661350305a1e8144eea01",
+  "submission_id": "58275874",
+  "public_score": 0.81905,
+  "public_score_delta_vs_s001": 0.01206,
+  "submission_sha256": "a6112f0a970e7a6a2e5f005e66c72da7cccbae1845b49cadc0759bed9e55c8ac",
+  "submission_bytes": 19479611,
+  "prediction_rows": 1037090,
+  "approval_consumed": true
 }
