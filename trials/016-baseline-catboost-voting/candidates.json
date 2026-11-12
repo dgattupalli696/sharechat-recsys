@@ -1,0 +1,173 @@
+{
+  "candidates": {
+    "tabm-k8": "artifacts/kaggle-t014/cross-masked-plr/validation_predictions.npz",
+    "tabm-k16": "artifacts/kaggle-t014/ensemble-16/validation_predictions.npz",
+    "tabm-k32": "artifacts/kaggle-t014/ensemble-32/validation_predictions.npz",
+    "lightgbm": "artifacts/local-t011/lightgbm/validation_predictions.npz",
+    "previous-ensemble": "artifacts/local-t013/validation_predictions.npz",
+    "dcnv2-r32": "artifacts/kaggle-t014/dcnv2-r32/validation_predictions.npz",
+    "dcnv2-r64": "artifacts/kaggle-t014/dcnv2-r64/validation_predictions.npz",
+    "dcnv2-moe4": "artifacts/kaggle-t014/dcnv2-moe4/validation_predictions.npz",
+    "finalmlp-gated": "artifacts/kaggle-t014/finalmlp-gated/validation_predictions.npz",
+    "finalmlp-ungated": "artifacts/kaggle-t014/finalmlp-ungated/validation_predictions.npz",
+    "finalmlp-alternate-lr": "artifacts/kaggle-t014/finalmlp-alternate-lr/validation_predictions.npz",
+    "catboost-baseline": "artifacts/b001-validation-replay/validation_predictions.npz",
+    "current-ensemble": "artifacts/local-t015/validation_predictions.npz"
+  },
+  "families": {
+    "tabm-k8": "TabM",
+    "tabm-k16": "TabM",
+    "tabm-k32": "TabM",
+    "lightgbm": "LightGBM",
+    "previous-ensemble": "Previous ensemble",
+    "dcnv2-r32": "DCNv2",
+    "dcnv2-r64": "DCNv2",
+    "dcnv2-moe4": "DCNv2",
+    "finalmlp-gated": "FinalMLP",
+    "finalmlp-ungated": "FinalMLP",
+    "finalmlp-alternate-lr": "FinalMLP",
+    "catboost-baseline": "CatBoost",
+    "current-ensemble": "Current ensemble"
+  },
+  "core_names": [
+    "tabm-k8",
+    "tabm-k16",
+    "tabm-k32",
+    "lightgbm",
+    "previous-ensemble",
+    "dcnv2-r32",
+    "dcnv2-r64",
+    "dcnv2-moe4",
+    "finalmlp-gated",
+    "finalmlp-ungated",
+    "finalmlp-alternate-lr",
+    "catboost-baseline",
+    "current-ensemble"
+  ],
+  "four_way_groups": [
+    [
+      "tabm-k8",
+      "dcnv2-moe4",
+      "finalmlp-gated",
+      "lightgbm"
+    ],
+    [
+      "tabm-k8",
+      "dcnv2-moe4",
+      "finalmlp-ungated",
+      "lightgbm"
+    ],
+    [
+      "tabm-k8",
+      "dcnv2-moe4",
+      "finalmlp-alternate-lr",
+      "lightgbm"
+    ],
+    [
+      "tabm-k16",
+      "dcnv2-moe4",
+      "finalmlp-gated",
+      "lightgbm"
+    ],
+    [
+      "tabm-k16",
+      "dcnv2-moe4",
+      "finalmlp-ungated",
+      "lightgbm"
+    ],
+    [
+      "tabm-k16",
+      "dcnv2-moe4",
+      "finalmlp-alternate-lr",
+      "lightgbm"
+    ],
+    [
+      "tabm-k32",
+      "dcnv2-moe4",
+      "finalmlp-gated",
+      "lightgbm"
+    ],
+    [
+      "tabm-k32",
+      "dcnv2-moe4",
+      "finalmlp-ungated",
+      "lightgbm"
+    ],
+    [
+      "tabm-k32",
+      "dcnv2-moe4",
+      "finalmlp-alternate-lr",
+      "lightgbm"
+    ],
+    [
+      "tabm-k8",
+      "dcnv2-moe4",
+      "finalmlp-gated",
+      "catboost-baseline"
+    ],
+    [
+      "tabm-k8",
+      "dcnv2-moe4",
+      "finalmlp-ungated",
+      "catboost-baseline"
+    ],
+    [
+      "tabm-k8",
+      "dcnv2-moe4",
+      "finalmlp-alternate-lr",
+      "catboost-baseline"
+    ],
+    [
+      "tabm-k16",
+      "dcnv2-moe4",
+      "finalmlp-gated",
+      "catboost-baseline"
+    ],
+    [
+      "tabm-k16",
+      "dcnv2-moe4",
+      "finalmlp-ungated",
+      "catboost-baseline"
+    ],
+    [
+      "tabm-k16",
+      "dcnv2-moe4",
+      "finalmlp-alternate-lr",
+      "catboost-baseline"
+    ],
+    [
+      "tabm-k32",
+      "dcnv2-moe4",
+      "finalmlp-gated",
+      "catboost-baseline"
+    ],
+    [
+      "tabm-k32",
+      "dcnv2-moe4",
+      "finalmlp-ungated",
+      "catboost-baseline"
+    ],
+    [
+      "tabm-k32",
+      "dcnv2-moe4",
+      "finalmlp-alternate-lr",
+      "catboost-baseline"
+    ]
+  ],
+  "scope": "Add original pre-refit CatBoost baseline and frozen current winner to complete primary-holdout soft voting",
+  "pair_weights": [
+    0.01,
+    0.025,
+    0.05,
+    0.1,
+    0.125,
+    0.25,
+    0.5,
+    0.75,
+    0.875,
+    0.9,
+    0.95,
+    0.975,
+    0.99
+  ]
+}

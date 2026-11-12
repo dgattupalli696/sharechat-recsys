@@ -28,7 +28,7 @@ submission unless it has an entry in `submitted/`.
 | T013 | [Existing-model ensembles](trials/013-existing-model-ensembles/README.md) | Local CPU / full primary holdout | **0.836899** | Not submitted | 21 unique models, 883 configurations; best equal mean 0.836669 |
 | T014 | [Combinations and architectures](trials/014-full-gpu-combinations-architectures/README.md) | Kaggle T4 / 1,537,638 | **0.840454** | Not submitted | All nineteen complete; PLR/cross/masked TabM k32 wins |
 | T015 | [New cross-family ensembles](trials/015-tabm-member-ensembles/README.md) | Local CPU / full primary holdout | **0.840708** | Not submitted | 50% k32 + 25% k8 + 25% DCNv2-r32; four-family alternative 0.840670 |
-| T016 | [Baseline CatBoost voting](trials/016-baseline-catboost-voting/README.md) | Local CPU / full primary holdout | Pending | Not submitted | Original 21-tree holdout model, equal and low-weight probability votes |
+| T016 | [Baseline CatBoost voting](trials/016-baseline-catboost-voting/README.md) | Local CPU / full primary holdout | **0.840806** | Not submitted | 10% LightGBM + 90% T015; baseline CatBoost at 2.5% gives 0.840729; tiny gains uncertain |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 
