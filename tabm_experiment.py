@@ -10,7 +10,7 @@ import joblib
 import numpy as np
 import polars as pl
 from sklearn.impute import SimpleImputer
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import log_loss, roc_auc_score
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 import torch
 from torch import nn
@@ -109,6 +109,7 @@ class TabMClassifier(nn.Module):
     def __init__(
         self, n_numeric, cardinalities, members=8, width=128, blocks=2, dropout=0.1,
         category_dropout=0.0, positive_rate=None,
+        embedding_dimensions=None, numeric_dropout=0.0, dropout_columns=None,
     ):
         super().__init__()
         from tabm import TabM
@@ -116,16 +117,21 @@ class TabMClassifier(nn.Module):
         if not 0 <= category_dropout <= 1:
             raise ValueError("category_dropout must be between zero and one")
         self.category_dropout = category_dropout
+        self.numeric_dropout = numeric_dropout
+        self.dropout_columns = dropout_columns or []
+        dimensions = embedding_dimensions or [8] * len(cardinalities)
+        if len(dimensions) != len(cardinalities) or any(d <= 0 for d in dimensions):
+            raise ValueError("Expected one positive embedding dimension per category")
         self.embeddings = nn.ModuleList(
-            nn.Embedding(cardinality, 8, padding_idx=0)
-            for cardinality in cardinalities
+            nn.Embedding(cardinality, dimension, padding_idx=0)
+            for cardinality, dimension in zip(cardinalities, dimensions)
         )
         for embedding in self.embeddings:
             nn.init.normal_(embedding.weight, std=0.02)
             with torch.no_grad():
                 embedding.weight[0].zero_()
         self.backbone = TabM.make(
-            n_num_features=n_numeric + 8 * len(cardinalities),
+            n_num_features=n_numeric + sum(dimensions),
             d_out=1,
             k=members,
             n_blocks=blocks,
@@ -141,6 +147,11 @@ class TabMClassifier(nn.Module):
                 )
 
     def forward(self, numeric, categorical):
+        if self.training and self.numeric_dropout:
+            numeric = numeric.clone()
+            numeric[:, self.dropout_columns] = F.dropout(
+                numeric[:, self.dropout_columns], p=self.numeric_dropout, training=True
+            )
         if self.training and self.category_dropout:
             categorical = categorical.masked_fill(
                 torch.rand_like(categorical, dtype=torch.float32) < self.category_dropout,
@@ -231,6 +242,112 @@ def fit_model(
         "epochs_run": len(history),
         "training_seconds": training_seconds,
         "history": history,
+    }
+
+
+def fit_model_steps(
+    model, model_config, optimizer, x_train, c_train, y_train, x_valid, c_valid, y_valid,
+    *, device, output, epochs=30, patience=5, batch_size=1024, validation_interval=300,
+    seed=42, scheduler=None,
+):
+    if min(epochs, patience, batch_size, validation_interval) <= 0:
+        raise ValueError("Training budgets and validation interval must be positive")
+    output.mkdir(parents=True, exist_ok=True)
+    generator = torch.Generator().manual_seed(seed)
+    probe_indices = torch.randperm(
+        len(y_train), generator=torch.Generator().manual_seed(42)
+    )[: min(16384, len(y_train))]
+    steps_per_epoch = (len(y_train) + batch_size - 1) // batch_size
+    best_auc, best_step, global_step = -np.inf, 0, 0
+    history, checks = [], []
+    started = time.monotonic()
+    if device == "cuda":
+        torch.cuda.reset_peak_memory_stats()
+    for epoch in range(1, epochs + 1):
+        model.train()
+        loss_sum, rows_seen, stop = 0.0, 0, False
+        order = torch.randperm(len(y_train), generator=generator)
+        for batch_index, indices in enumerate(order.split(batch_size), 1):
+            optimizer.zero_grad(set_to_none=True)
+            logits = model(x_train[indices].to(device), c_train[indices].to(device))
+            targets = y_train[indices].to(device).unsqueeze(1).expand_as(logits)
+            loss = F.binary_cross_entropy_with_logits(logits, targets)
+            if not torch.isfinite(loss).item():
+                raise ValueError(f"Nonfinite loss at epoch {epoch}, step {global_step}")
+            loss.backward()
+            optimizer.step()
+            if scheduler is not None:
+                scheduler.step()
+            global_step += 1
+            loss_sum += loss.item() * len(indices)
+            rows_seen += len(indices)
+            expired = global_step - best_step >= patience * steps_per_epoch
+            if (
+                global_step % validation_interval != 0
+                and batch_index != steps_per_epoch and not expired
+            ):
+                continue
+            probabilities = predict(model, x_valid, c_valid, device, batch_size)
+            auc = float(roc_auc_score(y_valid, probabilities))
+            probe = predict(
+                model, x_train[probe_indices], c_train[probe_indices], device, batch_size
+            )
+            probe_y = y_train[probe_indices].numpy()
+            record = {
+                "epoch": epoch,
+                "global_step": global_step,
+                "fractional_epoch": epoch - 1 + batch_index / steps_per_epoch,
+                "validation_auc": auc,
+                "validation_logloss": float(log_loss(y_valid, probabilities, labels=[0, 1])),
+                "training_probe_auc": float(roc_auc_score(probe_y, probe)),
+                "training_probe_logloss": float(log_loss(probe_y, probe, labels=[0, 1])),
+                "learning_rate": optimizer.param_groups[0]["lr"],
+                "seconds": time.monotonic() - started,
+            }
+            checks.append(record)
+            print(json.dumps(record), flush=True)
+            if auc > best_auc:
+                best_auc, best_step = auc, global_step
+                torch.save(
+                    {
+                        "model_config": model_config,
+                        "state_dict": {
+                            key: value.detach().cpu().clone()
+                            for key, value in model.state_dict().items()
+                        },
+                        "selection": record,
+                    },
+                    output / "best_model.pt",
+                )
+            model.train()
+            if global_step - best_step >= patience * steps_per_epoch:
+                stop = True
+                break
+        history.append({
+            "epoch": epoch, "training_loss": loss_sum / rows_seen,
+            "last_validation_auc": checks[-1]["validation_auc"],
+        })
+        if stop:
+            break
+    checkpoint = torch.load(output / "best_model.pt", map_location="cpu", weights_only=True)
+    model.load_state_dict(checkpoint["state_dict"])
+    probabilities = predict(model, x_valid, c_valid, device, batch_size)
+    auc = float(roc_auc_score(y_valid, probabilities))
+    if abs(auc - best_auc) > 1e-5:
+        raise ValueError("Fine checkpoint reload does not reproduce its validation AUC")
+    np.savez_compressed(
+        output / "validation_predictions.npz", y_true=y_valid, probabilities=probabilities
+    )
+    return {
+        "validation_auc": auc,
+        "validation_logloss": float(log_loss(y_valid, probabilities, labels=[0, 1])),
+        "best_epoch": checkpoint["selection"]["epoch"],
+        "best_global_step": best_step,
+        "best_fractional_epoch": checkpoint["selection"]["fractional_epoch"],
+        "optimizer_steps": global_step, "epochs_run": len(history),
+        "training_seconds": time.monotonic() - started,
+        "peak_cuda_bytes": torch.cuda.max_memory_allocated() if device == "cuda" else None,
+        "history": history, "checkpoint_history": checks,
     }
 
 

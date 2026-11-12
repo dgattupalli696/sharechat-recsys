@@ -1,0 +1,102 @@
+from datetime import datetime, timedelta
+import json
+from pathlib import Path
+import tempfile
+import unittest
+from unittest.mock import patch
+
+import numpy as np
+import polars as pl
+import torch
+
+from full_experiments import PRIMARY_CUTOFF, category_view, prepare_data, run_tabm
+from tabm_experiment import TabMClassifier, fit_model, fit_model_steps
+
+
+class FullExperimentTests(unittest.TestCase):
+    def test_fine_checks_preserve_optimizer_trajectory_and_training_mode(self):
+        torch.set_num_threads(1)
+        numeric = torch.randn(64, 3, generator=torch.Generator().manual_seed(7))
+        categories = torch.ones(64, 1, dtype=torch.int64)
+        target = torch.tensor([0.0, 1.0] * 32)
+        trajectories = []
+        with tempfile.TemporaryDirectory() as directory:
+            for fine in [False, True]:
+                torch.manual_seed(42)
+                config = {
+                    "n_numeric": 3, "cardinalities": [3], "members": 2,
+                    "width": 8, "category_dropout": 0.3,
+                }
+                model = TabMClassifier(**config)
+                optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
+                original_step = optimizer.step
+                states = []
+
+                def step(*args, **kwargs):
+                    self.assertTrue(model.training)
+                    result = original_step(*args, **kwargs)
+                    states.append({key: value.clone() for key, value in model.state_dict().items()})
+                    return result
+
+                output = Path(directory) / str(fine)
+                output.mkdir()
+                with patch.object(optimizer, "step", step):
+                    function = fit_model_steps if fine else fit_model
+                    extra = {"validation_interval": 2} if fine else {}
+                    result = function(
+                        model, config, optimizer, numeric, categories, target,
+                        numeric[:16], categories[:16], target[:16].numpy(),
+                        device="cpu", output=output, epochs=1, patience=5,
+                        batch_size=8, **extra,
+                    )
+                trajectories.append(states)
+                if fine:
+                    self.assertEqual(len(result["checkpoint_history"]), 4)
+                    self.assertIn(result["best_global_step"], [2, 4, 6, 8])
+                    chosen = states[result["best_global_step"] - 1]
+                    for key, expected in chosen.items():
+                        torch.testing.assert_close(model.state_dict()[key], expected)
+            for original, fine in zip(*trajectories):
+                for key in original:
+                    torch.testing.assert_close(original[key], fine[key], rtol=0, atol=0)
+
+    def test_full_partition_identity_and_category_remapping(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            cutoff = datetime.fromisoformat(PRIMARY_CUTOFF)
+            rows = 160
+            pl.DataFrame({
+                "request_id": [f"request-{i // 4}" for i in range(rows)],
+                "feature1": [cutoff + timedelta(seconds=i - 128) for i in range(rows)],
+                "feature5": ["common" if i % 3 else f"id-{i}" for i in range(rows)],
+                "feature33": [float(i % 30) for i in range(rows)],
+                "feature26": [[float((i + j) % 4) for j in range(32)] for i in range(rows)],
+                "watched": [i % 2 for i in range(rows)],
+            }).write_parquet(root / "train.parquet")
+            output = root / "output"
+            output.mkdir()
+            data = prepare_data(root / "train.parquet", output)
+            self.assertEqual(data["protocol"]["training_rows"], 128)
+            self.assertEqual(data["protocol"]["validation_rows"], 32)
+            identities = pl.read_parquet(output / "validation-identities.parquet")
+            self.assertEqual(identities["_row_id"].to_list(), list(range(128, 160)))
+            train, valid, cardinalities = category_view(data, minimum=1000)
+            self.assertEqual(cardinalities, [1])
+            self.assertTrue((train == 0).all().item())
+            self.assertTrue((valid == 0).all().item())
+            for name, changes in [
+                ("reference", {}), ("adaptive", {"adaptive": True}),
+                ("without-categories", {"drop_high": True}),
+            ]:
+                report = run_tabm(
+                    data, {"name": name, "width": 8, "members": 2, **changes},
+                    output, device="cpu", epochs=1, interval=1,
+                )
+                self.assertEqual(report["optimizer_steps"], 1)
+                self.assertTrue(np.isfinite(report["validation_auc"]))
+                self.assertFalse((output / name / "submission.csv").exists())
+            self.assertFalse(json.loads((output / "protocol.json").read_text())["competition_submission"])
+
+
+if __name__ == "__main__":
+    unittest.main()
