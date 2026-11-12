@@ -18,9 +18,9 @@ submission unless it has an entry in `submitted/`.
 | T005-A | [Custom regularized control](trials/005-custom-vector-network/README.md) | M1 Apple GPU / 150,000 | 0.813992 | Not submitted | Three branches; rare-ID pooling; 18.7 s fit |
 | T005-B | [Custom vector attention](trials/005-custom-vector-network/README.md) | M1 Apple GPU / 150,000 | 0.814561 | Not submitted | +0.000569 vs control; 23.3 s fit |
 | T006 | [Full GPU vector attention](trials/006-full-gpu-vector-attention/README.md) | Kaggle T4 / 1,537,638 | 0.827024 | 0.81905 (S002) | Best submitted model; epoch 1; +0.010535 vs T003 |
-| T007-A | [Updated standalone TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | **0.829229** | Not submitted | Best full-data validation; +0.002205 vs T006; 80.8 s fit |
+| T007-A | [Updated standalone TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | 0.829229 | Not submitted | +0.002205 vs T006; 80.8 s fit |
 | T007-B | [Attention encoder + TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | 0.827934 | Not submitted | +0.000910 vs T006; epoch 1; 104.4 s fit |
-| T008 | [Full TabM controls](trials/008-full-gpu-tabm-controls/README.md) | Kaggle T4 / all rows | Pending | Not submitted | 12 full-data checkpoint/optimization/category runs; no subset elimination |
+| T008 | [Full TabM controls](trials/008-full-gpu-tabm-controls/README.md) | Kaggle T4 / 1,537,638 | **0.833419** | Not submitted | All 12 completed; removing high-cardinality fields wins; best at 7.74 epochs |
 | T009 | [Full feature encodings](trials/009-full-gpu-feature-encodings/README.md) | Kaggle T4 / all rows | Pending | Not submitted | PLE, PLR, quantiles, vector projection/dropout/crosses; all full runs |
 | T010 | [Full tree/vector comparisons](trials/010-full-tree-vector-models/README.md) | GPU/CPU / all rows | Pending | Not submitted | Expanded/PCA/cross/native-embedding CatBoost and LightGBM |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |

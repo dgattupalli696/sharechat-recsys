@@ -30,20 +30,34 @@ validation cohort, stopping criterion or a substitute for full-data experiments.
 
 ## Full-data runs
 
-| Name | Single change from reference |
-| --- | --- |
-| epoch-checkpoint-control | Original epoch-end cadence; checks full-data reference reproduction |
-| reference | Fine checkpoint cadence; all other T007-A settings unchanged |
-| learning-rate-1e4 | LR 0.0001 |
-| dropout-035 | Backbone dropout 0.35 |
-| weight-decay-003 | AdamW weight decay 0.03 |
-| width-64 | Two 64-unit blocks |
-| numeric-dropout-01 | Drop eligible continuous scalar inputs with probability 0.1 |
-| cosine-two-epochs | Decay initial LR to 10% over two epochs, then hold the floor |
-| minimum-category-50 | Retain only categories occurring at least 50 times in training |
-| embedding-dim-4 | Four-dimensional categorical embeddings |
-| adaptive-category-dims | `min(32, ceil(cardinality ** 0.25))` per field |
-| without-high-cardinality | Mask fields with original training cardinality above 1,000 |
+| Name | Single change from reference | Full validation AUC | Best fractional epoch |
+| --- | --- | ---: | ---: |
+| epoch-checkpoint-control | Original epoch-end cadence | 0.8292287153 | 1.0000 |
+| reference | Fine checkpoint cadence | 0.8292340756 | 0.9983 |
+| learning-rate-1e4 | LR 0.0001 | 0.8303946009 | 2.9950 |
+| dropout-035 | Backbone dropout 0.35 | 0.8288247432 | 1.0000 |
+| weight-decay-003 | AdamW weight decay 0.03 | 0.8290579579 | 0.9983 |
+| width-64 | Two 64-unit blocks | 0.8283707922 | 1.0000 |
+| numeric-dropout-01 | Continuous scalar dropout 0.1 | 0.8287533428 | 1.0000 |
+| cosine-two-epochs | Decay LR to 10% over two epochs, then hold floor | 0.8308827050 | 1.7471 |
+| minimum-category-50 | Training frequency threshold 50 | 0.8299448274 | 1.7471 |
+| embedding-dim-4 | Four-dimensional category embeddings | 0.8290061527 | 1.0000 |
+| adaptive-category-dims | Capped fourth-root dimensions | 0.8288613710 | 0.7488 |
+| without-high-cardinality | Mask original training cardinality above 1,000 | **0.8334188580** | **7.7371** |
+
+All twelve full-data runs completed. The epoch-only control reproduces T007-A
+exactly, so the change in checkpoint cadence is isolated. Fine checking alone
+improved AUC by only 0.0000053603. Masking the seven high-cardinality fields
+improved the fine reference by 0.0041847823 and moved the best checkpoint well
+past the first epoch. These fields are `feature5`, `feature9`, `feature12`,
+`feature18`, `feature20`, `feature23`, and `feature24`; this joint ablation does
+not identify each field's individual contribution.
+
+The best variant trained for thirteen epochs before patience expired and
+restored global step 9,300. Its fit/validation time was 252.96 seconds.
+Preparation for the shared full dataset took 350.00 seconds. Every saved
+prediction file independently reproduces its reported AUC and exactly matches
+T007's held-out labels/order. No leaderboard score was generated.
 
 No variant is eliminated using subset AUC. Record every completed outcome,
 including regressions. Later experiments will test all planned encodings,
@@ -52,8 +66,12 @@ stacking and full-partition robustness checks.
 
 ## Tracking
 
-Pending execution in the next version of the existing
+Completed as version **3** of the existing
 `dheerajgattupalli/sharechat-model-experiments-gpu` notebook. Frozen sources,
 offline dependencies, configuration and source revision are tracked with
 provenance. Keep large weights, fitted preprocessors and prediction arrays in
 ignored `artifacts/kaggle-t008/`; archive small original reports/logs here.
+
+Source revision: `8552afb306bd794bffe15b3906325580d8ddb1fc`.
+Original metrics, log, protocol, exported metadata and artifact hashes are
+archived alongside this README. No test prediction or competition submission.
