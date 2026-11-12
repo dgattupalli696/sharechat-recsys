@@ -1,0 +1,19 @@
+{
+  "run_id": "T006",
+  "kaggle_kernel": "dheerajgattupalli/sharechat-custom-vector-attention-gpu",
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "tabm_experiment.py": "bb6b8316d88651bd725591f15e1eef87e6a535c3cdbf59a6658f7c7fb330ce9a",
+    "custom_network.py": "efc75267793b0f9c8f973ead1519fdea9c3a3a67f500bd0481ecca2372203c0c"
+  },
+  "notebook_sha256": "a4c5dd47cde74d6ee4c2fa9be28607a4c7d7241d0453196f86a29c4c35a1e2b2",
+  "configuration_sha256": "188652db0b471e94067a4aa0b1a8cbdc8caa749819ca3a141679664920ad4822",
+  "local_environment_lock_sha256": "b5ec8e50a2667ed4d17f2a4b3d927b895fb340e849dc531ff56d81710ee7b7ff",
+  "references": [
+    "B001",
+    "T003",
+    "T005-B"
+  ],
+  "scope": "one full-data CUDA attention run, original chronological holdout",
+  "competition_submission": false
+}

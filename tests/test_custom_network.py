@@ -12,6 +12,7 @@ import torch
 
 from custom_network import (
     RecommendationNetwork,
+    append_vectors,
     main,
     pack_vectors,
     prepare_custom_features,
@@ -65,6 +66,10 @@ class CustomNetworkTests(unittest.TestCase):
         self.assertEqual(packed[:, 0, 33].tolist(), [1.0, 0.0, 1.0])
         self.assertEqual(missing["feature26"], 1)
         self.assertTrue(torch.isfinite(packed).all().item())
+        dense = torch.tensor([[1.0, 2.0]] * 3)
+        appended, counts = append_vectors(pl.DataFrame(data), dense, ["feature26"])
+        torch.testing.assert_close(appended, torch.cat([dense, packed.flatten(1)], dim=1))
+        self.assertEqual(counts, missing)
         for attention in [False, True]:
             model = RecommendationNetwork(2, [2], 1, attention=attention)
             numeric = torch.cat([torch.zeros(3, 2), packed.flatten(1)], dim=1)
@@ -108,6 +113,41 @@ class CustomNetworkTests(unittest.TestCase):
                 self.assertFalse((output / variant / "submission.csv").exists())
             np.testing.assert_array_equal(*labels)
             self.assertFalse(result["competition_submission"])
+
+    def test_attention_only_run_reads_an_explicit_raw_dataset_directory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data = root / "input"
+            data.mkdir()
+            n = 160
+            expanded = frame(["common"] * n)
+            raw = expanded.select("_time", "feature5", "feature33", "watched").rename(
+                {"_time": "feature1"}
+            ).with_columns(
+                pl.Series(
+                    "feature26",
+                    [
+                        None if i % 13 == 0 else [float((i + j) % 4) for j in range(32)]
+                        for i in range(n)
+                    ],
+                )
+            )
+            raw.write_parquet(data / "train.parquet")
+            output = root / "output"
+            with patch.object(
+                sys, "argv",
+                [
+                    "custom_network.py", "--rows", str(n), "--data-dir", str(data),
+                    "--variant", "attention", "--epochs", "1", "--batch-size", "32",
+                    "--threads", "1", "--device", "cpu", "--output-dir", str(output),
+                ],
+            ):
+                main()
+            result = json.loads((output / "results.json").read_text())
+            self.assertEqual(result["training_rows"], 128)
+            self.assertEqual([entry["variant"] for entry in result["results"]], ["attention"])
+            self.assertTrue((output / "attention/best_model.pt").is_file())
+            self.assertFalse((output / "control").exists())
 
 
 if __name__ == "__main__":

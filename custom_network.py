@@ -34,6 +34,20 @@ def pack_vectors(frame, fields):
     return torch.from_numpy(np.stack(packed, axis=1).astype(np.float32)), missing
 
 
+def append_vectors(frame, numeric, fields):
+    packed = torch.empty(
+        (len(numeric), numeric.shape[1] + 34 * len(fields)), dtype=torch.float32
+    )
+    packed[:, : numeric.shape[1]] = numeric
+    missing = {}
+    for index, field in enumerate(fields):
+        vector, counts = pack_vectors(frame, [field])
+        start = numeric.shape[1] + 34 * index
+        packed[:, start : start + 34] = vector[:, 0]
+        missing.update(counts)
+    return packed, missing
+
+
 def prepare_custom_features(train, valid, min_category_count):
     dimension_columns = [name for name in train.columns if "_dim_" in name]
     fields = sorted(
@@ -62,11 +76,9 @@ def prepare_custom_features(train, valid, min_category_count):
         mapped_valid[:, index] = mapping[c_valid[:, index].numpy()]
         mappings.append(mapping)
         cardinalities.append(len(retained) + 1)
-    train_vectors, missing_train = pack_vectors(train, fields)
-    valid_vectors, missing_valid = pack_vectors(valid, fields)
     n_dense = x_train.shape[1]
-    x_train = torch.cat([x_train, train_vectors.flatten(1)], dim=1)
-    x_valid = torch.cat([x_valid, valid_vectors.flatten(1)], dim=1)
+    x_train, missing_train = append_vectors(train, x_train, fields)
+    x_valid, missing_valid = append_vectors(valid, x_valid, fields)
     state.update(
         {
             "original_cardinalities": state["cardinalities"],
@@ -178,6 +190,7 @@ class RecommendationNetwork(nn.Module):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", type=int, default=150_000)
+    parser.add_argument("--data-dir", type=Path, default=ROOT / "data")
     parser.add_argument("--sample-path", type=Path)
     parser.add_argument("--epochs", type=int, default=30)
     parser.add_argument("--patience", type=int, default=5)
@@ -215,14 +228,15 @@ def main():
             sample_hash = hashlib.file_digest(stream, "sha256").hexdigest()
     else:
         sample = load_sample(
-            ROOT / "data/train.parquet", args.rows, 42, expand_embeddings=True
+            args.data_dir / "train.parquet", args.rows, 42, expand_embeddings=True
         )
     sample = sample.sort("_time")
     if sample.height < 2 or sample["_time"].null_count():
         raise ValueError("Chronological validation requires nonmissing timestamps")
     cutoff = sample["_time"][int(sample.height * 0.8)]
-    train = sample.filter(pl.col("_time") < cutoff)
-    valid = sample.filter(pl.col("_time") >= cutoff)
+    split = int(sample["_time"].search_sorted(cutoff, side="left"))
+    train = sample.slice(0, split)
+    valid = sample.slice(split)
     for label, frame in [("training", train), ("validation", valid)]:
         if set(frame[TARGET].unique().to_list()) != {0, 1}:
             raise ValueError(f"{label} must contain both binary target classes")
@@ -311,7 +325,7 @@ def main():
             torch.mps.empty_cache()
         elif device == "cuda":
             torch.cuda.empty_cache()
-    print("Both results saved; no Kaggle run or competition submission performed", flush=True)
+    print("Requested validation results saved; no competition submission performed", flush=True)
 
 
 if __name__ == "__main__":

@@ -12,7 +12,6 @@ import polars as pl
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import roc_auc_score
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler
-from tabm import TabM
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -26,19 +25,26 @@ def prepare_features(train, valid):
     categorical = [name for name in columns if train.schema[name] == pl.String]
     if len(numeric) + len(categorical) != len(columns):
         raise TypeError("The engineered sample must contain only numeric/string features")
-    arrays = [
-        np.array(frame.select(numeric).to_numpy(), dtype=np.float32, order="C")
-        for frame in [train, valid]
-    ]
-    infinity_counts = [int(np.isinf(array).sum()) for array in arrays]
-    for label, array, count in zip(["training", "validation"], arrays, infinity_counts):
+    imputer = SimpleImputer(
+        strategy="median", keep_empty_features=True, add_indicator=True, copy=False
+    )
+    scaler = StandardScaler(copy=False)
+    transformed, infinity_counts = [], []
+    for label, frame in [("training", train), ("validation", valid)]:
+        array = np.array(frame.select(numeric).to_numpy(), dtype=np.float32, order="C")
+        count = int(np.isinf(array).sum())
+        infinity_counts.append(count)
         if count:
             print(f"Treating {count} infinite {label} values as missing", flush=True)
             array[np.isinf(array)] = np.nan
-    imputer = SimpleImputer(strategy="median", keep_empty_features=True, add_indicator=True)
-    scaler = StandardScaler()
-    x_train = scaler.fit_transform(imputer.fit_transform(arrays[0]))
-    x_valid = scaler.transform(imputer.transform(arrays[1]))
+        if label == "training":
+            array = imputer.fit_transform(array)
+            array = scaler.fit_transform(array)
+        else:
+            array = imputer.transform(array)
+            array = scaler.transform(array)
+        transformed.append(array)
+    x_train, x_valid = transformed
     for array in [x_train, x_valid]:
         np.clip(array, -10, 10, out=array)
         if not np.isfinite(array).all():
@@ -80,6 +86,8 @@ class TabMClassifier(nn.Module):
         self, n_numeric, cardinalities, members=8, width=128, blocks=2, dropout=0.1
     ):
         super().__init__()
+        from tabm import TabM
+
         self.embeddings = nn.ModuleList(
             nn.Embedding(cardinality, 8, padding_idx=0)
             for cardinality in cardinalities
