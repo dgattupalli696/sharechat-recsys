@@ -1,5 +1,5 @@
 {
-  "status": "FROZEN",
+  "status": "COMPLETE",
   "run_id": "T017-local-tree-recovery",
   "source_sha256": {
     "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
@@ -16,5 +16,17 @@
     "polars": "1.44.2",
     "scikit-learn": "1.9.1"
   },
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "0e43e5b",
+  "artifact_sha256": {
+    "category-vocabularies.json": "2457e990201159ddcf100bbcad04f8fb44a2ee4871c9c86c526720f7cdbac07d",
+    "lightgbm/model.txt": "743c4dcb9489a85e8d20dbe38733ed39cc448a73e0413ee905920f43b610e7b2",
+    "lightgbm/results.json": "0732deb7d48c5f99f724e3d446d4245c3fb37012e9927cb66e1c09e83cf52ef3",
+    "lightgbm/validation_predictions.npz": "5c0e34623a95d98c3e6eb822794677324f9e0aac6449c3d4272ac3f4f0d72416",
+    "lightgbm/worker-results.json": "a0f6ff1dd73df63bf4b272fc87406205e61abdaf1adb4df731e0d6dc426ded18",
+    "protocol.json": "402576a805a939ad7dc6b5661925e7baf0244343ed8ecf33222db32939e9fc01",
+    "results.json": "2d85df424f60a06240af02d0632d0f196c68e21a19a2c23a2b182d35d9c3a8d7",
+    "run.log": "fc763ab78512776dc9868607c8307df8277e3fc31801c6043c3b86da34385d34",
+    "validation-identities.parquet": "a41bfe35ea9827fa6e4f595e952c29faad0213a9c41d5197ff160111aad5b80f"
+  }
 }

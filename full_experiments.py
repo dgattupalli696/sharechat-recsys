@@ -315,9 +315,34 @@ def architecture_specs(base):
     ]
 
 
-def run_confirmation(path, output, specs, *, device="cuda", epochs=30, interval=300):
+def run_confirmation(path, output, specs, *, device="cuda", epochs=30, interval=300, fold=None):
     report = {"stage": "confirmation", "folds": [], "results": [], "competition_submission": False}
-    for secondary in [False, True]:
+    if fold is None:
+        spec_path = output / "confirmation-specs.json"
+        spec_path.write_text(json.dumps(specs, indent=2) + "\n")
+        worker = globals().get("FROZEN_EXPERIMENT_FILE", Path(__file__).resolve())
+        report["summary"] = []
+        for selected in ["primary", "earlier"]:
+            subprocess.run([
+                sys.executable, str(worker), "--output-dir", str(output),
+                "--device", device, "--stage", "confirmation",
+                "--spec-file", str(spec_path), "--confirmation-fold", selected,
+                "--confirmation-input-file", str(path),
+                "--epochs", str(epochs), "--validation-interval", str(interval),
+            ], check=True)
+            partial = json.loads((output / f"{selected}-results.json").read_text())
+            if partial.get("status") != "COMPLETE":
+                raise ValueError(f"Incomplete confirmation fold: {selected}")
+            for key in ["folds", "results", "summary"]:
+                report[key].extend(partial[key])
+            (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+        report["status"] = "COMPLETE"
+        (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+        return report
+    if fold not in {"primary", "earlier"}:
+        raise ValueError(f"Unknown confirmation fold: {fold}")
+    report_path = output / f"{fold}-results.json"
+    for secondary in [fold == "earlier"]:
         fold = "earlier" if secondary else "primary"
         destination = output / fold
         destination.mkdir(parents=True, exist_ok=True)
@@ -332,11 +357,11 @@ def run_confirmation(path, output, specs, *, device="cuda", epochs=30, interval=
                 result["fold"] = fold
                 result["recipe"] = recipe["name"]
                 report["results"].append(result)
-                (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+                report_path.write_text(json.dumps(report, indent=2) + "\n")
         del data
         gc.collect()
     report["summary"] = []
-    for fold in ["primary", "earlier"]:
+    for fold in [entry["name"] for entry in report["folds"]]:
         for recipe in specs:
             values = [
                 row["validation_auc"] for row in report["results"]
@@ -347,7 +372,7 @@ def run_confirmation(path, output, specs, *, device="cuda", epochs=30, interval=
                 "std_auc": float(np.std(values, ddof=1)), "seed_aucs": values,
             })
     report["status"] = "COMPLETE"
-    (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+    report_path.write_text(json.dumps(report, indent=2) + "\n")
     return report
 
 
@@ -508,6 +533,8 @@ def main():
     parser.add_argument("--validation-interval", type=int, default=300)
     parser.add_argument("--stacking-base", choices=["neural", "tree"])
     parser.add_argument("--stacking-input-file", type=Path)
+    parser.add_argument("--confirmation-fold", choices=["primary", "earlier"])
+    parser.add_argument("--confirmation-input-file", type=Path)
     parser.add_argument("--cutoff")
     parser.add_argument("--validation-end")
     parser.add_argument("--outer-only", action="store_true")
@@ -529,8 +556,10 @@ def main():
         plan = json.loads(args.spec_file.read_text())
         if args.stage == "confirmation":
             run_confirmation(
-                args.data_dir / "train.parquet", args.output_dir, plan,
+                args.confirmation_input_file or args.data_dir / "train.parquet",
+                args.output_dir, plan,
                 device=args.device, epochs=args.epochs, interval=args.validation_interval,
+                fold=args.confirmation_fold,
             )
         else:
             if args.stacking_base:

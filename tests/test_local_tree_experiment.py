@@ -13,6 +13,7 @@ from train import features
 
 class LocalTreeTests(unittest.TestCase):
     def test_fixed_budget_disk_worker_matches_in_memory_tree(self):
+        from full_experiments import fit_stacking_base
         from tree_experiments import run_trees
 
         with tempfile.TemporaryDirectory() as directory:
@@ -30,8 +31,12 @@ class LocalTreeTests(unittest.TestCase):
                 "feature26": rng.normal(size=(count, 32)).tolist(),
                 "watched": (signal + rng.normal(size=count) > 0).astype(np.int8),
             }).write_parquet(path)
-            disk = root / "disk"
-            report = run(path, disk, iterations=3, threads=1, fixed_budget=True)
+            base = root / "disk"
+            report = fit_stacking_base(
+                path, base, {"tree_kind": "lightgbm", "tree_iterations": 3},
+                CUTOFF, None, "tree", device="cpu",
+            )
+            disk = base / "tree"
             self.assertEqual(report["results"][0]["selection_mode"], "fixed_budget")
             self.assertEqual(report["results"][0]["best_iteration"], 3)
             self.assertEqual(

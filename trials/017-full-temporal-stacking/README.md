@@ -44,3 +44,36 @@ per base in total), then the kernel died during outer-fold preparation.
 All six base fits were preserved. The [recovery notebook](recovery/README.md)
 isolates the two remaining full outer fits into fresh processes. No OOF
 block is reduced, discarded or selected based on its AUC.
+
+Version 8 finished the outer neural fit, but its in-memory LightGBM worker
+received SIGKILL. The final tree was fitted locally with disk-backed
+matrices, exactly 140 iterations and no early stopping; its predictions
+exactly reproduce the independently archived T011 140-tree endpoint.
+It used 4.06 GiB peak worker RSS, 71.8 seconds of preparation and 441.0
+seconds of fitting/prediction.
+
+## Completed results
+
+| Matched full-outer evaluation | AUC |
+| --- | ---: |
+| k8 neural, fixed eight epochs | 0.8392367455 |
+| LightGBM, fixed 140 trees | 0.8255838643 |
+| Equal probability blend | 0.8372661876 |
+| Chronological two-logit logistic stack | **0.8394886338** |
+
+The stack improves its matched neural base by 0.0002518883. The conditional
+500-replicate request-bootstrap 95% delta interval is
+[+0.0000755, +0.0004430]; this is not selection-adjusted or time-block
+adjusted. Meta-training used all 943,867 eligible forward OOF rows and no
+outer holdout rows.
+
+**T016 remains the overall leader at 0.8408057533.** This two-base prototype
+uses a different inference scope and fixed endpoint rather than the
+validation-selected k8/k32/DCN checkpoints. Do not interpret that comparison
+as isolating stacking itself. No further stacking expansion is scheduled.
+
+The meta-model was fitted locally with scikit-learn 1.9.1. Both failed GPU
+attempts, their seven successful base fits, the final CPU fit and the local
+assembly are separately recorded in provenance. From the repository root,
+`python trials/017-full-temporal-stacking/archive_results.py` verifies all
+three source batches and recreates the stack from their saved artifacts.

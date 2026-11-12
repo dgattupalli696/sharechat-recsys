@@ -46,5 +46,6 @@
     "outer/validation-identities.parquet": "e4882e41b3e8a039308fcba4dec2e75b503c15c6d2a0dcd182a6876f3369d77e",
     "sharechat-model-experiments-gpu.log": "146bbc89628b34efb1ee4e7edceb9c09cc9b23e279e8974a3a905fd2f30efaa2",
     "stacking-plan.json": "ef6985dd5d730027cec0e3322b271864dffa4c0327726b55c0e04a127c98df9c"
-  }
+  },
+  "outer_neural_verified": true
 }

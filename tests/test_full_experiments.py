@@ -177,6 +177,10 @@ class FullExperimentTests(unittest.TestCase):
             )
             self.assertEqual(len(checked["results"]), 6)
             self.assertEqual(len(checked["summary"]), 2)
+            for fold in ["primary", "earlier"]:
+                partial = json.loads((confirmation / f"{fold}-results.json").read_text())
+                self.assertEqual(partial["status"], "COMPLETE")
+                self.assertEqual([entry["name"] for entry in partial["folds"]], [fold])
 
     def test_stacking_surfaces_isolated_fit_failure(self):
         with tempfile.TemporaryDirectory() as directory:
