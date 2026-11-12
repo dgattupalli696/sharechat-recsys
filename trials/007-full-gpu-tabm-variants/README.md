@@ -47,19 +47,56 @@ this pair cannot isolate each change's individual effect.
 
 ## Results
 
-Pending full-data execution. No public leaderboard score is requested or generated.
+| Model | Validation ROC AUC | Delta vs T006 | Best epoch | Training wall time |
+| --- | ---: | ---: | ---: | ---: |
+| T006: custom vector attention | 0.8270238904 | - | 1 | 98.91 s |
+| T007-A: updated standalone TabM | **0.8292287153** | **+0.0022048249** | 1 | 80.83 s |
+| T007-B: attention encoder + TabM | 0.8279340616 | +0.0009101712 | 1 | 104.37 s |
+
+Standalone TabM is the best full-data validation result so far. It also exceeds
+the hybrid by **0.0012946537 AUC**. Both models completed six epochs, restored
+their first-epoch checkpoints, and still showed overfitting: epoch-6 AUC fell
+to 0.8108963085 for standalone and 0.8080107397 for hybrid.
+
+Shared preparation took **281.82 seconds**. Standalone has 770,216 parameters;
+the hybrid has 773,392. The 971 dense preprocessed channels plus 476 vector
+channels form 1,447 numeric inputs. Standalone adds 184 category-embedding
+channels for 1,631 TabM inputs; the hybrid feeds its 256 fused branch outputs
+into its TabM head.
+
+The fitted preprocessor is byte-identical to T006's saved artifact. Saved
+validation labels/order exactly match T006, and independent AUC recomputation
+from both prediction files reproduces the reported scores. Checkpoint,
+preprocessor, prediction and report hashes are recorded in `provenance.json`.
+
+This is a single-seed exploratory comparison, not a significance claim. The
+old T004 subset score of 0.8091940040 used a smaller training set and different
+holdout/features/regularization, so its score difference cannot be attributed
+solely to these preprocessing changes. No public leaderboard score is generated.
 
 ## Versioning and reproduction
 
-Reuse `dheerajgattupalli/sharechat-expanded-vectors-gpu`, with the general display
-title **ShareChat Model Experiments GPU**; do not create another Kaggle notebook.
-Version 1 remains the original T003 experiment. Record the newly executed
-version and source commit in `provenance.json` after launch. Do not modify the
-separate T006 notebook on which submitted S002 depends.
+Reused the existing expanded-vectors notebook and renamed its display title to
+**ShareChat Model Experiments GPU**. Kaggle consequently changed its slug to
+`dheerajgattupalli/sharechat-model-experiments-gpu`; the notebook identity remains
+144588605. No additional Kaggle notebook was created.
 
-The notebook freezes all four source files and offline wheels. Original
-results/logs and executed metadata will be archived here; large artifacts stay
-in ignored `artifacts/kaggle-t007/`.
+Version 1 still exactly matches the frozen T003 source; version 2 is this T007
+pair. `kernel-metadata.json` preserves the original launch request with the old
+slug. The exported executed metadata records the canonical new slug. Do not
+modify the separate T006 notebook on which submitted S002 depends.
+
+Source revision: `a48b4f06715dd02cd9667be4b618e2436366134e`.
+
+The notebook freezes all four source files and offline wheels. Version 2
+completed successfully; exported source cells exactly match the frozen notebook.
+Original `results.json`, `run.log` and `executed-kernel-metadata.json` are archived
+here; large artifacts stay in ignored `artifacts/kaggle-t007/`.
+
+Kaggle versions match T006 exactly: PyTorch 2.11.0+cu130, NumPy 2.1.3,
+Polars 1.35.2, scikit-learn 1.6.1; additional packages are TabM 0.0.3 and
+rtdl-num-embeddings 0.0.12. The pinned image digest is recorded in executed
+metadata and provenance.
 
 ```bash
 uv sync --locked --extra deep-learning

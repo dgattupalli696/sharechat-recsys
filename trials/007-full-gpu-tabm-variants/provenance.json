@@ -1,6 +1,10 @@
 {
   "run_id": "T007",
-  "kaggle_kernel": "dheerajgattupalli/sharechat-expanded-vectors-gpu",
+  "kaggle_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "previous_kaggle_kernel": "dheerajgattupalli/sharechat-expanded-vectors-gpu",
+  "kaggle_kernel_id": 144588605,
+  "kaggle_kernel_version": 2,
+  "source_revision": "a48b4f06715dd02cd9667be4b618e2436366134e",
   "source_sha256": {
     "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
     "tabm_experiment.py": "9acca1eb44b9b8842fd9a94ba604c2262212fd39095264e1ec52043a9c3d1e27",
@@ -31,5 +35,36 @@
     "T006"
   ],
   "scope": "two full-data CUDA validation models on the original fixed chronological holdout",
-  "competition_submission": false
+  "competition_submission": false,
+  "kaggle_status": "COMPLETE",
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:de153e6d303881930c51286216393d56f56b26458d0661350305a1e8144eea01",
+  "artifact_sha256": {
+    "preprocessing.joblib": "9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983",
+    "results.json": "0bf95acbdf7c0c3764df665d78a9bb5722361e80f4dee52c00ea835cb4023cc2",
+    "standalone/best_model.pt": "ba34097cdb1423d67c620441f3825a774c05d52b4292c7f78bde49fb4819c3ca",
+    "standalone/validation_predictions.npz": "1c6d74fb77a653374711a5ccdc0e29acca5ed23e1c67156744e7db9dccae3858",
+    "hybrid/best_model.pt": "c6ba4df5a5b5b2afe6e6340b444d674c6a52eef9157f6cf08f1962df8963a724",
+    "hybrid/validation_predictions.npz": "f3b6dd33a8e0ee91bbe0aa069fd2933cceaa408e655ba2ec38af8fa0e5773c48",
+    "sharechat-model-experiments-gpu.log": "d3fb0b611fdd93e27ccbaa0632ea76e333862c6db7fad9826525de48a644a139"
+  },
+  "t006_preprocessing_identical": true,
+  "t006_validation_labels_identical": true,
+  "results": [
+    {
+      "variant": "standalone",
+      "validation_auc": 0.8292287153069722,
+      "delta_vs_t006": 0.002204824911615777,
+      "best_epoch": 1,
+      "epochs_run": 6,
+      "training_seconds": 80.82943803200004
+    },
+    {
+      "variant": "hybrid",
+      "validation_auc": 0.8279340616375311,
+      "delta_vs_t006": 0.0009101712421747399,
+      "best_epoch": 1,
+      "epochs_run": 6,
+      "training_seconds": 104.36524788500003
+    }
+  ]
 }

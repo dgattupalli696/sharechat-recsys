@@ -17,9 +17,9 @@ submission unless it has an entry in `submitted/`.
 | T004 | [Local TabM neural baseline](trials/004-local-tabm/README.md) | M1 Apple GPU / 150,000 | 0.809194 | Not submitted | Best epoch 1; overfit; 27.7 s fit |
 | T005-A | [Custom regularized control](trials/005-custom-vector-network/README.md) | M1 Apple GPU / 150,000 | 0.813992 | Not submitted | Three branches; rare-ID pooling; 18.7 s fit |
 | T005-B | [Custom vector attention](trials/005-custom-vector-network/README.md) | M1 Apple GPU / 150,000 | 0.814561 | Not submitted | +0.000569 vs control; 23.3 s fit |
-| T006 | [Full GPU vector attention](trials/006-full-gpu-vector-attention/README.md) | Kaggle T4 / 1,537,638 | **0.827024** | 0.81905 (S002) | Best full-data validation; epoch 1; +0.010535 vs T003 |
-| T007-A | [Updated standalone TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | Pending | Not submitted | Full holdout; rare-category pooling and normalized vectors |
-| T007-B | [Attention encoder + TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | Pending | Not submitted | Same inputs/holdout; jointly trained hybrid |
+| T006 | [Full GPU vector attention](trials/006-full-gpu-vector-attention/README.md) | Kaggle T4 / 1,537,638 | 0.827024 | 0.81905 (S002) | Best submitted model; epoch 1; +0.010535 vs T003 |
+| T007-A | [Updated standalone TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | **0.829229** | Not submitted | Best full-data validation; +0.002205 vs T006; 80.8 s fit |
+| T007-B | [Attention encoder + TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | 0.827934 | Not submitted | +0.000910 vs T006; epoch 1; 104.4 s fit |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 
@@ -107,10 +107,12 @@ decision. Save small machine-readable metrics and relevant logs in that folder;
 keep large outputs in ignored `artifacts/`. Add a row to the ledger above.
 
 Reuse the versioned Kaggle validation notebook
-`dheerajgattupalli/sharechat-expanded-vectors-gpu` (display title: ShareChat Model
+`dheerajgattupalli/sharechat-model-experiments-gpu` (display title: ShareChat Model
 Experiments GPU) for future training trials instead of creating one Kaggle
 notebook per trial. Preserve each executed version in that trial's provenance.
 Keep historical Git snapshots and submitted-model dependency notebooks unchanged.
+This is the renamed original expanded-vectors notebook: version 1 is T003 and
+version 2 is T007. Renaming did not create an additional Kaggle notebook.
 
 Preserve old results instead of overwriting them. Reproduce historical trials
 from their recorded source revision or frozen notebook, not an arbitrarily newer
