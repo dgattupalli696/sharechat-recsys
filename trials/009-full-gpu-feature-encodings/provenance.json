@@ -1,6 +1,7 @@
 {
   "run_id": "T009",
   "stage": "features",
+  "source_revision": "18478e0dc9a1fca0e4ee8460ef6bcb91b61b2963",
   "kaggle_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
   "source_sha256": {
     "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
