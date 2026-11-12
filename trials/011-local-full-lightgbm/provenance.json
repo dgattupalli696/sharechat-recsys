@@ -1,0 +1,11 @@
+{
+  "run_id": "T011",
+  "execution": "local CPU, parallel with Kaggle",
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "local_tree_experiment.py": "a8aab28d676eb253e214f25954d5b8c2b7bff3216cedffb985cbd4a4c4c9b08f",
+    "lightgbm_worker.py": "98e1ef1f264f8710991ce7f4ff02c94fe4a1d4b251397cf40f84dde8ccb54af9"
+  },
+  "notebook_sha256": "92f39850ec89764a0a53751a4c5570760f68691a5721a209e8da5535580880bc",
+  "competition_submission": false
+}

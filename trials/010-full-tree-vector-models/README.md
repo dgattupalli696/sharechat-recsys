@@ -10,17 +10,17 @@ on the identical 307,528-row holdout. No variant is screened on a subset.
 | pca-16 | Same, with sixteen coordinates |
 | catboost-crosses | Summary inputs plus exploratory dot/cosine/L2/presence features |
 | catboost-native-lda | Native 32-D vector inputs, CPU LDA embedding calcers, same tree settings |
-| lightgbm | CPU binary logloss, AUC selection, LR 0.03, 31 leaves, min child 100, max 1,000 trees, patience 60 |
 
 PCA uses all present training vectors, never validation/test rows, preserving
 summary and presence features. Native embedding support uses the explicit
 LDA-only calcer configuration rather than a nearest-neighbor pipeline.
 Anonymous vector cross-features are experimental, not claims about semantics.
 
-LightGBM runs in an isolated process to avoid conflicting native OpenMP
-runtimes. Temporary full-feature frames are removed after the worker finishes;
-only models, probabilities and small metrics persist as outputs. Scientific
-stack versions and the actual tree-library versions/backends are recorded.
+LightGBM moved to [T011](../011-local-full-lightgbm/README.md), running on
+the local CPU in parallel with Kaggle. This unlaunched batch now explicitly
+selects only the five CatBoost variants; no duplicate LightGBM job is launched.
+The frozen model implementations are unchanged. Scientific stack versions
+and actual tree-library versions/backends are recorded.
 
 Reuse the existing versioned Kaggle notebook. Archive original metrics, logs,
 source and configuration identity; keep large artifacts outside Git.

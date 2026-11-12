@@ -11,7 +11,7 @@
     "tree_experiments.py": "0fe4f0371a77bcdc48275f520dd914238e01dfc9465e685c3dca3bd1afddfa36",
     "full_experiments.py": "9b5b7038c38570ca0b2206bbcf9704ae09cc985e30d395a264ff5ca34877ba88"
   },
-  "notebook_sha256": "fd005f4a4ef01af41763d479b102002f6e479d3ea77c8d25e60d062490108d91",
+  "notebook_sha256": "d937afe7caecccc5ee1274668d8f0247e921e72f1ed76ab908f1b47151e64c29",
   "configuration_sha256": "cf9a12ed350a31b7143ea7c93d001271fa8ef0312e4b992621d387a3d397f0ea",
   "local_environment_lock_sha256": "8ac82041c6beb49eb48f3a1af223f048f362de3830fc4e08a74ac5e191618cf9",
   "offline_dependencies": {
@@ -29,5 +29,13 @@
     }
   },
   "scope": "all variants use all available training rows and the fixed full temporal holdout",
-  "competition_submission": false
+  "competition_submission": false,
+  "parallel_local_lightgbm": "T011",
+  "requested_variants": [
+    "catboost-expanded",
+    "pca-8",
+    "pca-16",
+    "catboost-crosses",
+    "catboost-native-lda"
+  ]
 }
