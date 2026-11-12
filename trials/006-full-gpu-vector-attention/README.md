@@ -39,22 +39,45 @@ imported lazily only when that architecture is instantiated.
 
 ## Results
 
-Pending Kaggle execution. Comparable full-data reference AUCs:
-
 | Model | Validation ROC AUC |
 | --- | ---: |
 | B001: CatBoost summaries | 0.8160260803 |
 | T003: CatBoost expanded vectors | 0.8164893363 |
+| T006: custom vector attention | **0.8270238904** |
 
+T006 changed AUC by **+0.0109978101** versus B001 and **+0.0105345541** versus
+T003 on the exact same 307,528-row chronological holdout. This is the best
+recorded full-data validation result so far, not a leaderboard score.
+
+The 732,553-parameter model peaked at **epoch 1**, stopped after six epochs,
+and restored that first-epoch checkpoint. AUC then declined to 0.8027202070 by
+epoch 6, so overfitting remains. The training-derived category vocabularies grew
+with the larger dataset, as expected; the dense branch still received 971 channels.
+
+Preparation took **317.31 seconds** and six training/validation epochs took
+**98.91 seconds**. The kernel log reached completed validation at approximately
+440 seconds from start (about 7.3 minutes). No full-data refit or test prediction
+was performed.
+
+Saved validation probabilities independently reproduce the reported AUC.
 T005-B's 0.8145605736 used a different, smaller holdout and is not directly
-comparable. One GPU run cannot establish statistical significance.
+comparable. One GPU run cannot establish statistical significance or guarantee a
+public leaderboard improvement.
 
 ## Reproduction and tracking
 
-Kaggle kernel: `dheerajgattupalli/sharechat-custom-vector-attention-gpu`.
-Source and configuration hashes are recorded in `provenance.json`. Results and
-the original execution log will be archived beside this README when the run
-finishes; large artifacts stay in ignored `artifacts/kaggle-t006/`.
+Kaggle kernel: `dheerajgattupalli/sharechat-custom-vector-attention-gpu`, version 1.
+Source revision: `899b34b05c4df0130af94f7ea7fb091dfdd81d90`.
+
+Source and configuration hashes are recorded in `provenance.json`. Original
+results and execution log are archived as `results.json` and `run.log`; the
+exported Kaggle image/configuration is in `executed-kernel-metadata.json`.
+Large artifacts stay in ignored `artifacts/kaggle-t006/`; checkpoint,
+preprocessor, and validation-prediction hashes are recorded in provenance.
+
+Kaggle environment: PyTorch 2.11.0+cu130, NumPy 2.1.3, Polars 1.35.2,
+scikit-learn 1.6.1. The image digest matches the B001/T003 Kaggle environment.
+CUDA training can be nondeterministic.
 
 The equivalent CLI, on a machine with CUDA and the competition data, is:
 

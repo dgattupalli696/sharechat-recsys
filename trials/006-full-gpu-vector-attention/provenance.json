@@ -15,5 +15,15 @@
     "T005-B"
   ],
   "scope": "one full-data CUDA attention run, original chronological holdout",
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "899b34b05c4df0130af94f7ea7fb091dfdd81d90",
+  "kaggle_kernel_version": 1,
+  "kaggle_status": "COMPLETE",
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:de153e6d303881930c51286216393d56f56b26458d0661350305a1e8144eea01",
+  "artifact_sha256": {
+    "results.json": "2c4d911a2f992aa69cae2357373adb326d5f457e7d7ed90c96913575df63d09e",
+    "preprocessing.joblib": "9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983",
+    "attention/best_model.pt": "454a93210a7ae5408fbaf92828e74e010f26f041ace3939d8fde3a10ebd74f3f",
+    "attention/validation_predictions.npz": "72c4edcf384fe50b1e6a893e80a945855294524798ce6d100c95a01412d96849"
+  }
 }

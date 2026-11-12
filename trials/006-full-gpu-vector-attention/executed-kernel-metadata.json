@@ -1,0 +1,21 @@
+{
+  "id": "dheerajgattupalli/sharechat-custom-vector-attention-gpu",
+  "id_no": 144607465,
+  "title": "ShareChat Custom Vector Attention GPU",
+  "code_file": "sharechat-custom-vector-attention-gpu.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": [
+    "sharechat"
+  ],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:de153e6d303881930c51286216393d56f56b26458d0661350305a1e8144eea01",
+  "machine_shape": "NvidiaTeslaT4"
+}
