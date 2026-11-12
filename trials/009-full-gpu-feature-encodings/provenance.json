@@ -1,0 +1,33 @@
+{
+  "run_id": "T009",
+  "stage": "features",
+  "kaggle_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "tabm_experiment.py": "dd4eccc1db6dd91f10561747cab860aa8169b83673ad9b560e88892605a29af6",
+    "custom_network.py": "c2c057e1fff475309fcf6840edba4b6a92dc825f0d8b66bf1ff0ae7963e23d74",
+    "feature_models.py": "0ede9a201f776dacf3c474acf55405e1b798b6a8ad43d0588f8e10035b8fc525",
+    "lightgbm_worker.py": "4302aa9f02e0013c12d174fb0266e95eba871321a896868db9d163a55ad2f37b",
+    "tree_experiments.py": "0fe4f0371a77bcdc48275f520dd914238e01dfc9465e685c3dca3bd1afddfa36",
+    "full_experiments.py": "9b5b7038c38570ca0b2206bbcf9704ae09cc985e30d395a264ff5ca34877ba88"
+  },
+  "notebook_sha256": "ba526a0ff7a9bc499d8bcfd2af01560ee3b0fcb2f40cfccf0dd5c6419f612a58",
+  "configuration_sha256": "cf9a12ed350a31b7143ea7c93d001271fa8ef0312e4b992621d387a3d397f0ea",
+  "local_environment_lock_sha256": "8ac82041c6beb49eb48f3a1af223f048f362de3830fc4e08a74ac5e191618cf9",
+  "offline_dependencies": {
+    "rtdl-num-embeddings": {
+      "version": "0.0.12",
+      "filename": "rtdl_num_embeddings-0.0.12-py3-none-any.whl",
+      "sha256": "87fd61270118915cf40888f2164f3a1f0353edf702f15fd91e71a147d23c930d",
+      "source_url": "https://files.pythonhosted.org/packages/18/b9/cef7a26a7999740d5067406b6e856fe0f18f1dd8bd2052e05f4bf4846c5e/rtdl_num_embeddings-0.0.12-py3-none-any.whl"
+    },
+    "tabm": {
+      "version": "0.0.3",
+      "filename": "tabm-0.0.3-py3-none-any.whl",
+      "sha256": "6cabed3cb436fef5e8a45f46097fd745f51b3e16be16d555b9af16cffda7f944",
+      "source_url": "https://files.pythonhosted.org/packages/6c/4f/cce9db4b2505c1d5664f7131ea6c115446fe8425c61d7c75b12162a4f25d/tabm-0.0.3-py3-none-any.whl"
+    }
+  },
+  "scope": "all variants use all available training rows and the fixed full temporal holdout",
+  "competition_submission": false
+}

@@ -9,7 +9,8 @@ import numpy as np
 import polars as pl
 import torch
 
-from full_experiments import PRIMARY_CUTOFF, category_view, prepare_data, run_tabm
+from full_experiments import PRIMARY_CUTOFF, category_view, feature_specs, prepare_data, run_tabm
+from tree_experiments import run_trees
 from tabm_experiment import TabMClassifier, fit_model, fit_model_steps
 
 
@@ -95,7 +96,25 @@ class FullExperimentTests(unittest.TestCase):
                 self.assertEqual(report["optimizer_steps"], 1)
                 self.assertTrue(np.isfinite(report["validation_auc"]))
                 self.assertFalse((output / name / "submission.csv").exists())
+            for spec in feature_specs()[1:]:
+                report = run_tabm(
+                    data, {**spec, "width": 8, "members": 2},
+                    output, device="cpu", epochs=1, interval=1,
+                )
+                self.assertEqual(report["optimizer_steps"], 1)
+                self.assertTrue(np.isfinite(report["validation_auc"]))
             self.assertFalse(json.loads((output / "protocol.json").read_text())["competition_submission"])
+            tree_output = root / "trees"
+            tree_output.mkdir()
+            report = run_trees(
+                root / "train.parquet", tree_output, PRIMARY_CUTOFF,
+                device="cpu", iterations=2, light_iterations=2,
+            )
+            self.assertEqual(len(report["results"]), 6)
+            self.assertTrue(all(np.isfinite(result["validation_auc"]) for result in report["results"]))
+            for result in report["results"]:
+                arrays = np.load(tree_output / result["name"] / "validation_predictions.npz")
+                np.testing.assert_array_equal(arrays["y_true"], data["y_valid"])
 
 
 if __name__ == "__main__":

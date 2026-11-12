@@ -21,6 +21,7 @@ submission unless it has an entry in `submitted/`.
 | T007-A | [Updated standalone TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | **0.829229** | Not submitted | Best full-data validation; +0.002205 vs T006; 80.8 s fit |
 | T007-B | [Attention encoder + TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | 0.827934 | Not submitted | +0.000910 vs T006; epoch 1; 104.4 s fit |
 | T008 | [Full TabM controls](trials/008-full-gpu-tabm-controls/README.md) | Kaggle T4 / all rows | Pending | Not submitted | 12 full-data checkpoint/optimization/category runs; no subset elimination |
+| T009 | [Full feature encodings](trials/009-full-gpu-feature-encodings/README.md) | Kaggle T4 / all rows | Pending | Not submitted | PLE, PLR, quantiles, vector projection/dropout/crosses; all full runs |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 

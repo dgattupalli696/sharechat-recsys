@@ -14,8 +14,10 @@ import pyarrow.parquet as pq
 import torch
 
 from custom_network import prepare_custom_features
+from feature_models import HeterogeneousClassifier
 from tabm_experiment import TabMClassifier, fit_model_steps
 from train import ROOT, TARGET, load_sample
+from tree_experiments import run_trees
 
 
 PRIMARY_CUTOFF = "2026-10-28T08:06:52.397000"
@@ -147,7 +149,76 @@ def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed
         "numeric_dropout": spec.get("numeric_dropout", 0.0),
         "dropout_columns": data["protocol"]["continuous_indices"],
     }
-    model = TabMClassifier(**config).to(device)
+    x_train, x_valid = data["x_train"], data["x_valid"]
+    numerical_encoding = spec.get("numerical_encoding", "none")
+    preprocessing_started = time.monotonic()
+    bins = None
+    if numerical_encoding == "ple":
+        from rtdl_num_embeddings import compute_bins
+
+        continuous = data["protocol"]["continuous_indices"]
+        bins = [
+            values.tolist() for values in compute_bins(
+                x_train[:, continuous], n_bins=16, verbose=False
+            )
+        ]
+    elif numerical_encoding == "quantile":
+        from sklearn.preprocessing import QuantileTransformer
+
+        continuous = data["protocol"]["continuous_indices"]
+        transformer = QuantileTransformer(
+            n_quantiles=min(256, len(x_train)), output_distribution="normal",
+            subsample=None, random_state=42, copy=False,
+        )
+        train_values = transformer.fit_transform(x_train[:, continuous].numpy())
+        valid_values = transformer.transform(x_valid[:, continuous].numpy())
+        x_train, x_valid = x_train.clone(), x_valid.clone()
+        x_train[:, continuous] = torch.from_numpy(train_values.astype(np.float32, copy=False))
+        x_valid[:, continuous] = torch.from_numpy(valid_values.astype(np.float32, copy=False))
+        joblib.dump(transformer, destination / "quantile-transformer.joblib")
+        del train_values, valid_values
+    adapted = (
+        numerical_encoding in {"ple", "plr"} or spec.get("vector_projection")
+        or spec.get("vector_dropout") or spec.get("vector_crosses")
+        or spec.get("architecture", "tabm") != "tabm"
+    )
+    if adapted:
+        state = data["state"]
+        summary_groups, indicator_groups = [], []
+        indicator_source = state["imputer"].indicator_.features_.tolist()
+        for field in state["vector_fields"]:
+            group = [
+                i for i, column in enumerate(state["numeric_columns"])
+                if column.startswith(field + "_")
+            ]
+            summary_groups.append(group)
+            indicator_groups.append([
+                len(state["numeric_columns"]) + position
+                for position, source in enumerate(indicator_source) if source in group
+            ])
+        encoder_config = {
+            "n_numeric": x_train.shape[1], "n_dense": state["n_dense"],
+            "n_vectors": len(state["vector_fields"]), "cardinalities": cardinalities,
+            "continuous_indices": data["protocol"]["continuous_indices"],
+            "embedding_dimensions": dims,
+            "numerical_encoding": numerical_encoding if numerical_encoding != "quantile" else "none",
+            "bins": bins, "vector_projection": bool(spec.get("vector_projection")),
+            "vector_dropout": spec.get("vector_dropout", 0.0),
+            "vector_crosses": bool(spec.get("vector_crosses")),
+            "summary_groups": summary_groups, "indicator_groups": indicator_groups,
+            "numeric_dropout": spec.get("numeric_dropout", 0.0),
+        }
+        config = {
+            "encoder_config": encoder_config, "architecture": spec.get("architecture", "tabm"),
+            "width": spec.get("width", 128), "dropout": spec.get("dropout", 0.2),
+            "members": spec.get("members", 8),
+            "positive_rate": float(data["y_train"].mean().item()),
+            "rank": spec.get("rank", 32), "experts": spec.get("experts", 1),
+            "gating": spec.get("gating", True),
+        }
+        model = HeterogeneousClassifier(**config).to(device)
+    else:
+        model = TabMClassifier(**config).to(device)
     learning_rate = spec.get("learning_rate", 0.0005)
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=learning_rate, weight_decay=spec.get("weight_decay", 0.01)
@@ -158,10 +229,11 @@ def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed
         scheduler = torch.optim.lr_scheduler.LambdaLR(
             optimizer, lambda step: 0.1 + 0.45 * (1 + math.cos(math.pi * min(step / period, 1)))
         )
+    variant_preparation_seconds = time.monotonic() - preprocessing_started
     print(f"START {name}: {json.dumps(spec)}", flush=True)
     metrics = fit_model_steps(
-        model, config, optimizer, data["x_train"], train_categories, data["y_train"],
-        data["x_valid"], valid_categories, data["y_valid"],
+        model, config, optimizer, x_train, train_categories, data["y_train"],
+        x_valid, valid_categories, data["y_valid"],
         device=device, output=destination, epochs=epochs, patience=5, batch_size=1024,
         validation_interval=interval, seed=seed, scheduler=scheduler,
     )
@@ -169,10 +241,11 @@ def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed
         "name": name, "spec": spec, "seed": seed,
         "parameters": sum(parameter.numel() for parameter in model.parameters()),
         "model_config": config, **metrics,
+        "variant_preparation_seconds": variant_preparation_seconds,
     }
     (destination / "results.json").write_text(json.dumps(result, indent=2) + "\n")
     print(f"RESULT {name}: AUC={result['validation_auc']:.10f}", flush=True)
-    del model, optimizer, train_categories, valid_categories
+    del model, optimizer, train_categories, valid_categories, x_train, x_valid
     gc.collect()
     if device == "cuda":
         torch.cuda.empty_cache()
@@ -196,12 +269,28 @@ def optimization_specs():
     ]
 
 
+def feature_specs():
+    return [
+        {"name": "reference"},
+        {"name": "ple-16bins-d8", "numerical_encoding": "ple"},
+        {"name": "plr-d8", "numerical_encoding": "plr"},
+        {"name": "quantile-normal", "numerical_encoding": "quantile"},
+        {"name": "vector-projection-ln", "vector_projection": True},
+        {"name": "vector-dropout-01", "vector_dropout": 0.1},
+        {"name": "vector-crosses", "vector_crosses": True},
+    ]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", type=Path, default=ROOT / "data")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cuda")
-    parser.add_argument("--stage", choices=["optimization"], default="optimization")
+    parser.add_argument("--stage", choices=["optimization", "features", "trees", "recipes"], default="optimization")
+    parser.add_argument("--spec-file", type=Path)
+    parser.add_argument("--secondary", action="store_true")
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--only", action="append")
     parser.add_argument("--epochs", type=int, default=30)
     parser.add_argument("--validation-interval", type=int, default=300)
     args = parser.parse_args()
@@ -209,13 +298,35 @@ def main():
         raise RuntimeError("The full Kaggle experiment requires CUDA")
     torch.set_num_threads(4)
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    data = prepare_data(args.data_dir / "train.parquet", args.output_dir)
+    if args.stage == "trees":
+        run_trees(
+            args.data_dir / "train.parquet", args.output_dir, PRIMARY_CUTOFF,
+            device=args.device, only=args.only,
+            worker_path=globals().get("FROZEN_LIGHTGBM_WORKER_FILE"),
+        )
+        return
+    data = prepare_data(
+        args.data_dir / "train.parquet", args.output_dir, secondary=args.secondary
+    )
     report = {"stage": args.stage, "protocol": data["protocol"], "results": [], "competition_submission": False}
-    for spec in optimization_specs():
+    if args.stage == "recipes":
+        if args.spec_file is None:
+            parser.error("--spec-file is required for recipes")
+        specs = json.loads(args.spec_file.read_text())
+    else:
+        specs = optimization_specs() if args.stage == "optimization" else feature_specs()
+    if args.only:
+        selected = set(args.only)
+        names = {spec["name"] for spec in specs}
+        if not selected <= names:
+            raise ValueError(f"Unknown experiment names: {selected - names}")
+        specs = [spec for spec in specs if spec["name"] in selected]
+    for spec in specs:
         result = run_tabm(
             data, spec, args.output_dir, device=args.device,
             epochs=args.epochs,
             interval=math.ceil(len(data["y_train"]) / 1024) if spec.get("epoch_only") else args.validation_interval,
+            seed=spec.get("seed", args.seed),
         )
         report["results"].append(result)
         (args.output_dir / "results.json").write_text(json.dumps(report, indent=2) + "\n")
