@@ -47,3 +47,16 @@ class LocalTreeTests(unittest.TestCase):
             np.testing.assert_array_equal(predictions["row_ids"], expected["_row_id"].to_numpy())
             self.assertTrue(np.isfinite(report["results"][0]["validation_auc"]))
             self.assertFalse(list((root / "fit").glob("streaming-lightgbm-*")))
+            earlier_cache, earlier_output = root / "earlier-cache", root / "earlier-output"
+            earlier_cache.mkdir()
+            earlier_output.mkdir()
+            earlier = prepare_arrays(
+                path, earlier_cache, earlier_output,
+                cutoff_string=(cutoff - timedelta(seconds=32)).isoformat(),
+                validation_end=(cutoff + timedelta(seconds=16)).isoformat(),
+            )
+            self.assertEqual(earlier["training_rows"], 96)
+            self.assertEqual(earlier["validation_rows"], 48)
+            earlier_ids = pl.read_parquet(earlier_output / "validation-identities.parquet")
+            self.assertTrue((earlier_ids["feature1"] < cutoff + timedelta(seconds=16)).all())
+            self.assertTrue((earlier_ids["feature1"] >= cutoff - timedelta(seconds=32)).all())

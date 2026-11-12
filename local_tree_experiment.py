@@ -22,13 +22,19 @@ from train import ROOT, TARGET, TIME, features
 CUTOFF = "2026-10-28T08:06:52.397000"
 
 
-def prepare_arrays(path, cache, output, reference_identity=None):
-    cutoff = datetime.fromisoformat(CUTOFF)
+def prepare_arrays(
+    path, cache, output, reference_identity=None, *,
+    cutoff_string=CUTOFF, validation_end=None,
+):
+    cutoff = datetime.fromisoformat(cutoff_string)
     parquet = pq.ParquetFile(path)
     raw_identity = pl.read_parquet(path, columns=[TIME, TARGET, "request_id"]).with_row_index("_row_id")
     identity = raw_identity.sort(TIME)
     training = identity.filter(pl.col(TIME) < cutoff)
-    validation = identity.filter(pl.col(TIME) >= cutoff)
+    validation_mask = pl.col(TIME) >= cutoff
+    if validation_end is not None:
+        validation_mask &= pl.col(TIME) < datetime.fromisoformat(validation_end)
+    validation = identity.filter(validation_mask)
     if not len(training) or not len(validation):
         raise ValueError("Both full temporal partitions must be nonempty")
     if reference_identity is not None:
@@ -45,7 +51,7 @@ def prepare_arrays(path, cache, output, reference_identity=None):
         if set(frame[TARGET].unique().to_list()) != {0, 1}:
             raise ValueError("Each temporal partition requires both target classes")
     rows = parquet.metadata.num_rows
-    if rows == 1537638:
+    if rows == 1537638 and cutoff_string == CUTOFF and validation_end is None:
         assert len(training) == 1230110 and len(validation) == 307528
     training_ids, validation_ids = training["_row_id"].to_numpy(), validation["_row_id"].to_numpy()
     validation.select("_row_id", "request_id", TIME).write_parquet(output / "validation-identities.parquet")
@@ -106,7 +112,8 @@ def prepare_arrays(path, cache, output, reference_identity=None):
     }) + "\n")
     protocol = {
         "source_rows": rows, "training_rows": len(training), "validation_rows": len(validation),
-        "cutoff": CUTOFF, "input_features": len(columns),
+        "cutoff": cutoff_string, "validation_end": validation_end,
+        "input_features": len(columns),
         "validation_labels_sha256": hashlib.sha256(
             validation[TARGET].to_numpy().astype(np.uint8).tobytes()
         ).hexdigest(),
@@ -117,7 +124,10 @@ def prepare_arrays(path, cache, output, reference_identity=None):
     return protocol
 
 
-def run(path, output, *, iterations=1000, threads=2, reference_identity=None):
+def run(
+    path, output, *, iterations=1000, threads=2, reference_identity=None,
+    cutoff_string=CUTOFF, validation_end=None,
+):
     output.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
     required = pq.ParquetFile(path).metadata.num_rows * 1127 * 4
@@ -125,7 +135,10 @@ def run(path, output, *, iterations=1000, threads=2, reference_identity=None):
         raise OSError("Insufficient free disk space for the full disk-backed feature matrices")
     with tempfile.TemporaryDirectory(prefix="streaming-lightgbm-", dir=output) as directory:
         cache = Path(directory)
-        protocol = prepare_arrays(path, cache, output, reference_identity)
+        protocol = prepare_arrays(
+            path, cache, output, reference_identity,
+            cutoff_string=cutoff_string, validation_end=validation_end,
+        )
         preparation_seconds = time.monotonic() - started
         print(f"FULL DATA READY: {json.dumps(protocol)}", flush=True)
         gc.collect()
@@ -166,6 +179,8 @@ def main():
     parser.add_argument("--iterations", type=int, default=1000)
     parser.add_argument("--threads", type=int, default=2)
     parser.add_argument("--reference-identities", type=Path)
+    parser.add_argument("--cutoff", default=CUTOFF)
+    parser.add_argument("--validation-end")
     args = parser.parse_args()
     if min(args.iterations, args.threads) <= 0:
         parser.error("Iterations and CPU threads must be positive")
@@ -173,6 +188,7 @@ def main():
         args.data_dir / "train.parquet", args.output_dir,
         iterations=args.iterations, threads=args.threads,
         reference_identity=args.reference_identities,
+        cutoff_string=args.cutoff, validation_end=args.validation_end,
     )
 
 
