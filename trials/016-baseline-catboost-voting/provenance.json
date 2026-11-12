@@ -1,0 +1,13 @@
+{
+  "run_id": "T016",
+  "execution": "local full-holdout probability voting",
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "predict_catboost_validation.py": "7d07b895c22551ec480b13e7f54f26c72efcf861fbe6fedf7c56f57efbe34637",
+    "experiment_analysis.py": "874538102bba33e3d9114c957fd106f72cd7828551fd78ff14963db80d10bd3d",
+    "ensemble_experiment.py": "6247df79d0b0332e1c4c69b069cbf06a85877329c9f3fa7f45e431a6c25d9208"
+  },
+  "input_preparation_sha256": "3eda5cc8259afde45b65060f60698fdf5179c2fb8e5dd7af53c0f4a281460ad0",
+  "notebook_sha256": "ac7b95223b12ea44ce8e9ecda561f1e51d70e6b117cebd0ce9e30a5508758532",
+  "competition_submission": false
+}

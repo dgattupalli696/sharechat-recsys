@@ -13,7 +13,10 @@ from experiment_analysis import load_candidates, paired_group_bootstrap
 def run_ensembles(
     candidates, identity_path, output, *, core_names, families,
     previous_predictions=None, repetitions=500, four_way_groups=(),
+    pair_weights=(0.25, 0.5, 0.75),
 ):
+    if not pair_weights or any(not 0 < weight < 1 for weight in pair_weights):
+        raise ValueError("Pair mixture weights must be strictly between zero and one")
     output.mkdir(parents=True, exist_ok=True)
     identity, labels, original, fingerprints = load_candidates(candidates, identity_path)
     values, hashes, aliases = {}, {}, {}
@@ -64,7 +67,7 @@ def run_ensembles(
         "family-balanced",
     )
     for first, second in combinations(names, 2):
-        for weight in [0.25, 0.5, 0.75]:
+        for weight in pair_weights:
             evaluate([first, second], [weight, 1 - weight], "pair-grid")
     for selected in combinations(core, 3):
         evaluate(selected, [1 / 3] * 3, "triple-equal")
@@ -109,6 +112,7 @@ def run_ensembles(
         "standalone_scores": scores, "duplicate_aliases": aliases,
         "unique_candidates": len(values), "configurations_evaluated": len(records),
         "four_way_groups": four_way_groups,
+        "pair_weights": pair_weights,
         "best_single": best_single, "best_equal_weight": best_equal,
         "best_ensemble": best, "candidate_artifacts": fingerprints,
         "configurations": records,
@@ -149,6 +153,7 @@ def main():
         args.identities, args.output_dir, core_names=manifest["core_names"],
         families=manifest["families"], previous_predictions=args.previous_predictions,
         four_way_groups=manifest.get("four_way_groups", ()),
+        pair_weights=manifest.get("pair_weights", (0.25, 0.5, 0.75)),
     )
 
 

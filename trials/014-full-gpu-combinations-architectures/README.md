@@ -38,3 +38,36 @@ are exploratory; no user/item semantics are assumed.
 
 Reuse the canonical versioned Kaggle notebook after T010 outputs are collected.
 Archive selected steps, fitted preprocessing, probabilities, hashes and source.
+
+## Completed full-data results
+
+All nineteen models completed in canonical notebook version 6. Saved
+probabilities independently reproduce every AUC and match the original full
+holdout labels.
+
+| Variant | Validation AUC |
+| --- | ---: |
+| vector-cross-control | 0.8353494632 |
+| masked-category-control | 0.8334188580 |
+| cross-masked | 0.8389109395 |
+| cross-masked-lr1e4 | 0.8388926127 |
+| cross-masked-cosine | 0.8392003042 |
+| cross-masked-min50 | 0.8387051189 |
+| cross-masked-plr | 0.8400069637 |
+| cross-masked-projection | 0.8383806365 |
+| cross-masked-fusion | 0.8396135056 |
+| cross-masked-fusion-lr1e4 | 0.8396810628 |
+| cross-masked-fusion-cosine | 0.8399000037 |
+| ensemble-16 | 0.8400283522 |
+| ensemble-32 | **0.8404542697** |
+| dcnv2-r32 | 0.8389150778 |
+| dcnv2-r64 | 0.8384340017 |
+| dcnv2-moe4 | 0.8390170406 |
+| finalmlp-gated | 0.8388672562 |
+| finalmlp-ungated | 0.8386067866 |
+| finalmlp-alternate-lr | 0.8392134819 |
+
+The winning input recipe combines vector crosses, high-cardinality masking
+and PLR. Its k8/k16/k32 models all selected global step 9,300, or epoch 7.7371.
+k32 training/prediction took 1,748.2 seconds; k8 took 618.9 seconds.
+The DCNv2/FinalMLP models were individually weaker but remain ensemble inputs.

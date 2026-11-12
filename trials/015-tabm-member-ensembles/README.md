@@ -25,3 +25,21 @@ candidate and the preceding T013 ensemble. These weights are holdout-selected,
 not independent temporal confirmation.
 
 Artifacts live in `artifacts/local-t015/`. No competition submission.
+
+## Completed full-holdout results
+
+Evaluated 1,158 configurations from eleven distinct prediction arrays.
+
+| Configuration | Validation AUC |
+| --- | ---: |
+| Best single: TabM k32 | 0.8404542697 |
+| Equal k8 + k16 | 0.8401713074 |
+| Equal k8 + k32 + DCNv2-r32 | 0.8406773179 |
+| 62.5% k32 + 12.5% each MoE / gated FinalMLP / LightGBM | 0.8406704426 |
+| 50% k32 + 25% k8 + 25% DCNv2-r32 | **0.8407075087** |
+
+Adding a weaker DCNv2 model helped: the best three-model mixture gains
+0.0002532390 over k32 alone. Its 500-replicate request-clustered conditional
+95% delta interval is [+0.0000966, +0.0004165]. This does not account for
+holdout model/weight selection and is not temporal confirmation.
+The four-family mixture also beat the best single, but not the simpler winner.

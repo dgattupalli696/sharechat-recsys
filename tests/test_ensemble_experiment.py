@@ -33,6 +33,7 @@ class EnsembleTests(unittest.TestCase):
                     "third": "cross", "fourth": "fusion",
                 },
                 four_way_groups=[["first", "second", "third", "fourth"]],
+                pair_weights=[0.1, 0.5, 0.9],
                 repetitions=10,
             )
             self.assertEqual(report["unique_candidates"], 4)
@@ -46,6 +47,10 @@ class EnsembleTests(unittest.TestCase):
             self.assertTrue(all(
                 abs(sum(row["weights"]) - 1) < 1e-12 and min(row["weights"]) > 0
                 for row in mixtures
+            ))
+            self.assertTrue(any(
+                row["kind"] == "pair-grid" and row["weights"] == [0.1, 0.9]
+                for row in report["configurations"]
             ))
             predictions = np.load(root / "results/equal_weight_predictions.npz")
             np.testing.assert_array_equal(predictions["row_ids"], ids)
