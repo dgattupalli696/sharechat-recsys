@@ -118,6 +118,74 @@ def predict(model, numeric, categorical, device, batch_size):
     return np.concatenate(probabilities)
 
 
+def fit_model(
+    model, model_config, optimizer, x_train, c_train, y_train, x_valid, c_valid, y_valid,
+    *, device, output, epochs, patience, batch_size,
+):
+    generator = torch.Generator().manual_seed(42)
+    best_auc, best_epoch, stale = -np.inf, 0, 0
+    history = []
+    training_started = time.monotonic()
+    for epoch in range(1, epochs + 1):
+        epoch_started = time.monotonic()
+        model.train()
+        order = torch.randperm(len(y_train), generator=generator)
+        loss_sum = 0.0
+        for indices in order.split(batch_size):
+            optimizer.zero_grad(set_to_none=True)
+            logits = model(x_train[indices].to(device), c_train[indices].to(device))
+            targets = y_train[indices].to(device).unsqueeze(1).expand_as(logits)
+            loss = F.binary_cross_entropy_with_logits(logits, targets)
+            if not torch.isfinite(loss).item():
+                raise ValueError(f"Nonfinite training loss at epoch {epoch}")
+            loss.backward()
+            optimizer.step()
+            loss_sum += loss.item() * len(indices)
+        probabilities = predict(model, x_valid, c_valid, device, batch_size)
+        auc = float(roc_auc_score(y_valid, probabilities))
+        record = {
+            "epoch": epoch,
+            "training_loss": loss_sum / len(y_train),
+            "validation_auc": auc,
+            "seconds": time.monotonic() - epoch_started,
+        }
+        history.append(record)
+        print(json.dumps(record), flush=True)
+        if auc > best_auc:
+            best_auc, best_epoch, stale = auc, epoch, 0
+            torch.save(
+                {
+                    "model_config": model_config,
+                    "state_dict": {
+                        key: value.detach().cpu().clone()
+                        for key, value in model.state_dict().items()
+                    },
+                },
+                output / "best_model.pt",
+            )
+        else:
+            stale += 1
+            if stale >= patience:
+                break
+    training_seconds = time.monotonic() - training_started
+    checkpoint = torch.load(output / "best_model.pt", map_location="cpu", weights_only=True)
+    model.load_state_dict(checkpoint["state_dict"])
+    probabilities = predict(model, x_valid, c_valid, device, batch_size)
+    restored_auc = float(roc_auc_score(y_valid, probabilities))
+    if abs(restored_auc - best_auc) > 1e-5:
+        raise ValueError("Reloaded checkpoint does not reproduce the selected validation AUC")
+    np.savez_compressed(
+        output / "validation_predictions.npz", y_true=y_valid, probabilities=probabilities
+    )
+    return {
+        "validation_auc": restored_auc,
+        "best_epoch": best_epoch,
+        "epochs_run": len(history),
+        "training_seconds": training_seconds,
+        "history": history,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", type=int, default=150_000)
@@ -192,7 +260,6 @@ def main():
     }
     model = TabMClassifier(**model_config).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.002, weight_decay=0.0003)
-    generator = torch.Generator().manual_seed(42)
     preparation_seconds = time.monotonic() - started
     print(
         f"Device: {device}; sample: {sample_rows:,}; train: {training_rows:,}; "
@@ -200,65 +267,14 @@ def main():
         f"cutoff: {cutoff}; preparation: {preparation_seconds:.1f}s",
         flush=True,
     )
-    best_auc, best_epoch, stale = -np.inf, 0, 0
-    history = []
-    training_started = time.monotonic()
-    for epoch in range(1, args.epochs + 1):
-        epoch_started = time.monotonic()
-        model.train()
-        order = torch.randperm(training_rows, generator=generator)
-        loss_sum = 0.0
-        for indices in order.split(args.batch_size):
-            optimizer.zero_grad(set_to_none=True)
-            logits = model(x_train[indices].to(device), c_train[indices].to(device))
-            targets = y_train[indices].to(device).unsqueeze(1).expand_as(logits)
-            loss = F.binary_cross_entropy_with_logits(logits, targets)
-            if not torch.isfinite(loss).item():
-                raise ValueError(f"Nonfinite training loss at epoch {epoch}")
-            loss.backward()
-            optimizer.step()
-            loss_sum += loss.item() * len(indices)
-        probabilities = predict(model, x_valid, c_valid, device, args.batch_size)
-        auc = float(roc_auc_score(y_valid, probabilities))
-        record = {
-            "epoch": epoch,
-            "training_loss": loss_sum / training_rows,
-            "validation_auc": auc,
-            "seconds": time.monotonic() - epoch_started,
-        }
-        history.append(record)
-        print(json.dumps(record), flush=True)
-        if auc > best_auc:
-            best_auc, best_epoch, stale = auc, epoch, 0
-            torch.save(
-                {
-                    "model_config": model_config,
-                    "state_dict": {
-                        key: value.detach().cpu().clone()
-                        for key, value in model.state_dict().items()
-                    },
-                },
-                output / "best_model.pt",
-            )
-        else:
-            stale += 1
-            if stale >= args.patience:
-                break
-    training_seconds = time.monotonic() - training_started
-    checkpoint = torch.load(output / "best_model.pt", map_location="cpu", weights_only=True)
-    model.load_state_dict(checkpoint["state_dict"])
-    probabilities = predict(model, x_valid, c_valid, device, args.batch_size)
-    restored_auc = float(roc_auc_score(y_valid, probabilities))
-    if abs(restored_auc - best_auc) > 1e-5:
-        raise ValueError("Reloaded checkpoint does not reproduce the selected validation AUC")
-    np.savez_compressed(
-        output / "validation_predictions.npz", y_true=y_valid, probabilities=probabilities
+    fitted = fit_model(
+        model, model_config, optimizer, x_train, c_train, y_train, x_valid, c_valid, y_valid,
+        device=device, output=output, epochs=args.epochs, patience=args.patience,
+        batch_size=args.batch_size,
     )
     report = {
         "algorithm": "TabM with learned categorical embeddings",
-        "validation_auc": restored_auc,
-        "best_epoch": best_epoch,
-        "epochs_run": len(history),
+        **fitted,
         "seed": 42,
         "sample_rows": sample_rows,
         "sample_sha256": sample_hash,
@@ -279,18 +295,17 @@ def main():
         "device": device,
         "threads": args.threads,
         "preparation_seconds": preparation_seconds,
-        "training_seconds": training_seconds,
         "versions": {
             name: version(name)
             for name in ["torch", "tabm", "numpy", "polars", "scikit-learn"]
         },
-        "history": history,
         "competition_submission": False,
     }
     (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
     print(
-        f"Best validation ROC AUC: {restored_auc:.6f}; epoch: {best_epoch}; "
-        f"training: {training_seconds:.1f}s; no submission performed",
+        f"Best validation ROC AUC: {fitted['validation_auc']:.6f}; "
+        f"epoch: {fitted['best_epoch']}; training: {fitted['training_seconds']:.1f}s; "
+        "no submission performed",
         flush=True,
     )
 

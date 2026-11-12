@@ -15,6 +15,7 @@ submission unless it has an entry in `submitted/`.
 | T002-B | [Embedding expansion](trials/002-embedding-expansion/README.md) | M1 CPU / 150,000 | 0.819478 | Not submitted | 1,127 features; 400 trees; 71.7 s fit |
 | T003 | [Full GPU expanded vectors](trials/003-full-gpu-expanded-vectors/README.md) | Kaggle T4 / 1,537,638 | 0.816489 | Not submitted | +0.000463 vs B001; 22 trees; validation only |
 | T004 | [Local TabM neural baseline](trials/004-local-tabm/README.md) | M1 Apple GPU / 150,000 | 0.809194 | Not submitted | Best epoch 1; overfit; 27.7 s fit |
+| T005-A/B | [Custom vector networks](trials/005-custom-vector-network/README.md) | M1 Apple GPU / 150,000 | Pending | Not submitted | Regularized control versus vector attention |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
@@ -30,6 +31,7 @@ measurements.
 - `train.py`: shared training and prediction pipeline; defaults to summary features.
 - `experiments.py`: paired local summary-versus-expanded-embedding experiment.
 - `tabm_experiment.py`: optional PyTorch/TabM neural subset experiment.
+- `custom_network.py`: paired regularized three-branch / vector-attention networks.
 - `download.py`: authenticated, resumable competition download.
 - `data/`: local competition files; ignored by Git.
 - `artifacts/`: local models, cached samples, and predictions; ignored by Git.

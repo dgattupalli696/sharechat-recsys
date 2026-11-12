@@ -1,0 +1,17 @@
+{
+  "run_id": "T005",
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "tabm_experiment.py": "d3068f6bbcd6a5e8630d094242d8a6614982d337587c75df797e8f4a6c638dbd",
+    "custom_network.py": "3009792219a0b77878cede51623637ea1c4db70ea9f4215300ec337602b4030d"
+  },
+  "notebook_sha256": "62d4e3915abc3f24b36443d9686263ec93c9257a7ea8e1f2f9bac6c10267535f",
+  "environment_lock_sha256": "b5ec8e50a2667ed4d17f2a4b3d927b895fb340e849dc531ff56d81710ee7b7ff",
+  "references": [
+    "T002-A",
+    "T002-B",
+    "T004"
+  ],
+  "scope": "paired local three-branch networks, with versus without vector attention",
+  "competition_submission": false
+}
