@@ -13,7 +13,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from tabm_experiment import fit_model, prepare_features
+from tabm_experiment import fit_model, prepare_features, transform_features
 from train import ROOT, TARGET, load_sample
 
 
@@ -99,6 +99,15 @@ def prepare_custom_features(train, valid, min_category_count):
         x_train, torch.from_numpy(mapped_train),
         x_valid, torch.from_numpy(mapped_valid), state,
     )
+
+
+def transform_custom_features(frame, state):
+    numeric, categorical = transform_features(frame, state)
+    remapped = np.empty(categorical.shape, dtype=np.int64)
+    for index, mapping in enumerate(state["category_remappings"]):
+        remapped[:, index] = mapping[categorical[:, index].numpy()]
+    numeric, _ = append_vectors(frame, numeric, state["vector_fields"])
+    return numeric, torch.from_numpy(remapped)
 
 
 class RecommendationNetwork(nn.Module):

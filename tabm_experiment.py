@@ -81,6 +81,30 @@ def prepare_features(train, valid):
     )
 
 
+def transform_features(frame, state):
+    numeric = np.array(
+        frame.select(state["numeric_columns"]).to_numpy(),
+        dtype=np.float32,
+        order="C",
+    )
+    infinities = np.isinf(numeric)
+    if infinities.any():
+        print(f"Treating {int(infinities.sum())} infinite inference values as missing", flush=True)
+        numeric[infinities] = np.nan
+    numeric = state["scaler"].transform(state["imputer"].transform(numeric))
+    np.clip(numeric, -10, 10, out=numeric)
+    if not np.isfinite(numeric).all():
+        raise ValueError("Nonfinite numerical features after inference preprocessing")
+    categories = (
+        frame.select(state["categorical_columns"]).fill_null("__MISSING__").to_numpy()
+    )
+    encoded = state["encoder"].transform(categories) + 1
+    return (
+        torch.from_numpy(np.ascontiguousarray(numeric, dtype=np.float32)),
+        torch.from_numpy(np.ascontiguousarray(encoded, dtype=np.int64)),
+    )
+
+
 class TabMClassifier(nn.Module):
     def __init__(
         self, n_numeric, cardinalities, members=8, width=128, blocks=2, dropout=0.1

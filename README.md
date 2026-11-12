@@ -34,6 +34,7 @@ measurements.
 - `experiments.py`: paired local summary-versus-expanded-embedding experiment.
 - `tabm_experiment.py`: optional PyTorch/TabM neural subset experiment.
 - `custom_network.py`: paired regularized three-branch / vector-attention networks.
+- `predict_custom.py`: checkpoint-only inference with environment, replay, and ID checks.
 - `download.py`: authenticated, resumable competition download.
 - `data/`: local competition files; ignored by Git.
 - `artifacts/`: local models, cached samples, and predictions; ignored by Git.

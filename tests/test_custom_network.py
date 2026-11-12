@@ -16,6 +16,7 @@ from custom_network import (
     main,
     pack_vectors,
     prepare_custom_features,
+    transform_custom_features,
 )
 
 
@@ -44,12 +45,18 @@ class CustomNetworkTests(unittest.TestCase):
     def test_rare_categories_are_retained_using_only_training_counts(self):
         train = frame(["common"] * 4 + ["rare", "another-rare", "common", "common"])
         valid = frame(["rare"] * 5 + ["unseen"] * 3)
-        _, c_train, _, c_valid, state = prepare_custom_features(train, valid, 3)
+        x_train, c_train, x_valid, c_valid, state = prepare_custom_features(train, valid, 3)
         self.assertEqual(state["cardinalities"], [2])
         self.assertTrue((c_valid.numpy() == 0).all())
         self.assertEqual(c_train[4, 0].item(), 0)
         self.assertGreater(c_train[0, 0].item(), 0)
         self.assertEqual(state["vector_fields"], ["feature26"])
+        for original, encoded, data in [
+            (x_train, c_train, train), (x_valid, c_valid, valid)
+        ]:
+            replay, categories = transform_custom_features(data, state)
+            torch.testing.assert_close(replay, original)
+            torch.testing.assert_close(categories, encoded)
 
     def test_vector_packing_preserves_direction_and_handles_missing_fields(self):
         data = {

@@ -1,0 +1,24 @@
+{
+  "submission_archive": "S002",
+  "training_trial": "T006",
+  "training_source_revision": "899b34b05c4df0130af94f7ea7fb091dfdd81d90",
+  "training_kaggle_kernel": "dheerajgattupalli/sharechat-custom-vector-attention-gpu",
+  "training_kaggle_kernel_version": 1,
+  "expected_training_artifact_sha256": {
+    "attention/best_model.pt": "454a93210a7ae5408fbaf92828e74e010f26f041ace3939d8fde3a10ebd74f3f",
+    "preprocessing.joblib": "9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983",
+    "results.json": "2c4d911a2f992aa69cae2357373adb326d5f457e7d7ed90c96913575df63d09e"
+  },
+  "inference_kaggle_kernel": "dheerajgattupalli/sharechat-vector-attention-inference",
+  "inference_source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "tabm_experiment.py": "73dd5cb0af5359116df15977ad481eccef8309735a4248d6e0d8934257493b89",
+    "custom_network.py": "7712e8daab2d69413e534227597ac92d24ed714154d368a02a1e52e2264a4fdc",
+    "predict_custom.py": "ab35200cfd6f13da0841fc11e69487b5bc7eb0c08ec409b98ac69b107a2111a5"
+  },
+  "notebook_sha256": "e0faf4f538de6fbe691b6d6081acaf8ec6c0fe4d2c99a3aa8322af8433ea618e",
+  "configuration_sha256": "80085e3384246e05acf308851356201a725d40cae08048d1dd3dbab18d86ee6c",
+  "refit": false,
+  "scope": "exact saved epoch-1 T006 checkpoint; one user-approved competition submission",
+  "automatic_competition_submission": false
+}
