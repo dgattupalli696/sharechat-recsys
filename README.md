@@ -29,6 +29,7 @@ submission unless it has an entry in `submitted/`.
 | T014 | [Combinations and architectures](trials/014-full-gpu-combinations-architectures/README.md) | Kaggle T4 / 1,537,638 | **0.840454** | Not submitted | All nineteen complete; PLR/cross/masked TabM k32 wins |
 | T015 | [New cross-family ensembles](trials/015-tabm-member-ensembles/README.md) | Local CPU / full primary holdout | **0.840708** | Not submitted | 50% k32 + 25% k8 + 25% DCNv2-r32; four-family alternative 0.840670 |
 | T016 | [Baseline CatBoost voting](trials/016-baseline-catboost-voting/README.md) | Local CPU / full primary holdout | **0.840806** | Not submitted | 10% LightGBM + 90% T015; baseline CatBoost at 2.5% gives 0.840729; tiny gains uncertain |
+| T017 | [Chronological OOF stacking](trials/017-full-temporal-stacking/README.md) | Kaggle GPU/CPU / full temporal prefixes | Pending | Not submitted | Fixed-budget k8 + LightGBM, three forward OOF blocks, outer full holdout |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 

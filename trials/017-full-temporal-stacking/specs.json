@@ -1,0 +1,11 @@
+{
+  "neural_recipe": {
+    "name": "tabm-k8-plr-cross-masked",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr"
+  },
+  "fixed_neural_epochs": 8,
+  "tree_kind": "lightgbm",
+  "tree_iterations": 140
+}
