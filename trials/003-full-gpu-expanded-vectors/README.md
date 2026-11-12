@@ -29,15 +29,36 @@ so both environments select all available labeled rows.
 
 ## Results
 
-Pending Kaggle execution. The reference B001 validation ROC AUC is 0.8160260803.
-Compare against that value, not against the differently sized local T002 holdout.
+| Run | Features | Selected trees | Validation ROC AUC |
+| --- | ---: | ---: | ---: |
+| B001: summary baseline | 679 | 21 | 0.8160260803 |
+| T003: summaries + expanded vectors | 1,127 | 22 | 0.8164893363 |
+
+Change: **+0.0004632559 AUC** on the exact same 307,528-row chronological holdout.
+Expanded vectors helped slightly in this full-data GPU run, unlike the smaller
+CPU experiment. The gain is small and comes from one GPU run per configuration;
+there are no repeated seeds or confidence intervals, and GPU training is
+nondeterministic. Do not treat this as an established leaderboard improvement.
+
+The fit call took 54.08 seconds, including model setup. The training loop itself
+was approximately eight seconds before early stopping. The log reaches completed
+validation and the validation-only exit at approximately 128 seconds from kernel
+start. No refit or test prediction was performed.
+
+Both runs used the same Kaggle image digest, GPU model configuration, labeled
+rows, and timestamp cutoff. Compare against B001, not the differently sized
+local T002 holdout. **No competition submission was made.**
 
 ## Tracking
 
-Kaggle kernel: `dheerajgattupalli/sharechat-expanded-vectors-gpu`.
-Source and configuration hashes are recorded in `provenance.json`. Logs and
-metrics will be archived beside this README after execution. Large artifacts
-remain in ignored `artifacts/kaggle-t003/`.
+Kaggle kernel: `dheerajgattupalli/sharechat-expanded-vectors-gpu`, version 1.
+Source revision: `f765854c8e418a70c78061965fafa30fc600a79c`.
+
+Source and configuration hashes are recorded in `provenance.json`. Original
+validation metrics, the execution log, and exported Kaggle environment metadata
+are archived here as `metrics.json`, `run.log`, and
+`executed-kernel-metadata.json`. The validation model remains in ignored
+`artifacts/kaggle-t003/`; its checksum is recorded in provenance.
 
 Reproduction through the shared CLI:
 

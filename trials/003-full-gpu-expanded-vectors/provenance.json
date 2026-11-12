@@ -7,5 +7,12 @@
   "reference": "B001",
   "comparison": "same full-data chronological split and GPU model settings",
   "validation_only": true,
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "f765854c8e418a70c78061965fafa30fc600a79c",
+  "kaggle_kernel_version": 1,
+  "kaggle_status": "COMPLETE",
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:de153e6d303881930c51286216393d56f56b26458d0661350305a1e8144eea01",
+  "validation_model_filename": "validation.cbm",
+  "validation_model_sha256": "d466688748c7ca40e80bbd36071c6fbd738c5a71c5f94aa001f28bf922d5300c",
+  "metrics_sha256": "09c3d11bb75cfea18dcdb0dfc2f7ef7d5e8fd6dca785a30526415213090177f7"
 }
