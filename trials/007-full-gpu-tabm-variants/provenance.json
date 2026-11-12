@@ -1,0 +1,35 @@
+{
+  "run_id": "T007",
+  "kaggle_kernel": "dheerajgattupalli/sharechat-expanded-vectors-gpu",
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "tabm_experiment.py": "9acca1eb44b9b8842fd9a94ba604c2262212fd39095264e1ec52043a9c3d1e27",
+    "custom_network.py": "c2c057e1fff475309fcf6840edba4b6a92dc825f0d8b66bf1ff0ae7963e23d74",
+    "tabm_variants.py": "519018713a36080de8c89ce62299de81acae4ff8fd9ff2bcb9f5e168c6a1bd51"
+  },
+  "notebook_sha256": "4a600e5326c7fb02af7640dd6cf5a05563754b60d1afd058ec0483f940833943",
+  "configuration_sha256": "35353bfc7b17563c9e9d3da60eefe4bb3ae48ac1c693f5e3185e24b4f7f0070f",
+  "local_environment_lock_sha256": "b5ec8e50a2667ed4d17f2a4b3d927b895fb340e849dc531ff56d81710ee7b7ff",
+  "offline_dependencies": {
+    "rtdl-num-embeddings": {
+      "version": "0.0.12",
+      "filename": "rtdl_num_embeddings-0.0.12-py3-none-any.whl",
+      "sha256": "87fd61270118915cf40888f2164f3a1f0353edf702f15fd91e71a147d23c930d",
+      "source_url": "https://files.pythonhosted.org/packages/18/b9/cef7a26a7999740d5067406b6e856fe0f18f1dd8bd2052e05f4bf4846c5e/rtdl_num_embeddings-0.0.12-py3-none-any.whl"
+    },
+    "tabm": {
+      "version": "0.0.3",
+      "filename": "tabm-0.0.3-py3-none-any.whl",
+      "sha256": "6cabed3cb436fef5e8a45f46097fd745f51b3e16be16d555b9af16cffda7f944",
+      "source_url": "https://files.pythonhosted.org/packages/6c/4f/cce9db4b2505c1d5664f7131ea6c115446fe8425c61d7c75b12162a4f25d/tabm-0.0.3-py3-none-any.whl"
+    }
+  },
+  "references": [
+    "B001",
+    "T003",
+    "T004",
+    "T006"
+  ],
+  "scope": "two full-data CUDA validation models on the original fixed chronological holdout",
+  "competition_submission": false
+}

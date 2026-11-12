@@ -18,6 +18,8 @@ submission unless it has an entry in `submitted/`.
 | T005-A | [Custom regularized control](trials/005-custom-vector-network/README.md) | M1 Apple GPU / 150,000 | 0.813992 | Not submitted | Three branches; rare-ID pooling; 18.7 s fit |
 | T005-B | [Custom vector attention](trials/005-custom-vector-network/README.md) | M1 Apple GPU / 150,000 | 0.814561 | Not submitted | +0.000569 vs control; 23.3 s fit |
 | T006 | [Full GPU vector attention](trials/006-full-gpu-vector-attention/README.md) | Kaggle T4 / 1,537,638 | **0.827024** | 0.81905 (S002) | Best full-data validation; epoch 1; +0.010535 vs T003 |
+| T007-A | [Updated standalone TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | Pending | Not submitted | Full holdout; rare-category pooling and normalized vectors |
+| T007-B | [Attention encoder + TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | Pending | Not submitted | Same inputs/holdout; jointly trained hybrid |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 
@@ -25,6 +27,11 @@ T002-A and T002-B share the same sampled rows and holdout and are directly
 comparable. Do not infer that either beats B001: B001 used a different, full-data
 holdout and GPU training. Public scores and local validation scores are different
 measurements.
+
+The local subset misranked CatBoost summaries and custom attention: T002-A beat
+T005-B locally, but T006 beat B001 on the full holdout. For learning curves, fix
+the full chronological validation cohort and sample only training rows; do not
+treat a subset ranking as a strict gate for rejecting a model family.
 
 ## Layout
 
@@ -35,6 +42,7 @@ measurements.
 - `experiments.py`: paired local summary-versus-expanded-embedding experiment.
 - `tabm_experiment.py`: optional PyTorch/TabM neural subset experiment.
 - `custom_network.py`: paired regularized three-branch / vector-attention networks.
+- `tabm_variants.py`: updated standalone / attention-hybrid TabM on a fixed holdout.
 - `predict_custom.py`: checkpoint-only inference with environment, replay, and ID checks.
 - `download.py`: authenticated, resumable competition download.
 - `data/`: local competition files; ignored by Git.
@@ -98,6 +106,12 @@ data selection, seed, split, source revision, measured results, runtime, and
 decision. Save small machine-readable metrics and relevant logs in that folder;
 keep large outputs in ignored `artifacts/`. Add a row to the ledger above.
 
+Reuse the versioned Kaggle validation notebook
+`dheerajgattupalli/sharechat-expanded-vectors-gpu` (display title: ShareChat Model
+Experiments GPU) for future training trials instead of creating one Kaggle
+notebook per trial. Preserve each executed version in that trial's provenance.
+Keep historical Git snapshots and submitted-model dependency notebooks unchanged.
+
 Preserve old results instead of overwriting them. Reproduce historical trials
 from their recorded source revision or frozen notebook, not an arbitrarily newer
 shared pipeline. Environment locks are included for local reproducibility;
@@ -107,7 +121,9 @@ bit-for-bit reproducible.
 
 ## Kaggle training and submission policy
 
-Verify changes on a local subset before launching promising full-data GPU runs.
+Verify code correctness locally before launching full-data GPU runs. Compare
+models on the same full chronological holdout; sample training only for smaller
+learning-curve experiments.
 The root `kernel-metadata.json` describes the private Kaggle GPU script and
 attaches the `sharechat` competition data with internet disabled.
 

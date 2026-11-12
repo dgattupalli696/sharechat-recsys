@@ -107,11 +107,15 @@ def transform_features(frame, state):
 
 class TabMClassifier(nn.Module):
     def __init__(
-        self, n_numeric, cardinalities, members=8, width=128, blocks=2, dropout=0.1
+        self, n_numeric, cardinalities, members=8, width=128, blocks=2, dropout=0.1,
+        category_dropout=0.0, positive_rate=None,
     ):
         super().__init__()
         from tabm import TabM
 
+        if not 0 <= category_dropout <= 1:
+            raise ValueError("category_dropout must be between zero and one")
+        self.category_dropout = category_dropout
         self.embeddings = nn.ModuleList(
             nn.Embedding(cardinality, 8, padding_idx=0)
             for cardinality in cardinalities
@@ -128,8 +132,20 @@ class TabMClassifier(nn.Module):
             d_block=width,
             dropout=dropout,
         )
+        if positive_rate is not None:
+            if not 0 < positive_rate < 1:
+                raise ValueError("positive_rate must be strictly between zero and one")
+            with torch.no_grad():
+                self.backbone.output.bias.fill_(
+                    float(np.log(positive_rate / (1 - positive_rate)))
+                )
 
     def forward(self, numeric, categorical):
+        if self.training and self.category_dropout:
+            categorical = categorical.masked_fill(
+                torch.rand_like(categorical, dtype=torch.float32) < self.category_dropout,
+                0,
+            )
         embedded = [
             layer(categorical[:, index])
             for index, layer in enumerate(self.embeddings)

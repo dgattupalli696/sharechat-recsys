@@ -6,10 +6,13 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+import joblib
 import numpy as np
 import polars as pl
 import torch
 
+from tabm_experiment import TabMClassifier, predict
+from tabm_variants import AttentionTabMClassifier, main as tabm_main
 from custom_network import (
     RecommendationNetwork,
     append_vectors,
@@ -155,6 +158,75 @@ class CustomNetworkTests(unittest.TestCase):
             self.assertEqual([entry["variant"] for entry in result["results"]], ["attention"])
             self.assertTrue((output / "attention/best_model.pt").is_file())
             self.assertFalse((output / "control").exists())
+
+    def test_tabm_variants_keep_the_full_holdout_when_sampling_training(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            sample = root / "sample.parquet"
+            data = frame(["common" if i % 3 else f"id-{i}" for i in range(160)])
+            data.write_parquet(sample)
+            states = []
+            for training_rows in [None, 96]:
+                output = root / str(training_rows)
+                argv = [
+                    "tabm_variants.py", "--sample-path", str(sample),
+                    "--epochs", "1", "--batch-size", "32", "--members", "2",
+                    "--width", "8", "--threads", "1", "--device", "cpu",
+                    "--output-dir", str(output),
+                ]
+                if training_rows is not None:
+                    argv += ["--training-rows", str(training_rows)]
+                with patch.object(sys, "argv", argv):
+                    tabm_main()
+                report = json.loads((output / "results.json").read_text())
+                states.append(report)
+                self.assertEqual(report["training_rows"], training_rows or 128)
+                self.assertEqual(report["validation_rows"], 32)
+                self.assertFalse(report["competition_submission"])
+                self.assertEqual(
+                    [entry["variant"] for entry in report["results"]],
+                    ["standalone", "hybrid"],
+                )
+                for variant, model_type in [
+                    ("standalone", TabMClassifier), ("hybrid", AttentionTabMClassifier)
+                ]:
+                    path = output / variant
+                    checkpoint = torch.load(path / "best_model.pt", weights_only=True)
+                    model = model_type(**checkpoint["model_config"])
+                    model.load_state_dict(checkpoint["state_dict"])
+                    state = joblib.load(output / "preprocessing.joblib")
+                    numeric, categories = transform_custom_features(data.slice(128), state)
+                    actual = predict(model, numeric, categories, "cpu", 32)
+                    saved = np.load(path / "validation_predictions.npz")
+                    np.testing.assert_allclose(actual, saved["probabilities"], atol=1e-7)
+                    np.testing.assert_array_equal(saved["y_true"], data["watched"][128:].to_numpy())
+                    self.assertFalse((path / "submission.csv").exists())
+            self.assertEqual(states[0]["cutoff"], states[1]["cutoff"])
+            for key in ["validation_labels_sha256", "validation_timestamps_sha256"]:
+                self.assertEqual(states[0][key], states[1][key])
+
+    def test_updated_tabm_drops_categories_only_during_training(self):
+        model = TabMClassifier(
+            2, [3], members=2, width=8, dropout=0, category_dropout=1,
+            positive_rate=0.05,
+        )
+        numeric = torch.zeros(4, 2)
+        known = torch.ones(4, 1, dtype=torch.int64)
+        unknown = torch.zeros_like(known)
+        model.train()
+        torch.testing.assert_close(model(numeric, known), model(numeric, unknown))
+        captured = []
+        handle = model.embeddings[0].register_forward_pre_hook(
+            lambda module, inputs: captured.append(inputs[0].clone())
+        )
+        model.eval()
+        model(numeric, known)
+        handle.remove()
+        torch.testing.assert_close(captured[0], known[:, 0])
+        torch.testing.assert_close(
+            model.backbone.output.bias,
+            torch.full((2, 1), float(np.log(0.05 / 0.95))),
+        )
 
 
 if __name__ == "__main__":

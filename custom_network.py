@@ -158,7 +158,7 @@ class RecommendationNetwork(nn.Module):
         self.attention_norm = nn.LayerNorm(32) if attention else None
         self.attention_dropout = nn.Dropout(0.2)
 
-    def forward(self, numeric, categorical):
+    def extract_features(self, numeric, categorical):
         if self.training:
             categorical = categorical.masked_fill(
                 torch.rand_like(categorical, dtype=torch.float32) < 0.3, 0
@@ -185,7 +185,7 @@ class RecommendationNetwork(nn.Module):
             )
             tokens = tokens + self.attention_dropout(interactions)
         tokens = tokens + self.vector_transform(tokens)
-        fused = torch.cat(
+        return torch.cat(
             [
                 self.scalar_branch(numeric[:, : self.n_dense]),
                 self.category_branch(embedded),
@@ -193,7 +193,8 @@ class RecommendationNetwork(nn.Module):
             ],
             dim=1,
         )
-        return self.head(fused)
+    def forward(self, numeric, categorical):
+        return self.head(self.extract_features(numeric, categorical))
 
 
 def main():
