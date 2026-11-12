@@ -30,15 +30,31 @@ def main():
     families["lightgbm"] = "LightGBM"
     candidates["previous-ensemble"] = "artifacts/local-t013/validation_predictions.npz"
     families["previous-ensemble"] = "Previous ensemble"
+    for family, variants in [
+        ("DCNv2", ["dcnv2-r32", "dcnv2-r64", "dcnv2-moe4"]),
+        ("FinalMLP", ["finalmlp-gated", "finalmlp-ungated", "finalmlp-alternate-lr"]),
+    ]:
+        for variant in variants:
+            if variant not in by_name:
+                raise ValueError(f"Missing completed architecture: {variant}")
+            candidates[variant] = str(
+                (batch / variant / "validation_predictions.npz").relative_to(ROOT)
+            )
+            families[variant] = family
     for path in candidates.values():
         if not (ROOT / path).is_file():
             raise FileNotFoundError(path)
     OUTPUT.mkdir(parents=True, exist_ok=True)
     (OUTPUT / "candidates.json").write_text(json.dumps({
         "candidates": candidates, "families": families, "core_names": list(candidates),
-        "scope": "new PLR/cross/masked TabM k8/k16/k32 predictions on the full primary holdout",
+        "four_way_groups": [
+            [tabm, "dcnv2-moe4", finalmlp, "lightgbm"]
+            for tabm in ["tabm-k8", "tabm-k16", "tabm-k32"]
+            for finalmlp in ["finalmlp-gated", "finalmlp-ungated", "finalmlp-alternate-lr"]
+        ],
+        "scope": "new TabM, DCNv2, FinalMLP, LightGBM and prior-ensemble predictions on the full primary holdout",
     }, indent=2) + "\n")
-    print("Prepared all five aligned full-holdout ensemble inputs")
+    print(f"Prepared {len(candidates)} aligned full-holdout ensemble inputs")
 
 
 if __name__ == "__main__":

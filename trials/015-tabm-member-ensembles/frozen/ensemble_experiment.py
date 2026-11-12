@@ -1,6 +1,6 @@
 import argparse
 import hashlib
-from itertools import combinations
+from itertools import combinations, product
 import json
 from pathlib import Path
 
@@ -12,7 +12,7 @@ from experiment_analysis import load_candidates, paired_group_bootstrap
 
 def run_ensembles(
     candidates, identity_path, output, *, core_names, families,
-    previous_predictions=None, repetitions=500,
+    previous_predictions=None, repetitions=500, four_way_groups=(),
 ):
     output.mkdir(parents=True, exist_ok=True)
     identity, labels, original, fingerprints = load_candidates(candidates, identity_path)
@@ -72,6 +72,17 @@ def run_ensembles(
             weights = [0.25] * 3
             weights[index] = 0.5
             evaluate(selected, weights, "triple-grid")
+    for selected in four_way_groups:
+        selected = [aliases.get(name, name) for name in selected]
+        if len(set(selected)) != 4 or not set(selected) <= set(names):
+            raise ValueError("Four-way mixtures require four available distinct candidates")
+        for first, second, third in product(range(1, 6), repeat=3):
+            fourth = 8 - first - second - third
+            if fourth > 0:
+                evaluate(
+                    selected, [value / 8 for value in [first, second, third, fourth]],
+                    "four-family-grid",
+                )
     best = max(records, key=lambda row: row["validation_auc"])
     equal_records = [
         row for row in records
@@ -97,6 +108,7 @@ def run_ensembles(
         "status": "COMPLETE", "rows": len(labels),
         "standalone_scores": scores, "duplicate_aliases": aliases,
         "unique_candidates": len(values), "configurations_evaluated": len(records),
+        "four_way_groups": four_way_groups,
         "best_single": best_single, "best_equal_weight": best_equal,
         "best_ensemble": best, "candidate_artifacts": fingerprints,
         "configurations": records,
@@ -136,6 +148,7 @@ def main():
         {name: Path(path) for name, path in manifest["candidates"].items()},
         args.identities, args.output_dir, core_names=manifest["core_names"],
         families=manifest["families"], previous_predictions=args.previous_predictions,
+        four_way_groups=manifest.get("four_way_groups", ()),
     )
 
 
