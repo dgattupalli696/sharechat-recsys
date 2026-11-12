@@ -9,7 +9,7 @@ import numpy as np
 import polars as pl
 import torch
 
-from full_experiments import PRIMARY_CUTOFF, category_view, feature_specs, prepare_data, run_tabm
+from full_experiments import PRIMARY_CUTOFF, category_view, feature_specs, prepare_data, run_confirmation, run_stacking, run_tabm
 from tree_experiments import run_trees
 from tabm_experiment import TabMClassifier, fit_model, fit_model_steps
 
@@ -115,6 +115,47 @@ class FullExperimentTests(unittest.TestCase):
             for result in report["results"]:
                 arrays = np.load(tree_output / result["name"] / "validation_predictions.npz")
                 np.testing.assert_array_equal(arrays["y_true"], data["y_valid"])
+
+    def test_temporal_stacking_uses_disjoint_oof_blocks_and_fixed_training(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            n = 400
+            start = datetime(2026, 10, 25, 18)
+            vectors = np.random.default_rng(42).normal(size=(n, 32)).astype(np.float32)
+            pl.DataFrame({
+                "request_id": [f"r-{i // 4}" for i in range(n)],
+                "feature1": [start + timedelta(minutes=i * 11) for i in range(n)],
+                "feature5": ["common"] * n,
+                "feature33": [float(i % 30) for i in range(n)],
+                "feature26": vectors.tolist(),
+                "watched": [i % 2 for i in range(n)],
+            }).write_parquet(root / "train.parquet")
+            output = root / "stack"
+            output.mkdir()
+            recipe = {"name": "reference", "members": 2, "width": 8}
+            report = run_stacking(
+                root / "train.parquet", output,
+                {"neural_recipe": recipe, "fixed_neural_epochs": 1,
+                 "tree_kind": "catboost-expanded", "tree_iterations": 2},
+                device="cpu",
+            )
+            self.assertEqual(report["status"], "COMPLETE")
+            self.assertEqual(len(report["folds"]), 4)
+            for fold in report["folds"]:
+                self.assertEqual(fold["neural"]["selection_mode"], "fixed_budget")
+                self.assertEqual(len(fold["neural"]["checkpoint_history"]), 1)
+            oof = np.load(output / "oof_predictions.npz")
+            outer = np.load(output / "validation_predictions.npz")
+            self.assertEqual(len(oof["row_ids"]), len(np.unique(oof["row_ids"])))
+            self.assertFalse(np.intersect1d(oof["row_ids"], outer["row_ids"]).size)
+            confirmation = root / "confirmation"
+            confirmation.mkdir()
+            checked = run_confirmation(
+                root / "train.parquet", confirmation, [recipe],
+                device="cpu", epochs=1, interval=300,
+            )
+            self.assertEqual(len(checked["results"]), 6)
+            self.assertEqual(len(checked["summary"]), 2)
 
 
 if __name__ == "__main__":

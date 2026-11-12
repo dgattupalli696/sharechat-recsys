@@ -249,6 +249,7 @@ def fit_model_steps(
     model, model_config, optimizer, x_train, c_train, y_train, x_valid, c_valid, y_valid,
     *, device, output, epochs=30, patience=5, batch_size=1024, validation_interval=300,
     seed=42, scheduler=None,
+    fixed_budget=False,
 ):
     if min(epochs, patience, batch_size, validation_interval) <= 0:
         raise ValueError("Training budgets and validation interval must be positive")
@@ -282,7 +283,10 @@ def fit_model_steps(
             loss_sum += loss.item() * len(indices)
             rows_seen += len(indices)
             expired = global_step - best_step >= patience * steps_per_epoch
-            if (
+            if fixed_budget:
+                if epoch != epochs or batch_index != steps_per_epoch:
+                    continue
+            elif (
                 global_step % validation_interval != 0
                 and batch_index != steps_per_epoch and not expired
             ):
@@ -325,7 +329,7 @@ def fit_model_steps(
                 break
         history.append({
             "epoch": epoch, "training_loss": loss_sum / rows_seen,
-            "last_validation_auc": checks[-1]["validation_auc"],
+            "last_validation_auc": checks[-1]["validation_auc"] if checks else None,
         })
         if stop:
             break
@@ -348,6 +352,7 @@ def fit_model_steps(
         "training_seconds": time.monotonic() - started,
         "peak_cuda_bytes": torch.cuda.max_memory_allocated() if device == "cuda" else None,
         "history": history, "checkpoint_history": checks,
+        "selection_mode": "fixed_budget" if fixed_budget else "validation_auc",
     }
 
 

@@ -83,16 +83,20 @@ def matrices(train, valid, fields, kind, output):
 def run_trees(
     path, output, cutoff, *, device="cuda", iterations=400,
     light_iterations=1000, only=None, worker_path=None,
+    valid_end=None, fixed_budget=False,
 ):
     rows = pq.ParquetFile(path).metadata.num_rows
     sample = load_sample(path, rows, 42, expand_embeddings=True).with_row_index("_row_id").sort("_time")
     split = int(sample["_time"].search_sorted(datetime.fromisoformat(cutoff), side="left"))
+    if valid_end:
+        end = int(sample["_time"].search_sorted(datetime.fromisoformat(valid_end), side="left"))
+        sample = sample.slice(0, end)
     train, valid = sample.slice(0, split), sample.slice(split)
     fields = sorted({
         name.rsplit("_dim_", 1)[0] for name in sample.columns if "_dim_" in name
     }, key=lambda value: int(value.removeprefix("feature")))
     y_train, y_valid = train[TARGET].to_numpy().copy(), valid[TARGET].to_numpy().copy()
-    if rows == 1537638:
+    if rows == 1537638 and cutoff == "2026-10-28T08:06:52.397000" and valid_end is None:
         assert len(y_train) == 1230110 and len(y_valid) == 307528
     report = {
         "stage": "trees", "training_rows": len(y_train), "validation_rows": len(y_valid),
@@ -127,6 +131,7 @@ def run_trees(
                     sys.executable, str(worker_path or Path(__file__).with_name("lightgbm_worker.py")),
                     "--input-dir", str(temporary), "--output-dir", str(destination),
                     "--iterations", str(light_iterations),
+                    *(["--fixed-budget"] if fixed_budget else []),
                 ], check=True)
             arrays = np.load(destination / "validation_predictions.npz")
             probabilities = arrays["probabilities"]
@@ -152,9 +157,12 @@ def run_trees(
             validation_pool = Pool(
                 x_valid, label=y_valid, cat_features=categories, embedding_features=embeddings
             )
-            estimator.fit(
-                training_pool, eval_set=validation_pool, early_stopping_rounds=60
-            )
+            if fixed_budget:
+                estimator.fit(training_pool)
+            else:
+                estimator.fit(
+                    training_pool, eval_set=validation_pool, early_stopping_rounds=60
+                )
             probabilities = estimator.predict(validation_pool, prediction_type="Probability")[:, 1]
             estimator.save_model(str(destination / "model.cbm"))
             best_iteration = estimator.tree_count_
@@ -168,6 +176,7 @@ def run_trees(
         np.savez_compressed(
             destination / "validation_predictions.npz",
             y_true=y_valid, probabilities=probabilities,
+            row_ids=valid["_row_id"].to_numpy(),
         )
         result = {
             "name": kind, "validation_auc": float(roc_auc_score(y_valid, probabilities)),

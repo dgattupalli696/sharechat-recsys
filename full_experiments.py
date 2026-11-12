@@ -30,7 +30,7 @@ def sha256(path):
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
-def prepare_data(path, output, *, secondary=False):
+def prepare_data(path, output, *, secondary=False, cutoff_override=None, end_override=None):
     from datetime import datetime
 
     started = time.monotonic()
@@ -41,11 +41,13 @@ def prepare_data(path, output, *, secondary=False):
     )
     if sample["_time"].null_count():
         raise ValueError("Missing timestamps in experiment input")
-    cutoff = datetime.fromisoformat(SECONDARY_CUTOFF if secondary else PRIMARY_CUTOFF)
+    cutoff = datetime.fromisoformat(
+        cutoff_override or (SECONDARY_CUTOFF if secondary else PRIMARY_CUTOFF)
+    )
     split = int(sample["_time"].search_sorted(cutoff, side="left"))
-    if secondary:
+    if secondary or end_override:
         end = int(sample["_time"].search_sorted(
-            datetime.fromisoformat(SECONDARY_END), side="left"
+            datetime.fromisoformat(end_override or SECONDARY_END), side="left"
         ))
         sample = sample.slice(0, end)
     train, valid = sample.slice(0, split), sample.slice(split)
@@ -81,6 +83,7 @@ def prepare_data(path, output, *, secondary=False):
         "source_rows": total, "training_rows": train.height, "validation_rows": valid.height,
         "cutoff": cutoff.isoformat(), "secondary": secondary,
         "secondary_end": SECONDARY_END if secondary else None,
+        "validation_end": end_override or (SECONDARY_END if secondary else None),
         "validation_labels_sha256": hashlib.sha256(
             valid[TARGET].to_numpy().astype(np.uint8).tobytes()
         ).hexdigest(),
@@ -93,7 +96,7 @@ def prepare_data(path, output, *, secondary=False):
         "preparation_seconds": time.monotonic() - started,
         "competition_submission": False,
     }
-    if not secondary and total == 1537638:
+    if not secondary and cutoff_override is None and total == 1537638:
         assert train.height == 1230110 and valid.height == 307528
     y_train = torch.tensor(train[TARGET].to_numpy().copy(), dtype=torch.float32)
     y_valid = valid[TARGET].to_numpy().copy()
@@ -106,16 +109,18 @@ def prepare_data(path, output, *, secondary=False):
         "y_train": y_train, "y_valid": y_valid, "state": state, "protocol": protocol,
         "original_train": original_train, "original_valid": original_valid,
         "category_counts": category_counts,
+        "validation_row_ids": validation_row_ids,
     }
 
 
-def category_view(data, minimum=10, drop_high=False):
+def category_view(data, minimum=10, drop_high=False, *, with_mappings=False):
     state = data["state"]
     if minimum == 10 and not drop_high:
-        return data["c_train"], data["c_valid"], state["cardinalities"]
+        result = (data["c_train"], data["c_valid"], state["cardinalities"])
+        return (*result, state["category_remappings"]) if with_mappings else result
     train = np.empty(data["c_train"].shape, dtype=np.int64)
     valid = np.empty(data["c_valid"].shape, dtype=np.int64)
-    cardinalities = []
+    cardinalities, mappings = [], []
     for index, counts in enumerate(data["category_counts"]):
         retained = np.flatnonzero((counts >= minimum) & (np.arange(len(counts)) != 0))
         if drop_high and state["original_cardinalities"][index] > 1000:
@@ -125,7 +130,9 @@ def category_view(data, minimum=10, drop_high=False):
         train[:, index] = mapping[data["original_train"][index]]
         valid[:, index] = mapping[data["original_valid"][index]]
         cardinalities.append(len(retained) + 1)
-    return torch.from_numpy(train), torch.from_numpy(valid), cardinalities
+        mappings.append(mapping)
+    result = (torch.from_numpy(train), torch.from_numpy(valid), cardinalities)
+    return (*result, mappings) if with_mappings else result
 
 
 def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed=42):
@@ -133,9 +140,10 @@ def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed
     destination = output / name
     destination.mkdir(parents=True, exist_ok=True)
     torch.manual_seed(seed)
-    train_categories, valid_categories, cardinalities = category_view(
-        data, spec.get("minimum", 10), spec.get("drop_high", False)
+    train_categories, valid_categories, cardinalities, mappings = category_view(
+        data, spec.get("minimum", 10), spec.get("drop_high", False), with_mappings=True,
     )
+    joblib.dump(mappings, destination / "category-remappings.joblib")
     dims = [
         min(32, math.ceil(cardinality ** 0.25)) if spec.get("adaptive") else spec.get("embedding_dim", 8)
         for cardinality in cardinalities
@@ -236,6 +244,14 @@ def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed
         x_valid, valid_categories, data["y_valid"],
         device=device, output=destination, epochs=epochs, patience=5, batch_size=1024,
         validation_interval=interval, seed=seed, scheduler=scheduler,
+        fixed_budget=spec.get("fixed_budget", False),
+    )
+    saved_predictions = np.load(destination / "validation_predictions.npz")
+    np.savez_compressed(
+        destination / "validation_predictions.npz",
+        y_true=saved_predictions["y_true"],
+        probabilities=saved_predictions["probabilities"],
+        row_ids=data["validation_row_ids"],
     )
     result = {
         "name": name, "spec": spec, "seed": seed,
@@ -281,12 +297,155 @@ def feature_specs():
     ]
 
 
+def architecture_specs(base):
+    return [
+        {**base, "name": "ensemble-16", "members": 16},
+        {**base, "name": "ensemble-32", "members": 32},
+        {**base, "name": "dcnv2-r32", "architecture": "dcnv2", "rank": 32},
+        {**base, "name": "dcnv2-r64", "architecture": "dcnv2", "rank": 64},
+        {**base, "name": "dcnv2-moe4", "architecture": "dcnv2", "rank": 32, "experts": 4},
+        {**base, "name": "finalmlp-gated", "architecture": "finalmlp", "gating": True},
+        {**base, "name": "finalmlp-ungated", "architecture": "finalmlp", "gating": False},
+        {
+            **base, "name": "finalmlp-alternate-lr", "architecture": "finalmlp",
+            "gating": True, "learning_rate": 0.0001 if base.get("learning_rate", 0.0005) != 0.0001 else 0.0005,
+        },
+    ]
+
+
+def run_confirmation(path, output, specs, *, device="cuda", epochs=30, interval=300):
+    report = {"stage": "confirmation", "folds": [], "results": [], "competition_submission": False}
+    for secondary in [False, True]:
+        fold = "earlier" if secondary else "primary"
+        destination = output / fold
+        destination.mkdir(parents=True, exist_ok=True)
+        data = prepare_data(path, destination, secondary=secondary)
+        report["folds"].append({"name": fold, **data["protocol"]})
+        for recipe in specs:
+            for seed in [42, 43, 44]:
+                spec = {**recipe, "name": f"{recipe['name']}-seed-{seed}"}
+                result = run_tabm(
+                    data, spec, destination, device=device, epochs=epochs, interval=interval, seed=seed,
+                )
+                result["fold"] = fold
+                result["recipe"] = recipe["name"]
+                report["results"].append(result)
+                (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+        del data
+        gc.collect()
+    report["summary"] = []
+    for fold in ["primary", "earlier"]:
+        for recipe in specs:
+            values = [
+                row["validation_auc"] for row in report["results"]
+                if row["fold"] == fold and row["recipe"] == recipe["name"]
+            ]
+            report["summary"].append({
+                "fold": fold, "recipe": recipe["name"], "mean_auc": float(np.mean(values)),
+                "std_auc": float(np.std(values, ddof=1)), "seed_aucs": values,
+            })
+    report["status"] = "COMPLETE"
+    (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+    return report
+
+
+def run_stacking(path, output, plan, *, device="cuda"):
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import log_loss, roc_auc_score
+
+    periods = [
+        ("2026-10-26T12:00:00", "2026-10-27T00:00:00"),
+        ("2026-10-27T00:00:00", "2026-10-27T12:00:00"),
+        ("2026-10-27T12:00:00", PRIMARY_CUTOFF),
+        (PRIMARY_CUTOFF, None),
+    ]
+    features, labels, identities, outer = [], [], [], None
+    report = {"stage": "stacking", "folds": [], "competition_submission": False}
+    recipe = {**plan["neural_recipe"], "name": "neural-fixed-budget", "fixed_budget": True}
+    fixed_epochs = max(1, int(math.ceil(plan["fixed_neural_epochs"])))
+    for index, (cutoff, end) in enumerate(periods):
+        destination = output / ("outer" if end is None else f"oof-{index + 1}")
+        destination.mkdir(parents=True, exist_ok=True)
+        data = prepare_data(path, destination, cutoff_override=cutoff, end_override=end)
+        protocol = data["protocol"]
+        neural = run_tabm(
+            data, recipe, destination, device=device, epochs=fixed_epochs,
+            interval=300, seed=42,
+        )
+        neural_predictions = np.load(destination / recipe["name"] / "validation_predictions.npz")
+        target = neural_predictions["y_true"].copy()
+        neural_probabilities = neural_predictions["probabilities"].copy()
+        row_ids = neural_predictions["row_ids"].copy()
+        del data, neural_predictions
+        gc.collect()
+        tree_output = destination / "tree"
+        tree_output.mkdir(exist_ok=True)
+        tree_report = run_trees(
+            path, tree_output, cutoff, device=device,
+            iterations=plan["tree_iterations"], light_iterations=plan["tree_iterations"],
+            only=[plan["tree_kind"]], worker_path=globals().get("FROZEN_LIGHTGBM_WORKER_FILE"),
+            valid_end=end, fixed_budget=True,
+        )
+        tree_predictions = np.load(
+            tree_output / plan["tree_kind"] / "validation_predictions.npz"
+        )
+        np.testing.assert_array_equal(target, tree_predictions["y_true"])
+        np.testing.assert_array_equal(row_ids, tree_predictions["row_ids"])
+        probability_matrix = np.column_stack([
+            neural_probabilities, tree_predictions["probabilities"]
+        ])
+        clipped = np.clip(probability_matrix, 1e-6, 1 - 1e-6)
+        logits = np.log(clipped / (1 - clipped))
+        if end is None:
+            outer = (logits, target, row_ids, probability_matrix)
+        else:
+            features.append(logits)
+            labels.append(target)
+            identities.append(row_ids)
+        report["folds"].append({
+            "cutoff": cutoff, "end": end, "protocol": protocol,
+            "neural": neural, "tree": tree_report["results"][0],
+        })
+        (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+    combined_ids = np.concatenate(identities)
+    if len(np.unique(combined_ids)) != len(combined_ids):
+        raise ValueError("OOF prediction blocks overlap")
+    meta = LogisticRegression(C=1.0, max_iter=1000, random_state=42)
+    meta.fit(np.concatenate(features), np.concatenate(labels))
+    joblib.dump(meta, output / "meta-model.joblib")
+    probabilities = meta.predict_proba(outer[0])[:, 1]
+    np.savez_compressed(
+        output / "validation_predictions.npz", y_true=outer[1],
+        probabilities=probabilities, row_ids=outer[2],
+    )
+    np.savez_compressed(
+        output / "oof_predictions.npz", logits=np.concatenate(features),
+        y_true=np.concatenate(labels), row_ids=combined_ids,
+    )
+    report.update({
+        "status": "COMPLETE", "oof_rows": len(combined_ids),
+        "validation_rows": len(outer[1]),
+        "validation_auc": float(roc_auc_score(outer[1], probabilities)),
+        "validation_logloss": float(log_loss(outer[1], probabilities, labels=[0, 1])),
+        "matched_neural_auc": float(roc_auc_score(outer[1], outer[3][:, 0])),
+        "matched_tree_auc": float(roc_auc_score(outer[1], outer[3][:, 1])),
+        "matched_equal_blend_auc": float(roc_auc_score(outer[1], outer[3].mean(axis=1))),
+        "fixed_neural_epochs": fixed_epochs,
+        "meta_coefficients": meta.coef_.tolist(), "meta_intercept": meta.intercept_.tolist(),
+    })
+    (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+    return report
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", type=Path, default=ROOT / "data")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cuda")
-    parser.add_argument("--stage", choices=["optimization", "features", "trees", "recipes"], default="optimization")
+    parser.add_argument(
+        "--stage", choices=["optimization", "features", "trees", "recipes", "combined", "confirmation", "stacking"],
+        default="optimization",
+    )
     parser.add_argument("--spec-file", type=Path)
     parser.add_argument("--secondary", action="store_true")
     parser.add_argument("--seed", type=int, default=42)
@@ -305,11 +464,23 @@ def main():
             worker_path=globals().get("FROZEN_LIGHTGBM_WORKER_FILE"),
         )
         return
+    if args.stage in {"confirmation", "stacking"}:
+        if args.spec_file is None:
+            parser.error("--spec-file is required for confirmation/stacking")
+        plan = json.loads(args.spec_file.read_text())
+        if args.stage == "confirmation":
+            run_confirmation(
+                args.data_dir / "train.parquet", args.output_dir, plan,
+                device=args.device, epochs=args.epochs, interval=args.validation_interval,
+            )
+        else:
+            run_stacking(args.data_dir / "train.parquet", args.output_dir, plan, device=args.device)
+        return
     data = prepare_data(
         args.data_dir / "train.parquet", args.output_dir, secondary=args.secondary
     )
     report = {"stage": args.stage, "protocol": data["protocol"], "results": [], "competition_submission": False}
-    if args.stage == "recipes":
+    if args.stage in {"recipes", "combined"}:
         if args.spec_file is None:
             parser.error("--spec-file is required for recipes")
         specs = json.loads(args.spec_file.read_text())
@@ -330,6 +501,16 @@ def main():
         )
         report["results"].append(result)
         (args.output_dir / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+    if args.stage == "combined":
+        best = max(report["results"], key=lambda entry: entry["validation_auc"])
+        report["selected_combination"] = {"name": best["name"], "spec": best["spec"]}
+        for spec in architecture_specs(best["spec"]):
+            result = run_tabm(
+                data, spec, args.output_dir, device=args.device,
+                epochs=args.epochs, interval=args.validation_interval,
+            )
+            report["results"].append(result)
+            (args.output_dir / "results.json").write_text(json.dumps(report, indent=2) + "\n")
     report["status"] = "COMPLETE"
     (args.output_dir / "results.json").write_text(json.dumps(report, indent=2) + "\n")
 
