@@ -1,0 +1,299 @@
+import argparse
+import gc
+import hashlib
+from importlib.metadata import version
+import json
+from pathlib import Path
+import time
+
+import joblib
+import numpy as np
+import polars as pl
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import roc_auc_score
+from sklearn.preprocessing import OrdinalEncoder, StandardScaler
+from tabm import TabM
+import torch
+from torch import nn
+from torch.nn import functional as F
+
+from train import ROOT, TARGET, load_sample
+
+
+def prepare_features(train, valid):
+    columns = [name for name in train.columns if name not in {TARGET, "_time"}]
+    numeric = [name for name in columns if train.schema[name].is_numeric()]
+    categorical = [name for name in columns if train.schema[name] == pl.String]
+    if len(numeric) + len(categorical) != len(columns):
+        raise TypeError("The engineered sample must contain only numeric/string features")
+    arrays = [
+        np.array(frame.select(numeric).to_numpy(), dtype=np.float32, order="C")
+        for frame in [train, valid]
+    ]
+    infinity_counts = [int(np.isinf(array).sum()) for array in arrays]
+    for label, array, count in zip(["training", "validation"], arrays, infinity_counts):
+        if count:
+            print(f"Treating {count} infinite {label} values as missing", flush=True)
+            array[np.isinf(array)] = np.nan
+    imputer = SimpleImputer(strategy="median", keep_empty_features=True, add_indicator=True)
+    scaler = StandardScaler()
+    x_train = scaler.fit_transform(imputer.fit_transform(arrays[0]))
+    x_valid = scaler.transform(imputer.transform(arrays[1]))
+    for array in [x_train, x_valid]:
+        np.clip(array, -10, 10, out=array)
+        if not np.isfinite(array).all():
+            raise ValueError("Nonfinite numerical features after preprocessing")
+    encoder = OrdinalEncoder(
+        handle_unknown="use_encoded_value", unknown_value=-1, dtype=np.int64
+    )
+    categories = [
+        frame.select(categorical).fill_null("__MISSING__").to_numpy()
+        for frame in [train, valid]
+    ]
+    c_train = encoder.fit_transform(categories[0]) + 1
+    c_valid = encoder.transform(categories[1]) + 1
+    cardinalities = [len(values) + 1 for values in encoder.categories_]
+    preprocessing = {
+        "numeric_columns": numeric,
+        "categorical_columns": categorical,
+        "imputer": imputer,
+        "scaler": scaler,
+        "encoder": encoder,
+        "cardinalities": cardinalities,
+        "infinity_counts": infinity_counts,
+        "validation_unknown_category_rates": {
+            name: float((c_valid[:, index] == 0).mean())
+            for index, name in enumerate(categorical)
+        },
+    }
+    return (
+        torch.from_numpy(np.ascontiguousarray(x_train, dtype=np.float32)),
+        torch.from_numpy(np.ascontiguousarray(c_train)),
+        torch.from_numpy(np.ascontiguousarray(x_valid, dtype=np.float32)),
+        torch.from_numpy(np.ascontiguousarray(c_valid)),
+        preprocessing,
+    )
+
+
+class TabMClassifier(nn.Module):
+    def __init__(
+        self, n_numeric, cardinalities, members=8, width=128, blocks=2, dropout=0.1
+    ):
+        super().__init__()
+        self.embeddings = nn.ModuleList(
+            nn.Embedding(cardinality, 8, padding_idx=0)
+            for cardinality in cardinalities
+        )
+        for embedding in self.embeddings:
+            nn.init.normal_(embedding.weight, std=0.02)
+            with torch.no_grad():
+                embedding.weight[0].zero_()
+        self.backbone = TabM.make(
+            n_num_features=n_numeric + 8 * len(cardinalities),
+            d_out=1,
+            k=members,
+            n_blocks=blocks,
+            d_block=width,
+            dropout=dropout,
+        )
+
+    def forward(self, numeric, categorical):
+        embedded = [
+            layer(categorical[:, index])
+            for index, layer in enumerate(self.embeddings)
+        ]
+        return self.backbone(torch.cat([numeric, *embedded], dim=1)).squeeze(-1)
+
+
+@torch.inference_mode()
+def predict(model, numeric, categorical, device, batch_size):
+    model.eval()
+    probabilities = []
+    for start in range(0, len(numeric), batch_size):
+        logits = model(
+            numeric[start : start + batch_size].to(device),
+            categorical[start : start + batch_size].to(device),
+        )
+        probabilities.append(logits.sigmoid().mean(dim=1).cpu().numpy())
+    return np.concatenate(probabilities)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--rows", type=int, default=150_000)
+    parser.add_argument("--sample-path", type=Path)
+    parser.add_argument("--epochs", type=int, default=20)
+    parser.add_argument("--patience", type=int, default=5)
+    parser.add_argument("--batch-size", type=int, default=1024)
+    parser.add_argument("--members", type=int, default=8)
+    parser.add_argument("--width", type=int, default=128)
+    parser.add_argument("--blocks", type=int, default=2)
+    parser.add_argument("--threads", type=int, default=4)
+    parser.add_argument("--device", choices=["auto", "cpu", "mps", "cuda"], default="auto")
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "artifacts/local-tabm-v1")
+    args = parser.parse_args()
+    if min(
+        args.rows, args.epochs, args.patience, args.batch_size,
+        args.members, args.width, args.blocks, args.threads,
+    ) <= 0:
+        parser.error("All numerical arguments must be positive")
+    device = args.device
+    if device == "auto":
+        device = (
+            "cuda" if torch.cuda.is_available()
+            else "mps" if torch.backends.mps.is_available()
+            else "cpu"
+        )
+    if device == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError("CUDA requested but unavailable")
+    if device == "mps" and not torch.backends.mps.is_available():
+        raise RuntimeError("Apple MPS requested but unavailable")
+    torch.set_num_threads(args.threads)
+    torch.manual_seed(42)
+    started = time.monotonic()
+    sample_hash = None
+    if args.sample_path:
+        sample = pl.read_parquet(args.sample_path)
+        if sample.height != args.rows:
+            raise ValueError("Cached sample row count does not match --rows")
+        with args.sample_path.open("rb") as stream:
+            sample_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+    else:
+        sample = load_sample(ROOT / "data/train.parquet", args.rows, 42)
+    sample = sample.select(
+        name for name in sample.columns if "_dim_" not in name
+    ).sort("_time")
+    if sample.height < 2 or sample["_time"].null_count():
+        raise ValueError("Chronological validation requires nonmissing timestamps")
+    cutoff = sample["_time"][int(sample.height * 0.8)]
+    train = sample.filter(pl.col("_time") < cutoff)
+    valid = sample.filter(pl.col("_time") >= cutoff)
+    for label, frame in [("training", train), ("validation", valid)]:
+        if set(frame[TARGET].unique().to_list()) != {0, 1}:
+            raise ValueError(f"{label} must contain both binary target classes")
+    training_rows, validation_rows = train.height, valid.height
+    y_train = torch.tensor(train[TARGET].to_numpy().copy(), dtype=torch.float32)
+    y_valid = valid[TARGET].to_numpy().copy()
+    x_train, c_train, x_valid, c_valid, preprocessing = prepare_features(train, valid)
+    feature_count = sample.width - 2
+    sample_rows = sample.height
+    del sample, train, valid
+    gc.collect()
+    output = args.output_dir
+    output.mkdir(parents=True, exist_ok=True)
+    joblib.dump(preprocessing, output / "preprocessing.joblib")
+    model_config = {
+        "n_numeric": x_train.shape[1],
+        "cardinalities": preprocessing["cardinalities"],
+        "members": args.members,
+        "width": args.width,
+        "blocks": args.blocks,
+        "dropout": 0.1,
+    }
+    model = TabMClassifier(**model_config).to(device)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=0.002, weight_decay=0.0003)
+    generator = torch.Generator().manual_seed(42)
+    preparation_seconds = time.monotonic() - started
+    print(
+        f"Device: {device}; sample: {sample_rows:,}; train: {training_rows:,}; "
+        f"valid: {validation_rows:,}; features: {feature_count}; "
+        f"cutoff: {cutoff}; preparation: {preparation_seconds:.1f}s",
+        flush=True,
+    )
+    best_auc, best_epoch, stale = -np.inf, 0, 0
+    history = []
+    training_started = time.monotonic()
+    for epoch in range(1, args.epochs + 1):
+        epoch_started = time.monotonic()
+        model.train()
+        order = torch.randperm(training_rows, generator=generator)
+        loss_sum = 0.0
+        for indices in order.split(args.batch_size):
+            optimizer.zero_grad(set_to_none=True)
+            logits = model(x_train[indices].to(device), c_train[indices].to(device))
+            targets = y_train[indices].to(device).unsqueeze(1).expand_as(logits)
+            loss = F.binary_cross_entropy_with_logits(logits, targets)
+            if not torch.isfinite(loss).item():
+                raise ValueError(f"Nonfinite training loss at epoch {epoch}")
+            loss.backward()
+            optimizer.step()
+            loss_sum += loss.item() * len(indices)
+        probabilities = predict(model, x_valid, c_valid, device, args.batch_size)
+        auc = float(roc_auc_score(y_valid, probabilities))
+        record = {
+            "epoch": epoch,
+            "training_loss": loss_sum / training_rows,
+            "validation_auc": auc,
+            "seconds": time.monotonic() - epoch_started,
+        }
+        history.append(record)
+        print(json.dumps(record), flush=True)
+        if auc > best_auc:
+            best_auc, best_epoch, stale = auc, epoch, 0
+            torch.save(
+                {
+                    "model_config": model_config,
+                    "state_dict": {
+                        key: value.detach().cpu().clone()
+                        for key, value in model.state_dict().items()
+                    },
+                },
+                output / "best_model.pt",
+            )
+        else:
+            stale += 1
+            if stale >= args.patience:
+                break
+    training_seconds = time.monotonic() - training_started
+    checkpoint = torch.load(output / "best_model.pt", map_location="cpu", weights_only=True)
+    model.load_state_dict(checkpoint["state_dict"])
+    probabilities = predict(model, x_valid, c_valid, device, args.batch_size)
+    restored_auc = float(roc_auc_score(y_valid, probabilities))
+    if abs(restored_auc - best_auc) > 1e-5:
+        raise ValueError("Reloaded checkpoint does not reproduce the selected validation AUC")
+    np.savez_compressed(
+        output / "validation_predictions.npz", y_true=y_valid, probabilities=probabilities
+    )
+    report = {
+        "algorithm": "TabM with learned categorical embeddings",
+        "validation_auc": restored_auc,
+        "best_epoch": best_epoch,
+        "epochs_run": len(history),
+        "seed": 42,
+        "sample_rows": sample_rows,
+        "sample_sha256": sample_hash,
+        "training_rows": training_rows,
+        "validation_rows": validation_rows,
+        "cutoff": str(cutoff),
+        "input_features": feature_count,
+        "numerical_features": len(preprocessing["numeric_columns"]),
+        "numerical_features_after_imputation": x_train.shape[1],
+        "categorical_features": len(preprocessing["categorical_columns"]),
+        "validation_unknown_category_rates": preprocessing["validation_unknown_category_rates"],
+        "infinite_input_counts_train_valid": preprocessing["infinity_counts"],
+        "model_config": model_config,
+        "optimizer": {"name": "AdamW", "learning_rate": 0.002, "weight_decay": 0.0003},
+        "max_epochs": args.epochs,
+        "patience": args.patience,
+        "batch_size": args.batch_size,
+        "device": device,
+        "threads": args.threads,
+        "preparation_seconds": preparation_seconds,
+        "training_seconds": training_seconds,
+        "versions": {
+            name: version(name)
+            for name in ["torch", "tabm", "numpy", "polars", "scikit-learn"]
+        },
+        "history": history,
+        "competition_submission": False,
+    }
+    (output / "results.json").write_text(json.dumps(report, indent=2) + "\n")
+    print(
+        f"Best validation ROC AUC: {restored_auc:.6f}; epoch: {best_epoch}; "
+        f"training: {training_seconds:.1f}s; no submission performed",
+        flush=True,
+    )
+
+
+if __name__ == "__main__":
+    main()

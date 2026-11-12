@@ -12,3 +12,6 @@ artifacts/
 submission*.csv
 kaggle.json
 access_token
+*.pt
+*.joblib
+*.npz

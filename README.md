@@ -14,6 +14,7 @@ submission unless it has an entry in `submitted/`.
 | T002-A | [Summary-feature control](trials/002-embedding-expansion/README.md) | M1 CPU / 150,000 | 0.820875 | Not submitted | 679 features; 298 trees; 49.6 s fit |
 | T002-B | [Embedding expansion](trials/002-embedding-expansion/README.md) | M1 CPU / 150,000 | 0.819478 | Not submitted | 1,127 features; 400 trees; 71.7 s fit |
 | T003 | [Full GPU expanded vectors](trials/003-full-gpu-expanded-vectors/README.md) | Kaggle T4 / 1,537,638 | 0.816489 | Not submitted | +0.000463 vs B001; 22 trees; validation only |
+| T004 | [Local TabM neural baseline](trials/004-local-tabm/README.md) | M1 / 150,000 | Pending | Not submitted | Summary features; neural ensemble; validation only |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
@@ -28,6 +29,7 @@ measurements.
 - `submitted/`: immutable source/notebook snapshots and scoreboard records for actual submissions.
 - `train.py`: shared training and prediction pipeline; defaults to summary features.
 - `experiments.py`: paired local summary-versus-expanded-embedding experiment.
+- `tabm_experiment.py`: optional PyTorch/TabM neural subset experiment.
 - `download.py`: authenticated, resumable competition download.
 - `data/`: local competition files; ignored by Git.
 - `artifacts/`: local models, cached samples, and predictions; ignored by Git.
@@ -63,6 +65,18 @@ uv run python train.py --rows 150000 --task-type CPU \
 Local defaults use a seed-42 uniform 150,000-row sample. Training and validation
 are split chronologically 80/20 by `feature1`, keeping timestamp ties together.
 Kaggle defaults select all 1,537,638 labeled rows and require a CUDA GPU.
+
+Optional local deep-learning trial and its focused checks:
+
+```bash
+uv sync --locked --extra deep-learning
+uv run --extra deep-learning python -m unittest discover -s tests -q
+uv run --extra deep-learning python tabm_experiment.py --rows 150000
+```
+
+TabM selects CUDA, Apple MPS, or CPU in that order and reports its device.
+Use `--device cpu`, `--device mps`, or `--device cuda` to require a specific backend.
+It only validates and saves the best checkpoint; it never submits predictions.
 
 | Dataset | Rows | Bytes |
 | --- | ---: | ---: |

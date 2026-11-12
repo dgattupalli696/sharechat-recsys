@@ -1,0 +1,10 @@
+{
+  "run_id": "T004",
+  "training_source_sha256": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+  "neural_source_sha256": "27dd8995708893e1d7e229399c6a693abfeda99428d636e16bd6d6359960e17f",
+  "notebook_sha256": "c96191b3e01da48c547ded4aed490b48fd21f715027ad8df7dfaaa3f605c2b53",
+  "environment_lock_sha256": "b5ec8e50a2667ed4d17f2a4b3d927b895fb340e849dc531ff56d81710ee7b7ff",
+  "reference_trial": "T002-A",
+  "scope": "local subset, summary-based features, validation only",
+  "competition_submission": false
+}
