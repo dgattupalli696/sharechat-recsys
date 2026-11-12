@@ -13,6 +13,7 @@ submission unless it has an entry in `submitted/`.
 | T001 | [Timestamp split failure](trials/001-timestamp-split-failure/README.md) | Kaggle T4 / 1,537,638 | - | - | Failed before fitting; fixed in B001 |
 | T002-A | [Summary-feature control](trials/002-embedding-expansion/README.md) | M1 CPU / 150,000 | 0.820875 | Not submitted | 679 features; 298 trees; 49.6 s fit |
 | T002-B | [Embedding expansion](trials/002-embedding-expansion/README.md) | M1 CPU / 150,000 | 0.819478 | Not submitted | 1,127 features; 400 trees; 71.7 s fit |
+| T003 | [Full GPU expanded vectors](trials/003-full-gpu-expanded-vectors/README.md) | Kaggle T4 / 1,537,638 | Pending | Not submitted | Same holdout as B001; validation only |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly

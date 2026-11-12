@@ -2,6 +2,7 @@ import argparse
 import gc
 import json
 from pathlib import Path
+import time
 
 from catboost import CatBoostClassifier
 from catboost.utils import get_gpu_device_count
@@ -103,6 +104,8 @@ def main():
     parser.add_argument("--rows", type=int, default=1_600_000 if ON_KAGGLE else 150_000)
     parser.add_argument("--iterations", type=int, default=400)
     parser.add_argument("--threads", type=int, default=4)
+    parser.add_argument("--expand-embeddings", action="store_true")
+    parser.add_argument("--validation-only", action="store_true")
     parser.add_argument(
         "--task-type", choices=["CPU", "GPU"], default="GPU" if ON_KAGGLE else "CPU"
     )
@@ -134,7 +137,9 @@ def main():
     output = args.output_dir
     output.mkdir(parents=True, exist_ok=True)
     print(f"Compute: {args.task_type}; input: {data}; output: {output}", flush=True)
-    sample = load_sample(data / "train.parquet", args.rows, 42).sort("_time")
+    sample = load_sample(
+        data / "train.parquet", args.rows, 42, args.expand_embeddings
+    ).sort("_time")
     if sample.height < 2:
         raise ValueError("Chronological validation requires at least two rows")
     if sample["_time"].null_count():
@@ -153,31 +158,43 @@ def main():
     categories = [name for name in columns if sample.schema[name] == pl.String]
     x_train = train.select(columns).to_pandas()
     x_valid = valid.select(columns).to_pandas()
+    y_train = train[TARGET].to_numpy()
+    y_valid = valid[TARGET].to_numpy()
+    sample_rows, training_rows, validation_rows = sample.height, train.height, valid.height
     print(
         f"Training: {train.height:,}; validation: {valid.height:,}; "
         f"features: {len(columns)}; cutoff: {cutoff}",
         flush=True,
     )
+    if args.validation_only:
+        del sample, train, valid
+        gc.collect()
     estimator = model(args.iterations, args.threads, args.task_type)
+    fit_started = time.monotonic()
     estimator.fit(
         x_train,
-        train[TARGET].to_numpy(),
+        y_train,
         cat_features=categories,
-        eval_set=(x_valid, valid[TARGET].to_numpy()),
+        eval_set=(x_valid, y_valid),
         early_stopping_rounds=60,
     )
+    fit_seconds = time.monotonic() - fit_started
     auc = roc_auc_score(
-        valid[TARGET].to_numpy(), estimator.predict_proba(x_valid)[:, 1]
+        y_valid, estimator.predict_proba(x_valid)[:, 1]
     )
     best_iterations = estimator.tree_count_
     metrics = {
         "validation_auc": auc,
         "validation": "chronological 80/20 split; timestamp ties kept together",
         "cutoff": str(cutoff),
-        "sample_rows": sample.height,
-        "training_rows": train.height,
-        "validation_rows": valid.height,
+        "sample_rows": sample_rows,
+        "training_rows": training_rows,
+        "validation_rows": validation_rows,
         "iterations": best_iterations,
+        "max_iterations": args.iterations,
+        "expand_embeddings": args.expand_embeddings,
+        "validation_only": args.validation_only,
+        "fit_seconds": fit_seconds,
         "task_type": args.task_type,
         "features": columns,
         "categorical_features": categories,
@@ -185,6 +202,9 @@ def main():
     estimator.save_model(str(output / "validation.cbm"))
     (output / "metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
     print(f"Validation ROC AUC: {auc:.6f}", flush=True)
+    if args.validation_only:
+        print("Validation-only run: skipping full-data refit and test predictions", flush=True)
+        return
     del estimator, x_train, x_valid, train, valid
     gc.collect()
 
@@ -215,7 +235,9 @@ def main():
         if raw["id"].to_list() != expected.to_list():
             raise ValueError("Test ids do not match sample submission order")
         predictions.append(
-            estimator.predict_proba(features(raw).select(columns).to_pandas())[:, 1]
+            estimator.predict_proba(
+                features(raw, args.expand_embeddings).select(columns).to_pandas()
+            )[:, 1]
         )
         offset += raw.height
     probabilities = np.concatenate(predictions)
