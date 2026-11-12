@@ -1,0 +1,43 @@
+{
+  "unique_candidates": 11,
+  "configurations_evaluated": 1158,
+  "best_equal_weight": {
+    "models": [
+      "dcnv2-r32",
+      "tabm-k32",
+      "tabm-k8"
+    ],
+    "weights": [
+      0.3333333333333333,
+      0.3333333333333333,
+      0.3333333333333333
+    ],
+    "kind": "triple-equal",
+    "validation_auc": 0.8406773178513687
+  },
+  "best_ensemble": {
+    "models": [
+      "dcnv2-r32",
+      "tabm-k32",
+      "tabm-k8"
+    ],
+    "weights": [
+      0.25,
+      0.5,
+      0.25
+    ],
+    "kind": "triple-grid",
+    "validation_auc": 0.84070750870922
+  },
+  "paired_bootstrap_vs_best_single": {
+    "group_count": 85985,
+    "repetitions": 500,
+    "excluded_single_class_draws": 0,
+    "mean_delta": 0.00025600804704776125,
+    "percentile_95_interval": [
+      9.656748107904624e-05,
+      0.00041645552702533324
+    ],
+    "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+  }
+}

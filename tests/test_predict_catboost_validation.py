@@ -27,7 +27,10 @@ class BaselineReplayTests(unittest.TestCase):
             raw.write_parquet(root / "train.parquet")
             train = raw.filter(pl.col("feature1") < cutoff)
             valid = raw.with_row_index("_row_id").filter(pl.col("feature1") >= cutoff)
-            model = CatBoostClassifier(iterations=2, depth=2, thread_count=1, verbose=False)
+            model = CatBoostClassifier(
+                iterations=2, depth=2, thread_count=1, verbose=False,
+                allow_writing_files=False,
+            )
             model.fit(features(train).to_pandas(), train["watched"].to_numpy(), cat_features=["feature5"])
             model.save_model(str(root / "validation.cbm"))
             valid.select("_row_id", "request_id", "feature1").write_parquet(root / "identity.parquet")

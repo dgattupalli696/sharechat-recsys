@@ -7,5 +7,14 @@
   },
   "input_preparation_sha256": "df67041e108a154261e5f00144a767c7e4ed4861cab6f0a74259fd8993261c0c",
   "notebook_sha256": "72457d248faff92744cd54e597f4e7376400fc9a10e0f155f94cf188152d7c17",
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "8297614",
+  "status": "COMPLETE",
+  "artifact_sha256": {
+    "candidates.json": "b171694e8e8b99a745437dc27f8152d35c6445b310a2f3d90f380d1fbb45ce01",
+    "equal_weight_predictions.npz": "69b1de269ee1f67a1bf760aeecad7b3e78f5b964bd55232937ac97454a003a2d",
+    "results.json": "fb6443a462f1a1b4d65cb74dac0cef3b372c773f0b5af86ec6926d032a1e2748",
+    "run.log": "792e8683e2d01dd79fa3b3eff5caf5160511db21ff959f785b11a9dd76055d54",
+    "validation_predictions.npz": "aea96ba3bdec680ef12a04ae71b7b601e54541c60887738f0f7931bea7852430"
+  }
 }
