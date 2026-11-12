@@ -1,0 +1,20 @@
+[
+  {
+    "name": "reference"
+  },
+  {
+    "name": "tabm-k32-plr-cross-masked",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "members": 32
+  },
+  {
+    "name": "dcnv2-r32-plr-cross-masked",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "architecture": "dcnv2",
+    "rank": 32
+  }
+]

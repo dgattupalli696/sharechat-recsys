@@ -1,0 +1,33 @@
+{
+  "run_id": "T018",
+  "stage": "confirmation",
+  "kaggle_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "tabm_experiment.py": "7ddbb75066fc7b13e784f005b94d4cafb8c1fff4ec1abe9f25c637644b4f4e02",
+    "custom_network.py": "c2c057e1fff475309fcf6840edba4b6a92dc825f0d8b66bf1ff0ae7963e23d74",
+    "feature_models.py": "0ede9a201f776dacf3c474acf55405e1b798b6a8ad43d0588f8e10035b8fc525",
+    "lightgbm_worker.py": "c149ead477061216d744a19f26b3b0d1b68a38c8c5bbc49418b140aceb0fd3bd",
+    "tree_experiments.py": "3881d07c80fab2522b16019f47aa52c535f7171dec5aa55c156f8902308132bc",
+    "full_experiments.py": "6df0999773e5bd00d68fcf2d88e0de4f59bc8277fe0ae6234c8a5fbb16fe07c8"
+  },
+  "notebook_sha256": "8b9d9dee9e1be2124dc2aad57fb70cebd299265b9ce56d3be6ed6e127dedbb62",
+  "configuration_sha256": "cf9a12ed350a31b7143ea7c93d001271fa8ef0312e4b992621d387a3d397f0ea",
+  "local_environment_lock_sha256": "8ac82041c6beb49eb48f3a1af223f048f362de3830fc4e08a74ac5e191618cf9",
+  "offline_dependencies": {
+    "rtdl-num-embeddings": {
+      "version": "0.0.12",
+      "filename": "rtdl_num_embeddings-0.0.12-py3-none-any.whl",
+      "sha256": "87fd61270118915cf40888f2164f3a1f0353edf702f15fd91e71a147d23c930d",
+      "source_url": "https://files.pythonhosted.org/packages/18/b9/cef7a26a7999740d5067406b6e856fe0f18f1dd8bd2052e05f4bf4846c5e/rtdl_num_embeddings-0.0.12-py3-none-any.whl"
+    },
+    "tabm": {
+      "version": "0.0.3",
+      "filename": "tabm-0.0.3-py3-none-any.whl",
+      "sha256": "6cabed3cb436fef5e8a45f46097fd745f51b3e16be16d555b9af16cffda7f944",
+      "source_url": "https://files.pythonhosted.org/packages/6c/4f/cce9db4b2505c1d5664f7131ea6c115446fe8425c61d7c75b12162a4f25d/tabm-0.0.3-py3-none-any.whl"
+    }
+  },
+  "scope": "three seeds per recipe on the complete primary and predeclared earlier temporal partitions",
+  "competition_submission": false
+}
