@@ -25,3 +25,23 @@ and actual tree-library versions/backends are recorded.
 Reuse the existing versioned Kaggle notebook. Archive original metrics, logs,
 source and configuration identity; keep large artifacts outside Git.
 No test predictions or competition submission.
+
+## Completed full-data results
+
+Kaggle notebook version 5 completed all five CatBoost variants.
+All predictions match the full primary holdout's labels and independently
+reproduce the reported AUCs.
+
+| Variant | Validation AUC |
+| --- | ---: |
+| catboost-expanded | 0.8164893363 |
+| pca-8 | 0.8162657347 |
+| pca-16 | 0.8160712030 |
+| catboost-crosses | **0.8252509472** |
+| catboost-native-lda | 0.8167170746 |
+
+Expanded CatBoost exactly reproduces T003. Exploratory vector crosses help
+materially, while PCA and native LDA embeddings do not beat that cross-feature
+recipe. T011 LightGBM remains the strongest individual tree at 0.8255838643.
+Preserve all predictions for later ensemble comparison; do not infer that
+the weaker individual models cannot add ensemble diversity.

@@ -1,0 +1,65 @@
+{
+  "stage": "trees",
+  "training_rows": 1230110,
+  "validation_rows": 307528,
+  "cutoff": "2026-10-28T08:06:52.397000",
+  "results": [
+    {
+      "name": "catboost-expanded",
+      "validation_auc": 0.8164893362624378,
+      "validation_logloss": 0.1822959863714801,
+      "preparation_seconds": 6.251172269999984,
+      "training_and_prediction_seconds": 59.642547315,
+      "best_iteration": 22,
+      "backend": "GPU",
+      "library_version": "1.2.10",
+      "input_features": 1127
+    },
+    {
+      "name": "pca-8",
+      "validation_auc": 0.8162657347341563,
+      "validation_logloss": 0.17955460042020485,
+      "preparation_seconds": 37.460679141000014,
+      "training_and_prediction_seconds": 45.586064599,
+      "best_iteration": 23,
+      "backend": "GPU",
+      "library_version": "1.2.10",
+      "input_features": 805
+    },
+    {
+      "name": "pca-16",
+      "validation_auc": 0.8160712029833296,
+      "validation_logloss": 0.17923266922678377,
+      "preparation_seconds": 37.75314992099999,
+      "training_and_prediction_seconds": 50.55433899299999,
+      "best_iteration": 23,
+      "backend": "GPU",
+      "library_version": "1.2.10",
+      "input_features": 917
+    },
+    {
+      "name": "catboost-crosses",
+      "validation_auc": 0.8252509472220444,
+      "validation_logloss": 0.17635267500172233,
+      "preparation_seconds": 53.12969498800004,
+      "training_and_prediction_seconds": 53.30485144199997,
+      "best_iteration": 23,
+      "backend": "GPU",
+      "library_version": "1.2.10",
+      "input_features": 1043
+    },
+    {
+      "name": "catboost-native-lda",
+      "validation_auc": 0.8167170745990096,
+      "validation_logloss": 0.17530484250464198,
+      "preparation_seconds": 22.75844042999995,
+      "training_and_prediction_seconds": 298.187419471,
+      "best_iteration": 28,
+      "backend": "CPU",
+      "library_version": "1.2.10",
+      "input_features": 707
+    }
+  ],
+  "competition_submission": false,
+  "status": "COMPLETE"
+}

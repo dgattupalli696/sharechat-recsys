@@ -37,5 +37,62 @@
     "pca-16",
     "catboost-crosses",
     "catboost-native-lda"
+  ],
+  "source_revision": "dd3d7b55267978e8b3613eda8f293073b79b10c5",
+  "kaggle_kernel_version": 5,
+  "kaggle_kernel_id": 144588605,
+  "kaggle_status": "COMPLETE",
+  "artifact_sha256": {
+    "catboost-expanded/validation_predictions.npz": "95fcc3375224cd8bd2dc6946196bdf18de653215ccd02f85d0dc1ff825d018fd",
+    "pca-8/validation_predictions.npz": "6adab2f4419b3ebc4b2902cffdb40a3e2fd7218e5ffe3c2e06f2ff3f812aaf33",
+    "pca-16/validation_predictions.npz": "35de12c97ebbb68a05f2505f40344c151fffe8ac7d01e3d4d779efbb9836a35f",
+    "catboost-crosses/validation_predictions.npz": "67368f4e8761322c32409102a3bcb1d9b3038818c1b9b4e0daac92ea9c491436",
+    "catboost-native-lda/validation_predictions.npz": "2bc458d13a37f478347a73751222317f47348a5ac271c0d2c609ef21d7178392",
+    "catboost-crosses/model.cbm": "c61cc4c70053be021a78ddb865e0fa57b69c57bafe822bb6adca35f357f4e676",
+    "catboost-crosses/results.json": "7cf41a2694d1a6d63485c8dd50641cf4f4e5c1289b43b3c423338b750e818a23",
+    "catboost-expanded/model.cbm": "55a9322d7ea4f7e6343098c7861d291865505c87549f09203804d6f16574a02b",
+    "catboost-expanded/results.json": "b662b08f093d306d7f1fcf554b6f7684b7f7de2a70a67b198c747d89b1ec602d",
+    "catboost-native-lda/model.cbm": "714c3160b96b9f511f3643d889f114cfdbf20fa85fd6e9b55ff2d500be6bac55",
+    "catboost-native-lda/results.json": "3c708a0f028c5ae8abeb434447261c67f6595139a992d50601551bc6339852ae",
+    "pca-16/model.cbm": "88e15312f6dd81b05f54740be99fa8992b237698b4b37e7b306dc2c68cd20dbe",
+    "pca-16/pca.joblib": "85cc56b14fd290481767289b82beffc97bd273074347926bdecdd986adaa01b9",
+    "pca-16/results.json": "ae43972ecb07c6985316b80dbcf83e488eda5023fc88bcb2c05bb614eac6a359",
+    "pca-8/model.cbm": "58ad958eecfe15fcf83a02dbb90aa021677c8376ec8388533004a4ef1fc47695",
+    "pca-8/pca.joblib": "07f703afc035f14449bb30240a0e4ee76457cc63be0ac1207be13b5485ccf1c5",
+    "pca-8/results.json": "c82c6eedb4c4ce4353c879853b3e5098c6d6b484410094e6b4e1fab8cafcb3af",
+    "results.json": "5da11991e771282e1d41cd5bae567bb697cf91af53dec37976767631ec889d73"
+  },
+  "validation_labels_match_t007": true,
+  "results": [
+    {
+      "name": "catboost-expanded",
+      "validation_auc": 0.8164893362624378,
+      "best_fractional_epoch": null,
+      "training_seconds": 59.642547315
+    },
+    {
+      "name": "pca-8",
+      "validation_auc": 0.8162657347341563,
+      "best_fractional_epoch": null,
+      "training_seconds": 45.586064599
+    },
+    {
+      "name": "pca-16",
+      "validation_auc": 0.8160712029833295,
+      "best_fractional_epoch": null,
+      "training_seconds": 50.55433899299999
+    },
+    {
+      "name": "catboost-crosses",
+      "validation_auc": 0.8252509472220444,
+      "best_fractional_epoch": null,
+      "training_seconds": 53.30485144199997
+    },
+    {
+      "name": "catboost-native-lda",
+      "validation_auc": 0.8167170745990098,
+      "best_fractional_epoch": null,
+      "training_seconds": 298.187419471
+    }
   ]
 }

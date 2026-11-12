@@ -1,0 +1,144 @@
+[{"stream_name":"stderr","time":8.291950159,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.292015947,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.292022322,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.292026411,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.939038431,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.939073393,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.939078392999999,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.939082087,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":11.079986036,"data":"Processing /tmp/tmpv__baoa6/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.09251288,"data":"Processing /tmp/tmpv__baoa6/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.126053955,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":11.186476742,"data":"\n"}
+,{"stream_name":"stdout","time":11.266594663,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":11.283196362,"data":"Processing /tmp/tmpv__baoa6/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.283224273,"data":"Processing /tmp/tmpv__baoa6/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.283229757,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":11.283233967,"data":"\n"}
+,{"stream_name":"stdout","time":11.28323777,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":11.341901265,"data":"Pinned offline TabM dependencies verified\n"}
+,{"stream_name":"stdout","time":99.731392715,"data":"START catboost-expanded: 1230110 train / 307528 holdout\n"}
+,{"stream_name":"stderr","time":143.094202161,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stderr","time":143.094237071,"data":"\n"}
+,{"stream_name":"stderr","time":143.09424282,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stdout","time":151.105402709,"data":"0:\ttest: 0.7068365\tbest: 0.7068365 (0)\ttotal: 383ms\tremaining: 2m 32s\n"}
+,{"stream_name":"stdout","time":155.701100064,"data":"50:\ttest: 0.8099991\tbest: 0.8164894 (21)\ttotal: 4.98s\tremaining: 34.1s\n"}
+,{"stream_name":"stdout","time":158.48707089,"data":"bestTest = 0.8164893687\n"}
+,{"stream_name":"stdout","time":158.48714433,"data":"bestIteration = 21\n"}
+,{"stream_name":"stdout","time":158.487154228,"data":"Shrink model to first 22 iterations.\n"}
+,{"stream_name":"stdout","time":160.245673672,"data":"RESULT catboost-expanded: AUC=0.8164893363\n"}
+,{"stream_name":"stdout","time":199.173519788,"data":"START pca-8: 1230110 train / 307528 holdout\n"}
+,{"stream_name":"stderr","time":229.261766245,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stderr","time":229.261820523,"data":"\n"}
+,{"stream_name":"stderr","time":229.262034446,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stdout","time":236.530052056,"data":"0:\ttest: 0.7765936\tbest: 0.7765936 (0)\ttotal: 126ms\tremaining: 50.1s\n"}
+,{"stream_name":"stdout","time":240.131939526,"data":"50:\ttest: 0.8097560\tbest: 0.8162657 (22)\ttotal: 3.73s\tremaining: 25.5s\n"}
+,{"stream_name":"stdout","time":242.464056743,"data":"bestTest = 0.816265732\n"}
+,{"stream_name":"stdout","time":242.464096966,"data":"bestIteration = 22\n"}
+,{"stream_name":"stdout","time":242.464103478,"data":"Shrink model to first 23 iterations.\n"}
+,{"stream_name":"stdout","time":243.8738994,"data":"RESULT pca-8: AUC=0.8162657347\n"}
+,{"stream_name":"stdout","time":281.631681475,"data":"START pca-16: 1230110 train / 307528 holdout\n"}
+,{"stream_name":"stderr","time":317.254919056,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stderr","time":317.254952939,"data":"\n"}
+,{"stream_name":"stderr","time":317.255150145,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stdout","time":324.77051377,"data":"0:\ttest: 0.7765936\tbest: 0.7765936 (0)\ttotal: 141ms\tremaining: 56.2s\n"}
+,{"stream_name":"stdout","time":328.759603587,"data":"50:\ttest: 0.8104524\tbest: 0.8160712 (22)\ttotal: 4.13s\tremaining: 28.3s\n"}
+,{"stream_name":"stdout","time":331.3594217,"data":"bestTest = 0.8160712421\n"}
+,{"stream_name":"stdout","time":331.359480786,"data":"bestIteration = 22\n"}
+,{"stream_name":"stdout","time":331.359486797,"data":"Shrink model to first 23 iterations.\n"}
+,{"stream_name":"stdout","time":332.718521167,"data":"RESULT pca-16: AUC=0.8160712030\n"}
+,{"stream_name":"stdout","time":386.817879726,"data":"START catboost-crosses: 1230110 train / 307528 holdout\n"}
+,{"stream_name":"stderr","time":423.827421764,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stderr","time":423.827455267,"data":"\n"}
+,{"stream_name":"stderr","time":423.827460124,"data":"Default metric period is 5 because AUC is/are not implemented for GPU\n"}
+,{"stream_name":"stdout","time":431.336418841,"data":"0:\ttest: 0.7893589\tbest: 0.7893589 (0)\ttotal: 168ms\tremaining: 1m 6s\n"}
+,{"stream_name":"stdout","time":435.563322313,"data":"50:\ttest: 0.8193711\tbest: 0.8252510 (22)\ttotal: 4.39s\tremaining: 30.1s\n"}
+,{"stream_name":"stdout","time":438.353656468,"data":"bestTest = 0.8252509832\n"}
+,{"stream_name":"stdout","time":438.353701753,"data":"bestIteration = 22\n"}
+,{"stream_name":"stdout","time":438.353707136,"data":"Shrink model to first 23 iterations.\n"}
+,{"stream_name":"stdout","time":439.58974375,"data":"RESULT catboost-crosses: AUC=0.8252509472\n"}
+,{"stream_name":"stdout","time":463.569976031,"data":"START catboost-native-lda: 1230110 train / 307528 holdout\n"}
+,{"stream_name":"stdout","time":553.368736831,"data":"0:\ttest: 0.7749059\tbest: 0.7749059 (0)\ttotal: 3.07s\tremaining: 20m 24s\n"}
+,{"stream_name":"stdout","time":673.486178175,"data":"50:\ttest: 0.8142925\tbest: 0.8167171 (27)\ttotal: 2m 3s\tremaining: 14m 2s\n"}
+,{"stream_name":"stdout","time":759.899266068,"data":"Stopped by overfitting detector  (60 iterations wait)\n"}
+,{"stream_name":"stdout","time":759.89930136,"data":"\n"}
+,{"stream_name":"stdout","time":759.899308555,"data":"bestTest = 0.8167170746\n"}
+,{"stream_name":"stdout","time":759.899313689,"data":"bestIteration = 27\n"}
+,{"stream_name":"stdout","time":759.899318522,"data":"\n"}
+,{"stream_name":"stdout","time":759.899323287,"data":"Shrink model to first 28 iterations.\n"}
+,{"stream_name":"stdout","time":762.853692957,"data":"RESULT catboost-native-lda: AUC=0.8167170746\n"}
+,{"stream_name":"stdout","time":762.894787773,"data":"{\n"}
+,{"stream_name":"stdout","time":762.894815787,"data":"  \"stage\": \"trees\",\n"}
+,{"stream_name":"stdout","time":762.89482035,"data":"  \"training_rows\": 1230110,\n"}
+,{"stream_name":"stdout","time":762.89482398,"data":"  \"validation_rows\": 307528,\n"}
+,{"stream_name":"stdout","time":762.894827448,"data":"  \"cutoff\": \"2026-10-28T08:06:52.397000\",\n"}
+,{"stream_name":"stdout","time":762.894831402,"data":"  \"results\": [\n"}
+,{"stream_name":"stdout","time":762.894834732,"data":"    {\n"}
+,{"stream_name":"stdout","time":762.894837908,"data":"      \"name\": \"catboost-expanded\",\n"}
+,{"stream_name":"stdout","time":762.894841362,"data":"      \"validation_auc\": 0.8164893362624378,\n"}
+,{"stream_name":"stdout","time":762.894844738,"data":"      \"validation_logloss\": 0.1822959863714801,\n"}
+,{"stream_name":"stdout","time":762.894848232,"data":"      \"preparation_seconds\": 6.251172269999984,\n"}
+,{"stream_name":"stdout","time":762.894852166,"data":"      \"training_and_prediction_seconds\": 59.642547315,\n"}
+,{"stream_name":"stdout","time":762.894856174,"data":"      \"best_iteration\": 22,\n"}
+,{"stream_name":"stdout","time":762.894859745,"data":"      \"backend\": \"GPU\",\n"}
+,{"stream_name":"stdout","time":762.894863475,"data":"      \"library_version\": \"1.2.10\",\n"}
+,{"stream_name":"stdout","time":762.894867485,"data":"      \"input_features\": 1127\n"}
+,{"stream_name":"stdout","time":762.894870881,"data":"    },\n"}
+,{"stream_name":"stdout","time":762.894874047,"data":"    {\n"}
+,{"stream_name":"stdout","time":762.894877233,"data":"      \"name\": \"pca-8\",\n"}
+,{"stream_name":"stdout","time":762.89488048,"data":"      \"validation_auc\": 0.8162657347341563,\n"}
+,{"stream_name":"stdout","time":762.89488387,"data":"      \"validation_logloss\": 0.17955460042020485,\n"}
+,{"stream_name":"stdout","time":762.894887154,"data":"      \"preparation_seconds\": 37.460679141000014,\n"}
+,{"stream_name":"stdout","time":762.894890537,"data":"      \"training_and_prediction_seconds\": 45.586064599,\n"}
+,{"stream_name":"stdout","time":762.894894198,"data":"      \"best_iteration\": 23,\n"}
+,{"stream_name":"stdout","time":762.894897612,"data":"      \"backend\": \"GPU\",\n"}
+,{"stream_name":"stdout","time":762.894901017,"data":"      \"library_version\": \"1.2.10\",\n"}
+,{"stream_name":"stdout","time":762.894904408,"data":"      \"input_features\": 805\n"}
+,{"stream_name":"stdout","time":762.894907762,"data":"    },\n"}
+,{"stream_name":"stdout","time":762.894910903,"data":"    {\n"}
+,{"stream_name":"stdout","time":762.89491397,"data":"      \"name\": \"pca-16\",\n"}
+,{"stream_name":"stdout","time":762.894917312,"data":"      \"validation_auc\": 0.8160712029833296,\n"}
+,{"stream_name":"stdout","time":762.894920597,"data":"      \"validation_logloss\": 0.17923266922678377,\n"}
+,{"stream_name":"stdout","time":762.894923744,"data":"      \"preparation_seconds\": 37.75314992099999,\n"}
+,{"stream_name":"stdout","time":762.894926978,"data":"      \"training_and_prediction_seconds\": 50.55433899299999,\n"}
+,{"stream_name":"stdout","time":762.894930456,"data":"      \"best_iteration\": 23,\n"}
+,{"stream_name":"stdout","time":762.894935205,"data":"      \"backend\": \"GPU\",\n"}
+,{"stream_name":"stdout","time":762.89493841,"data":"      \"library_version\": \"1.2.10\",\n"}
+,{"stream_name":"stdout","time":762.894941812,"data":"      \"input_features\": 917\n"}
+,{"stream_name":"stdout","time":762.894945003,"data":"    },\n"}
+,{"stream_name":"stdout","time":762.894961328,"data":"    {\n"}
+,{"stream_name":"stdout","time":762.894965132,"data":"      \"name\": \"catboost-crosses\",\n"}
+,{"stream_name":"stdout","time":762.894969225,"data":"      \"validation_auc\": 0.8252509472220444,\n"}
+,{"stream_name":"stdout","time":762.894973265,"data":"      \"validation_logloss\": 0.17635267500172233,\n"}
+,{"stream_name":"stdout","time":762.894977073,"data":"      \"preparation_seconds\": 53.12969498800004,\n"}
+,{"stream_name":"stdout","time":762.894980505,"data":"      \"training_and_prediction_seconds\": 53.30485144199997,\n"}
+,{"stream_name":"stdout","time":762.894983885,"data":"      \"best_iteration\": 23,\n"}
+,{"stream_name":"stdout","time":762.894987639,"data":"      \"backend\": \"GPU\",\n"}
+,{"stream_name":"stdout","time":762.894991454,"data":"      \"library_version\": \"1.2.10\",\n"}
+,{"stream_name":"stdout","time":762.894995081,"data":"      \"input_features\": 1043\n"}
+,{"stream_name":"stdout","time":762.894998526,"data":"    },\n"}
+,{"stream_name":"stdout","time":762.895002123,"data":"    {\n"}
+,{"stream_name":"stdout","time":762.895005349,"data":"      \"name\": \"catboost-native-lda\",\n"}
+,{"stream_name":"stdout","time":762.895008768,"data":"      \"validation_auc\": 0.8167170745990096,\n"}
+,{"stream_name":"stdout","time":762.89501205,"data":"      \"validation_logloss\": 0.17530484250464198,\n"}
+,{"stream_name":"stdout","time":762.895015414,"data":"      \"preparation_seconds\": 22.75844042999995,\n"}
+,{"stream_name":"stdout","time":762.895018738,"data":"      \"training_and_prediction_seconds\": 298.187419471,\n"}
+,{"stream_name":"stdout","time":762.895022582,"data":"      \"best_iteration\": 28,\n"}
+,{"stream_name":"stdout","time":762.895026438,"data":"      \"backend\": \"CPU\",\n"}
+,{"stream_name":"stdout","time":762.89503087,"data":"      \"library_version\": \"1.2.10\",\n"}
+,{"stream_name":"stdout","time":762.895033972,"data":"      \"input_features\": 707\n"}
+,{"stream_name":"stdout","time":762.895036987,"data":"    }\n"}
+,{"stream_name":"stdout","time":762.895040091,"data":"  ],\n"}
+,{"stream_name":"stdout","time":762.895043552,"data":"  \"competition_submission\": false,\n"}
+,{"stream_name":"stdout","time":762.895047423,"data":"  \"status\": \"COMPLETE\"\n"}
+,{"stream_name":"stdout","time":762.895051423,"data":"}\n"}
+,{"stream_name":"stdout","time":762.895054422,"data":"\n"}
+,{"stream_name":"stderr","time":770.401392225,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":770.401427563,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":770.661501936,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":770.661553569,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":772.483222733,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":772.576917621,"data":"[NbConvertApp] Writing 160443 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":775.422225578,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":776.57160121,"data":"[NbConvertApp] Writing 769061 bytes to __results__.html\n"}
+]
