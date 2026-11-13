@@ -22,11 +22,11 @@ class ArraySequence(lgb.Sequence):
         return np.asarray(self.values[index], dtype=np.float64)
 
 
-def train_arrays(directory, output, iterations, threads, *, fixed_budget=False):
+def train_arrays(directory, output, iterations, threads, *, fixed_budget=False, full_training=False):
     metadata = json.loads((directory / "metadata.json").read_text())
     labels = np.load(directory / "labels.npz")
     train_sequence = ArraySequence(directory / "train.npy")
-    valid_sequence = ArraySequence(directory / "valid.npy")
+    valid_sequence = None if full_training else ArraySequence(directory / "valid.npy")
     params = {
         "objective": "binary", "metric": "auc", "learning_rate": 0.03,
         "num_leaves": 31, "max_depth": -1, "min_data_in_leaf": 100,
@@ -51,17 +51,18 @@ def train_arrays(directory, output, iterations, threads, *, fixed_budget=False):
             callbacks=[lgb.early_stopping(60), lgb.log_evaluation(50)],
         )
     selected_iteration = iterations if fixed_budget else booster.best_iteration
-    probabilities = np.empty(len(valid_sequence), dtype=np.float64)
-    for start in range(0, len(valid_sequence), valid_sequence.batch_size):
-        end = min(start + valid_sequence.batch_size, len(valid_sequence))
-        probabilities[start:end] = booster.predict(
-            valid_sequence[start:end], num_iteration=selected_iteration,
-            num_threads=threads,
+    if not full_training:
+        probabilities = np.empty(len(valid_sequence), dtype=np.float64)
+        for start in range(0, len(valid_sequence), valid_sequence.batch_size):
+            end = min(start + valid_sequence.batch_size, len(valid_sequence))
+            probabilities[start:end] = booster.predict(
+                valid_sequence[start:end], num_iteration=selected_iteration,
+                num_threads=threads,
+            )
+        np.savez_compressed(
+            output / "validation_predictions.npz", y_true=labels["valid"],
+            probabilities=probabilities, row_ids=labels["row_ids"],
         )
-    np.savez_compressed(
-        output / "validation_predictions.npz", y_true=labels["valid"],
-        probabilities=probabilities, row_ids=labels["row_ids"],
-    )
     booster.save_model(str(output / "model.txt"))
     peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     (output / "worker-results.json").write_text(json.dumps({
@@ -69,6 +70,7 @@ def train_arrays(directory, output, iterations, threads, *, fixed_budget=False):
         "selection_mode": "fixed_budget" if fixed_budget else "validation",
         "backend": "CPU isolated disk-backed process", "parameters": params,
         "peak_rss_bytes": peak if sys.platform == "darwin" else peak * 1024,
+        "full_training": full_training, "training_rows": len(train_sequence),
     }, indent=2) + "\n")
 
 
@@ -84,7 +86,10 @@ def main():
     parser.add_argument("--iterations", type=int, default=1000)
     parser.add_argument("--threads", type=int, default=2)
     parser.add_argument("--fixed-budget", action="store_true")
+    parser.add_argument("--full-training", action="store_true")
     args = parser.parse_args()
+    if args.full_training and (args.array_dir is None or not args.fixed_budget):
+        parser.error("--full-training requires --array-dir and --fixed-budget")
     if args.predict_array is not None:
         if args.model_file is None or args.feature_columns is None:
             parser.error("--model-file and --feature-columns are required for prediction")
@@ -107,6 +112,7 @@ def main():
         train_arrays(
             args.array_dir, args.output_dir, args.iterations, args.threads,
             fixed_budget=args.fixed_budget,
+            full_training=args.full_training,
         )
         return
     train = pd.read_parquet(args.input_dir / "train.parquet")

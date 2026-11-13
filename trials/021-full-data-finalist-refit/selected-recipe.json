@@ -1,0 +1,39 @@
+{
+  "selection_trial": "T016",
+  "selection_validation_auc": 0.8408057533245857,
+  "full_training_rows": 1537638,
+  "lightgbm_trees": 140,
+  "ensemble_weights": {
+    "tabm32": 0.45,
+    "tabm8": 0.225,
+    "dcn32": 0.225,
+    "lightgbm": 0.1
+  },
+  "neural": {
+    "tabm32": {
+      "members": 32,
+      "architecture": "tabm",
+      "fractional_epochs": 7.737104825291182,
+      "original_selected_steps": 9300,
+      "source_trial": "T014/ensemble-32",
+      "source_results_sha256": "40a0d4c54cd7192ad37b729aa832314a5cced65812f3453e8d7338cfd5ff5223"
+    },
+    "tabm8": {
+      "members": 8,
+      "architecture": "tabm",
+      "fractional_epochs": 7.737104825291182,
+      "original_selected_steps": 9300,
+      "source_trial": "T014/cross-masked-plr",
+      "source_results_sha256": "f1bb7581d19997fad2141da197e20f8b700492859ff215574f595bcf727cbae2"
+    },
+    "dcn32": {
+      "members": 8,
+      "architecture": "dcnv2",
+      "fractional_epochs": 1.7470881863560732,
+      "original_selected_steps": 2100,
+      "source_trial": "T014/dcnv2-r32",
+      "source_results_sha256": "f03670432ce71036fdc59302ccfd59e18e781b9de4ece3ba392e7b00319556b6"
+    }
+  },
+  "competition_submission": false
+}
