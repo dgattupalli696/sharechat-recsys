@@ -19,6 +19,15 @@ from torch.nn import functional as F
 from train import ROOT, TARGET, load_sample
 
 
+def numeric_float32(frame, columns, block=64):
+    # Column blocks avoid materializing the whole matrix as float64 first.
+    array = np.empty((frame.height, len(columns)), dtype=np.float32)
+    for start in range(0, len(columns), block):
+        names = columns[start : start + block]
+        array[:, start : start + len(names)] = frame.select(names).to_numpy()
+    return array
+
+
 def prepare_features(train, valid):
     columns = [name for name in train.columns if name not in {TARGET, "_time"}]
     numeric = [name for name in columns if train.schema[name].is_numeric()]
@@ -31,7 +40,7 @@ def prepare_features(train, valid):
     scaler = StandardScaler(copy=False)
     transformed, infinity_counts = [], []
     for label, frame in [("training", train), ("validation", valid)]:
-        array = np.array(frame.select(numeric).to_numpy(), dtype=np.float32, order="C")
+        array = numeric_float32(frame, numeric)
         count = int(np.isinf(array).sum())
         infinity_counts.append(count)
         if count:
@@ -82,11 +91,7 @@ def prepare_features(train, valid):
 
 
 def transform_features(frame, state):
-    numeric = np.array(
-        frame.select(state["numeric_columns"]).to_numpy(),
-        dtype=np.float32,
-        order="C",
-    )
+    numeric = numeric_float32(frame, state["numeric_columns"])
     infinities = np.isinf(numeric)
     if infinities.any():
         print(f"Treating {int(infinities.sum())} infinite inference values as missing", flush=True)

@@ -80,7 +80,8 @@ def load_sample(path, maximum_rows, seed, expand_embeddings=False):
                 )
             )
         offset = end
-    return pl.concat(frames)
+    # Callers sort or slice next; skipping the rechunk avoids a full extra copy.
+    return pl.concat(frames, rechunk=False)
 
 
 def model(iterations, threads, task_type):
