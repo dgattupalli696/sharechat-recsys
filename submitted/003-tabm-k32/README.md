@@ -1,4 +1,7 @@
-# S003 - Approved best TabM checkpoint
+# S003 - Submitted best TabM checkpoint
+
+Submission **58291755**, November 13, 2026: public AUC **0.83349**.
+The single approved upload is complete; its approval is consumed.
 
 The user approved this submission and S004 on November 13, 2026:
 "do 2 submissions one with highest tabm score and one highest ensemble."
@@ -13,5 +16,10 @@ Verify every bundle checksum and package version, replay the full holdout,
 then predict all 1,037,090 test rows and check sample-template IDs.
 Export exactly two files; the notebook never submits automatically.
 
-Upload this TabM CSV once after local checksum/schema verification.
-Approval is limited to this submission and S004; no other submissions.
+Shared inference completed in canonical Kaggle notebook version 10. Independent
+full-holdout replay reproduced AUC 0.8404542697, with maximum probability error
+5.96e-8. Both exported CSVs have exactly 1,037,090 template-ordered rows.
+
+The exact executed notebook, environment, full replay, CSV checksum and scored
+submission receipt are archived here. No refit or model changes were made.
+Approval was limited to this submission and S004; no other submissions.

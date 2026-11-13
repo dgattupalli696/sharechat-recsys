@@ -1,0 +1,15 @@
+{
+  "ref": "58291755",
+  "description": "S003 T014 TabM k32 seed42; unchanged checkpoint; holdout AUC 0.8404542697; no refit; approved 2026-11-13",
+  "model_trial": "T014/ensemble-32",
+  "training_rows": 1230110,
+  "validation_rows": 307528,
+  "test_rows": 1037090,
+  "refit": false,
+  "submission_sha256": "18dd803d10569f72bcfa7c90636e066aeff4c66006db8ee1ae75c7a8fb8460cf",
+  "inference_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "inference_kernel_version": 10,
+  "user_approved_once": true,
+  "approval_consumed": true,
+  "public_score": "0.83349"
+}

@@ -1,0 +1,15 @@
+{
+  "ref": "58291773",
+  "description": "S004 T016 frozen vote: 45% TabM k32 + 22.5% TabM k8 + 22.5% DCNv2-r32 + 10% LightGBM; holdout AUC 0.8408057533; no refit; approved 2026-11-13",
+  "model_trial": "T016",
+  "training_rows": 1230110,
+  "validation_rows": 307528,
+  "test_rows": 1037090,
+  "refit": false,
+  "submission_sha256": "1480d46ad1dc53da950968b4b470212c9c9a942b5aa75eaf7478576fb99e57aa",
+  "inference_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "inference_kernel_version": 10,
+  "user_approved_once": true,
+  "approval_consumed": true,
+  "public_score": "0.83365"
+}

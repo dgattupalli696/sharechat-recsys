@@ -18,7 +18,7 @@ submission unless it has an entry in `submitted/`.
 | T004 | [Local TabM neural baseline](trials/004-local-tabm/README.md) | M1 Apple GPU / 150,000 | 0.809194 | Not submitted | Best epoch 1; overfit; 27.7 s fit |
 | T005-A | [Custom regularized control](trials/005-custom-vector-network/README.md) | M1 Apple GPU / 150,000 | 0.813992 | Not submitted | Three branches; rare-ID pooling; 18.7 s fit |
 | T005-B | [Custom vector attention](trials/005-custom-vector-network/README.md) | M1 Apple GPU / 150,000 | 0.814561 | Not submitted | +0.000569 vs control; 23.3 s fit |
-| T006 | [Full GPU vector attention](trials/006-full-gpu-vector-attention/README.md) | Kaggle T4 / 1,537,638 | 0.827024 | 0.81905 (S002) | Best submitted model; epoch 1; +0.010535 vs T003 |
+| T006 | [Full GPU vector attention](trials/006-full-gpu-vector-attention/README.md) | Kaggle T4 / 1,537,638 | 0.827024 | 0.81905 (S002) | Epoch 1; +0.010535 vs T003; superseded by S003/S004 |
 | T007-A | [Updated standalone TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | 0.829229 | Not submitted | +0.002205 vs T006; 80.8 s fit |
 | T007-B | [Attention encoder + TabM](trials/007-full-gpu-tabm-variants/README.md) | Kaggle T4 / 1,537,638 | 0.827934 | Not submitted | +0.000910 vs T006; epoch 1; 104.4 s fit |
 | T008 | [Full TabM controls](trials/008-full-gpu-tabm-controls/README.md) | Kaggle T4 / 1,537,638 | **0.833419** | Not submitted | All 12 completed; removing high-cardinality fields wins; best at 7.74 epochs |
@@ -27,13 +27,15 @@ submission unless it has an entry in `submitted/`.
 | T011 | [Full local LightGBM](trials/011-local-full-lightgbm/README.md) | Local CPU / 1,537,638 | 0.825584 | Not submitted | 10.6 min total; preliminary 75% T008 / 25% tree blend: **0.834336** |
 | T012 | [LightGBM temporal backtest](trials/012-local-lightgbm-temporal-backtest/README.md) | Local CPU / 710,330 train + 299,969 valid | 0.818814 | Not submitted | Earlier fold, not directly comparable to primary AUC |
 | T013 | [Existing-model ensembles](trials/013-existing-model-ensembles/README.md) | Local CPU / full primary holdout | **0.836899** | Not submitted | 21 unique models, 883 configurations; best equal mean 0.836669 |
-| T014 | [Combinations and architectures](trials/014-full-gpu-combinations-architectures/README.md) | Kaggle T4 / 1,537,638 | **0.840454** | Not submitted | All nineteen complete; PLR/cross/masked TabM k32 wins |
+| T014 | [Combinations and architectures](trials/014-full-gpu-combinations-architectures/README.md) | Kaggle T4 / 1,537,638 | **0.840454** | 0.83349 (S003) | All nineteen complete; PLR/cross/masked TabM k32 wins |
 | T015 | [New cross-family ensembles](trials/015-tabm-member-ensembles/README.md) | Local CPU / full primary holdout | **0.840708** | Not submitted | 50% k32 + 25% k8 + 25% DCNv2-r32; four-family alternative 0.840670 |
-| T016 | [Baseline CatBoost voting](trials/016-baseline-catboost-voting/README.md) | Local CPU / full primary holdout | **0.840806** | Not submitted | 10% LightGBM + 90% T015; baseline CatBoost at 2.5% gives 0.840729; tiny gains uncertain |
+| T016 | [Baseline CatBoost voting](trials/016-baseline-catboost-voting/README.md) | Local CPU / full primary holdout | **0.840806** | 0.83365 (S004) | 10% LightGBM + 90% T015; baseline CatBoost at 2.5% gives 0.840729; tiny gains uncertain |
 | T017 | [Chronological OOF stacking](trials/017-full-temporal-stacking/README.md) | Kaggle GPU / local CPU / full temporal prefixes | **0.839489** | Not submitted | Beats matched fixed-budget neural (0.839237), below T016; all OOF rows, recovered without subsets |
 | T018 | [Full seed/time confirmation](trials/018-full-seed-time-confirmation/README.md) | Kaggle GPU / both full temporal partitions | **0.840753** | Not submitted | All 18 fits complete; frozen seed-averaged 75/25 vote: primary 0.840753, earlier 0.837549; T016 remains best |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
+| S003 | [Submitted best TabM k32](submitted/003-tabm-k32/README.md) | Unchanged T014 seed-42 checkpoint | **0.840454** | **0.83349** | Submission 58291755; no refit; +0.01444 vs S002 |
+| S004 | [Submitted best frozen ensemble](submitted/004-best-ensemble/README.md) | Unchanged T014/T011 checkpoints | **0.840806** | **0.83365** | Submission 58291773; no refit; +0.00016 vs S003; best public score |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
 comparable. Do not infer that either beats B001: B001 used a different, full-data

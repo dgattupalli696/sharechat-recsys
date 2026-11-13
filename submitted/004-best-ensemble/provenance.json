@@ -9,5 +9,10 @@
     "lightgbm": 0.1
   },
   "refit": false,
-  "approval_scope": "one approved ensemble upload"
+  "approval_scope": "one approved ensemble upload",
+  "submission_ref": "58291773",
+  "submission_sha256": "1480d46ad1dc53da950968b4b470212c9c9a942b5aa75eaf7478576fb99e57aa",
+  "public_score": "0.83365",
+  "submission_uploads_completed": true,
+  "approval_consumed": true
 }

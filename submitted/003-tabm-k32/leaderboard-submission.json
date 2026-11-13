@@ -1,0 +1,9 @@
+{
+  "ref": "58291755",
+  "fileName": "submission-tabm.csv",
+  "date": "2026-11-13 02:01:34.257000",
+  "description": "S003 T014 TabM k32 seed42; unchanged checkpoint; holdout AUC 0.8404542697; no refit; approved 2026-11-13",
+  "status": "SubmissionStatus.COMPLETE",
+  "publicScore": "0.83349",
+  "privateScore": ""
+}

@@ -1,0 +1,9 @@
+{
+  "ref": "58291773",
+  "fileName": "submission-ensemble.csv",
+  "date": "2026-11-13 02:02:19.233000",
+  "description": "S004 T016 frozen vote: 45% TabM k32 + 22.5% TabM k8 + 22.5% DCNv2-r32 + 10% LightGBM; holdout AUC 0.8408057533; no refit; approved 2026-11-13",
+  "status": "SubmissionStatus.COMPLETE",
+  "publicScore": "0.83365",
+  "privateScore": ""
+}

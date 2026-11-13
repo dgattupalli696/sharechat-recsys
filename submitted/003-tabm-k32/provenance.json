@@ -22,5 +22,9 @@
   "source_revision": "667ae811dfb37770e3285106c5977cc896a97011",
   "inference_kernel_version": 10,
   "independent_verification": "independent-verification.json",
-  "submission_uploads_completed": false
+  "submission_uploads_completed": true,
+  "submission_ref": "58291755",
+  "submission_sha256": "18dd803d10569f72bcfa7c90636e066aeff4c66006db8ee1ae75c7a8fb8460cf",
+  "public_score": "0.83349",
+  "approval_consumed": true
 }
