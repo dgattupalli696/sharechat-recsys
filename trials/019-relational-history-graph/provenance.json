@@ -12,7 +12,7 @@
     "relational_audit.py": "7df2dc9e629659097765ccc4b866358b5f8c1efd4639064188ea7a624532a45c",
     "relational_experiment.py": "ba3c9db949c0fb4ca2d1a7afcdac967909117ad89ea86587310fe6df422b501d"
   },
-  "notebook_sha256": "ba962aaf6fa0ed4ae8808d57aed9f22dd099bf4e10e00dbf8f34e662a69a00e6",
+  "notebook_sha256": "d3a9c6e6e236f12c3f3ad474bc764697d0937fbcb05ea9f336cb65697550bb6f",
   "configuration_sha256": "1c962f85ad5233411d2458bb7610cadb827ab6ce2b65f623615526a13895c5ad",
   "audit_sha256": "4a5795ea0a7a9e15621529d936e93cdfa41ef159a5efcc0627d4a2dceb8197dd",
   "competition_submission": false

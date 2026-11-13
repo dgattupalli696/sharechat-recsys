@@ -1,0 +1,12 @@
+{
+  "kernel_version": 11,
+  "source_revision": "a53641a",
+  "status": "ERROR",
+  "phase": "offline dependency bootstrap, before data preparation or model training",
+  "error": "NameError: name 'Path' is not defined",
+  "root_cause": "Copied wheel-bootstrap cell depended on Path and sys imported by a preceding cell in the original notebook.",
+  "fix": "Import sys and pathlib.Path in the bootstrap cell itself; execute the cell in an empty namespace locally before relaunch.",
+  "completed_model_fits": 0,
+  "model_protocol_changed": false,
+  "competition_submission": false
+}

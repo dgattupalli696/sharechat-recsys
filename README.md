@@ -142,6 +142,9 @@ bit-for-bit reproducible.
 Verify code correctness locally before launching full-data GPU runs. Compare
 models on the same full chronological holdout; sample training only for smaller
 learning-curve experiments.
+Use held-out results to select model capability, feature recipes and training
+budgets. Only after selecting the final approach, refit on all labeled rows to
+generate submission predictions; that refit has no independent holdout score.
 The root `kernel-metadata.json` describes the private Kaggle GPU script and
 attaches the `sharechat` competition data with internet disabled.
 
