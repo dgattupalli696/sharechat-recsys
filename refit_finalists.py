@@ -217,7 +217,8 @@ def tree_matrix(path, destination, vocabularies, columns=None):
 
 
 def run(data, output, selected, device="cuda", worker=None):
-    if selected["ensemble_weights"] != WEIGHTS:
+    tabm_only = selected.get("tabm_only", False)
+    if not tabm_only and selected["ensemble_weights"] != WEIGHTS:
         raise ValueError("Refit weights differ from the selected T016 ensemble")
     output.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(4)
@@ -236,7 +237,10 @@ def run(data, output, selected, device="cuda", worker=None):
         steps_per_epoch = math.ceil(len(labels) / 1024)
         for name, specification in selected["neural"].items():
             torch.manual_seed(42)
-            config = {**base, "members": specification["members"], "architecture": specification["architecture"]}
+            config = {
+                **base, **specification.get("model_config", {}),
+                "members": specification["members"], "architecture": specification["architecture"],
+            }
             steps = round(specification["fractional_epochs"] * steps_per_epoch)
             model = HeterogeneousClassifier(**config).to(device)
             print(f"START FULL {name}: {len(labels):,} rows, {steps} fixed steps", flush=True)
@@ -273,47 +277,52 @@ def run(data, output, selected, device="cuda", worker=None):
         gc.collect()
         if device == "cuda":
             torch.cuda.empty_cache()
-        vocabularies = json.loads((output / "category-vocabularies.json").read_text())
-        columns = tree_matrix(data / "train.parquet", cache / "train.npy", vocabularies)
-        (cache / "metadata.json").write_text(json.dumps({"columns": columns, "categories": list(vocabularies)}))
-        np.savez(cache / "labels.npz", train=labels)
-        tree_output = output / "lightgbm"
-        tree_output.mkdir()
-        worker = worker or Path(__file__).with_name("lightgbm_worker.py")
-        subprocess.run([
-            sys.executable, str(worker), "--array-dir", str(cache), "--output-dir", str(tree_output),
-            "--iterations", str(selected["lightgbm_trees"]), "--threads", "4", "--fixed-budget", "--full-training",
-        ], check=True)
-        (cache / "train.npy").unlink()
-        tree_matrix(data / "test.parquet", cache / "test.npy", vocabularies, columns)
-        (cache / "columns.json").write_text(json.dumps(columns))
-        subprocess.run([
-            sys.executable, str(worker), "--predict-array", str(cache / "test.npy"),
-            "--model-file", str(tree_output / "model.txt"),
-            "--feature-columns", str(cache / "columns.json"),
-            "--output-dir", str(tree_output), "--threads", "4",
-        ], check=True)
-        predictions["lightgbm"] = np.load(tree_output / "probabilities.npy")
+        if not tabm_only:
+            vocabularies = json.loads((output / "category-vocabularies.json").read_text())
+            columns = tree_matrix(data / "train.parquet", cache / "train.npy", vocabularies)
+            (cache / "metadata.json").write_text(json.dumps({"columns": columns, "categories": list(vocabularies)}))
+            np.savez(cache / "labels.npz", train=labels)
+            tree_output = output / "lightgbm"
+            tree_output.mkdir()
+            worker = worker or Path(__file__).with_name("lightgbm_worker.py")
+            subprocess.run([
+                sys.executable, str(worker), "--array-dir", str(cache), "--output-dir", str(tree_output),
+                "--iterations", str(selected["lightgbm_trees"]), "--threads", "4", "--fixed-budget", "--full-training",
+            ], check=True)
+            (cache / "train.npy").unlink()
+            tree_matrix(data / "test.parquet", cache / "test.npy", vocabularies, columns)
+            (cache / "columns.json").write_text(json.dumps(columns))
+            subprocess.run([
+                sys.executable, str(worker), "--predict-array", str(cache / "test.npy"),
+                "--model-file", str(tree_output / "model.txt"),
+                "--feature-columns", str(cache / "columns.json"),
+                "--output-dir", str(tree_output), "--threads", "4",
+            ], check=True)
+            predictions["lightgbm"] = np.load(tree_output / "probabilities.npy")
     for name, values in predictions.items():
         if len(values) != len(template) or not np.isfinite(values).all() or not ((values >= 0) & (values <= 1)).all():
             raise ValueError(f"Invalid full-refit predictions: {name}")
     np.savez_compressed(output / "test-component-predictions.npz", **predictions)
-    ensemble = sum(WEIGHTS[name] * values.astype(np.float64) for name, values in predictions.items())
+    outputs = [("tabm", predictions["tabm32"])]
+    if not tabm_only:
+        outputs.append(("ensemble", sum(WEIGHTS[name] * values.astype(np.float64) for name, values in predictions.items())))
     submissions = {}
-    for name, values in [("tabm", predictions["tabm32"]), ("ensemble", ensemble)]:
+    for name, values in outputs:
         path = output / f"submission-full-{name}.csv"
         template.with_columns(pl.Series("watched", values)).write_csv(path)
         submissions[name] = {"file": path.name, "sha256": digest(path), "rows": len(values)}
     report = {
         "status": "COMPLETE", "full_training_rows": len(labels),
         "validation_auc": None, "validation_used_for_refit_selection": False,
-        "selection_reference": "T016 holdout AUC 0.8408057533; not an evaluation of this full-data refit",
-        "neural": neural_results, "ensemble_weights": WEIGHTS,
+        "selection_reference": selected.get(
+            "selection_reference", "T016 holdout AUC 0.8408057533; not an evaluation of this full-data refit",
+        ),
+        "neural": neural_results, "ensemble_weights": None if tabm_only else WEIGHTS,
         "preprocessing_training_rows": int(state["scaler"].n_samples_seen_),
         "preprocessing_sha256": digest(output / "preprocessing.joblib"),
         "category_vocabulary_sha256": digest(output / "category-vocabularies.json"),
         "training_labels_sha256": hashlib.sha256(labels.astype(np.uint8).tobytes()).hexdigest(),
-        "lightgbm": {
+        "lightgbm": None if tabm_only else {
             **json.loads((tree_output / "worker-results.json").read_text()),
             "checkpoint_sha256": digest(tree_output / "model.txt"),
         },

@@ -58,6 +58,28 @@ class FullRefitTests(unittest.TestCase):
             np.testing.assert_allclose(state["imputer"].statistics_, expected["imputer"].statistics_)
             self.assertEqual(config["encoder_config"]["n_numeric"], x.shape[1])
 
+    def test_tabm_only_refit_uses_frozen_model_config_and_skips_trees(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            output = root / "output"
+            selected = {
+                "tabm_only": True, "full_training_rows": 160,
+                "neural": {"tabm32": {
+                    "members": 2, "architecture": "tabm", "fractional_epochs": 2.,
+                    "model_config": {"width": 16, "rank": 4, "gating": False},
+                }},
+            }
+            report = run(root, output, selected, device="cpu")
+            self.assertEqual(report["neural"]["tabm32"]["optimizer_steps"], 2)
+            self.assertIsNone(report["lightgbm"])
+            self.assertEqual(list(report["submissions"]), ["tabm"])
+            self.assertFalse((output / "lightgbm").exists())
+            config = torch.load(output / "tabm32/model.pt", weights_only=True)["model_config"]
+            self.assertEqual((config["width"], config["rank"], config["gating"]), (16, 4, False))
+            actual = pl.read_csv(output / "submission-full-tabm.csv")
+            np.testing.assert_array_equal(actual["id"].to_numpy(), np.arange(1000, 1020))
+
     def test_full_refit_exports_ordered_fixed_weight_csvs_without_validation(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

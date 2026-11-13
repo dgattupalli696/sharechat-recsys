@@ -1,0 +1,25 @@
+{
+  "selection_trial": "T024",
+  "selection_validation_auc": 0.8893497968342682,
+  "selection_reference": "T024 k32 holdout AUC 0.8893497968; not an evaluation of this full-data refit",
+  "tabm_only": true,
+  "full_training_rows": 1537638,
+  "neural": {
+    "tabm32": {
+      "model_config": {
+        "width": 128,
+        "dropout": 0.2,
+        "rank": 32,
+        "experts": 1,
+        "gating": true
+      },
+      "members": 32,
+      "architecture": "tabm",
+      "fractional_epochs": 17.728785357737106,
+      "original_selected_steps": 21310,
+      "source_trial": "T024/ensemble-32",
+      "source_results_sha256": "0821044aff765ec709ce6fd9bcea0d342cc49cbfc65ac3b67339eeb77fce8646"
+    }
+  },
+  "competition_submission": "approved: S007 TabM k32 full-data refit"
+}
