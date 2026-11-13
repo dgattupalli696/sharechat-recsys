@@ -1,15 +1,20 @@
 from datetime import datetime, timedelta
+from importlib.metadata import version
 import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
+import shutil
+import subprocess
 
 import numpy as np
 import polars as pl
 import torch
 
 from custom_network import prepare_custom_features
-from refit_finalists import prepare, run
+from evaluate_refit import evaluate
+from refit_finalists import digest, prepare, run
 from train import features
 
 
@@ -84,6 +89,41 @@ class FullRefitTests(unittest.TestCase):
             np.testing.assert_array_equal(actual["id"].to_numpy(), np.arange(1000, 1020))
             np.testing.assert_allclose(actual["watched"].to_numpy(), expected, rtol=0, atol=1e-15)
             self.assertTrue((output / "submission-full-tabm.csv").is_file())
+            bundle = root / "bundle"
+            bundle.mkdir()
+            for name in selected["neural"]:
+                shutil.copyfile(output / name / "model.pt", bundle / f"{name}.pt")
+            for filename in ["preprocessing.joblib", "category-vocabularies.json"]:
+                shutil.copyfile(output / filename, bundle / filename)
+            shutil.copyfile(output / "lightgbm/model.txt", bundle / "lightgbm.txt")
+            evaluation_ids = np.arange(80, 160, dtype=np.uint32)[::-1]
+            np.savez_compressed(
+                bundle / "evaluation-reference.npz",
+                row_ids=evaluation_ids, y_true=(evaluation_ids % 2).astype(np.int8),
+            )
+            manifest = {
+                "files_sha256": {path.name: digest(path) for path in bundle.iterdir()},
+                "versions": {name: version(name) for name in ["torch", "numpy", "scikit-learn"]},
+                "ensemble_weights": selected["ensemble_weights"],
+                "cutoff": (datetime(2026, 10, 25) + timedelta(seconds=80)).isoformat(),
+                "checkpoint_training_rows": 160,
+            }
+            (bundle / "manifest.json").write_text(json.dumps(manifest))
+            sanity = root / "sanity"
+            with patch("torch.optim.AdamW", side_effect=AssertionError("Evaluation must not train")), patch(
+                "evaluate_refit.subprocess.run", wraps=subprocess.run,
+            ) as calls:
+                sanity_report = evaluate(bundle, root / "train.parquet", sanity, device="cpu")
+            self.assertFalse(sanity_report["additional_training"])
+            self.assertFalse(sanity_report["unbiased_validation"])
+            self.assertFalse(sanity_report["used_for_model_selection"])
+            self.assertEqual(sanity_report["training_overlap_rows"], 80)
+            self.assertEqual(set(sanity_report["scores"]), {*selected["ensemble_weights"], "ensemble"})
+            self.assertEqual(calls.call_count, 1)
+            self.assertIn("--predict-array", calls.call_args.args[0])
+            self.assertNotIn("--full-training", calls.call_args.args[0])
+            with np.load(sanity / "former-holdout-predictions.npz") as arrays:
+                np.testing.assert_array_equal(arrays["row_ids"], evaluation_ids)
 
 
 if __name__ == "__main__":
