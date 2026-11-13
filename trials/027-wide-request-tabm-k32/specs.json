@@ -1,0 +1,9 @@
+[
+  {
+    "name": "ensemble-32",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "members": 32
+  }
+]

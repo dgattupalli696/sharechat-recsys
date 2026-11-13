@@ -1,0 +1,13 @@
+[
+  {
+    "name": "feed-attention",
+    "members": 32,
+    "width": 128,
+    "dropout": 0.2,
+    "heads": 4,
+    "layers": 2,
+    "attention_dropout": 0.1,
+    "similarity": true,
+    "drop_high": true
+  }
+]

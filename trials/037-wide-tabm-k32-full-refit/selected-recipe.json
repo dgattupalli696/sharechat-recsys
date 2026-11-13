@@ -1,0 +1,58 @@
+{
+  "selection_trial": "T027",
+  "selection_validation_auc": 0.8898504840424367,
+  "selection_reference": "T027 wide k32 holdout AUC 0.8898504840; not an evaluation of this full-data refit",
+  "tabm_only": true,
+  "full_training_rows": 1537638,
+  "neural": {
+    "tabm32": {
+      "model_config": {
+        "width": 128,
+        "dropout": 0.2,
+        "rank": 32,
+        "experts": 1,
+        "gating": true
+      },
+      "members": 32,
+      "architecture": "tabm",
+      "fractional_epochs": 8.985024958402661,
+      "original_selected_steps": 10800,
+      "seed": 42,
+      "source_trial": "T027/ensemble-32",
+      "source_results_sha256": "2999feaf8b7eca083ec44bab255d40b4736ade3f42de895f195a7cf046c8a878"
+    },
+    "tabm32-seed43": {
+      "model_config": {
+        "width": 128,
+        "dropout": 0.2,
+        "rank": 32,
+        "experts": 1,
+        "gating": true
+      },
+      "members": 32,
+      "architecture": "tabm",
+      "fractional_epochs": 8.985024958402661,
+      "original_selected_steps": 10800,
+      "seed": 43,
+      "source_trial": "T027/ensemble-32",
+      "source_results_sha256": "2999feaf8b7eca083ec44bab255d40b4736ade3f42de895f195a7cf046c8a878"
+    },
+    "tabm32-seed44": {
+      "model_config": {
+        "width": 128,
+        "dropout": 0.2,
+        "rank": 32,
+        "experts": 1,
+        "gating": true
+      },
+      "members": 32,
+      "architecture": "tabm",
+      "fractional_epochs": 8.985024958402661,
+      "original_selected_steps": 10800,
+      "seed": 44,
+      "source_trial": "T027/ensemble-32",
+      "source_results_sha256": "2999feaf8b7eca083ec44bab255d40b4736ade3f42de895f195a7cf046c8a878"
+    }
+  },
+  "competition_submission": false
+}

@@ -137,14 +137,14 @@ def prepare(path, cache, output):
     return numeric_array, category_array, labels, order, state, config
 
 
-def train_fixed(model, config, numeric, categorical, labels, order, steps, destination, device):
+def train_fixed(model, config, numeric, categorical, labels, order, steps, destination, device, seed=42):
     if steps <= 0 or len(numeric) != len(labels) or len(order) != len(labels):
         raise ValueError("Invalid full-training budget or population")
     if steps < math.ceil(len(labels) / 1024) or not np.array_equal(np.sort(order), np.arange(len(labels))):
         raise ValueError("Every labeled row must be visited in a complete first epoch")
     destination.mkdir()
     optimizer = torch.optim.AdamW(model.parameters(), lr=.0005, weight_decay=.01)
-    generator = torch.Generator().manual_seed(42)
+    generator = torch.Generator().manual_seed(seed)
     x, c = torch.from_numpy(numeric), torch.from_numpy(categorical)
     y = torch.tensor(labels, dtype=torch.float32)
     chronological = torch.from_numpy(order)
@@ -181,7 +181,7 @@ def train_fixed(model, config, numeric, categorical, labels, order, steps, desti
     model.load_state_dict(checkpoint["state_dict"], strict=True)
     np.testing.assert_array_equal(replay_before, predict(model, x[:16], c[:16], device, 16))
     result = {
-        "training_rows": len(labels), "optimizer_steps": completed,
+        "training_rows": len(labels), "optimizer_steps": completed, "seed": seed,
         "selection": "validation-frozen fractional-epoch budget; no refit validation",
         "history": history, "training_seconds": time.monotonic() - started,
         "checkpoint_sha256": digest(destination / "model.pt"),
@@ -236,7 +236,8 @@ def run(data, output, selected, device="cuda", worker=None):
             raise ValueError("Refit requires every labeled row")
         steps_per_epoch = math.ceil(len(labels) / 1024)
         for name, specification in selected["neural"].items():
-            torch.manual_seed(42)
+            seed = specification.get("seed", 42)
+            torch.manual_seed(seed)
             config = {
                 **base, **specification.get("model_config", {}),
                 "members": specification["members"], "architecture": specification["architecture"],
@@ -245,7 +246,7 @@ def run(data, output, selected, device="cuda", worker=None):
             model = HeterogeneousClassifier(**config).to(device)
             print(f"START FULL {name}: {len(labels):,} rows, {steps} fixed steps", flush=True)
             neural_results[name] = train_fixed(
-                model, config, numeric, categorical, labels, order, steps, output / name, device,
+                model, config, numeric, categorical, labels, order, steps, output / name, device, seed,
             )
             del model
             gc.collect()
@@ -303,7 +304,10 @@ def run(data, output, selected, device="cuda", worker=None):
         if len(values) != len(template) or not np.isfinite(values).all() or not ((values >= 0) & (values <= 1)).all():
             raise ValueError(f"Invalid full-refit predictions: {name}")
     np.savez_compressed(output / "test-component-predictions.npz", **predictions)
-    outputs = [("tabm", predictions["tabm32"])]
+    neural_names = list(selected["neural"]) if tabm_only else ["tabm32"]
+    outputs = [("tabm" if name == "tabm32" else name, predictions[name]) for name in neural_names]
+    if len(neural_names) > 1:
+        outputs.append(("tabm-seed-mean", np.mean([predictions[n].astype(np.float64) for n in neural_names], axis=0)))
     if not tabm_only:
         outputs.append(("ensemble", sum(WEIGHTS[name] * values.astype(np.float64) for name, values in predictions.items())))
     submissions = {}

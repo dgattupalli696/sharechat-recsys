@@ -168,6 +168,35 @@ def category_view(data, minimum=10, drop_high=False, *, with_mappings=False):
     return (*result, mappings) if with_mappings else result
 
 
+def adapted_encoder_config(data, n_numeric, cardinalities, dims, spec, bins=None):
+    state = data["state"]
+    numerical_encoding = spec.get("numerical_encoding", "none")
+    summary_groups, indicator_groups = [], []
+    indicator_source = state["imputer"].indicator_.features_.tolist()
+    for field in state["vector_fields"]:
+        group = [
+            i for i, column in enumerate(state["numeric_columns"])
+            if column.startswith(field + "_")
+        ]
+        summary_groups.append(group)
+        indicator_groups.append([
+            len(state["numeric_columns"]) + position
+            for position, source in enumerate(indicator_source) if source in group
+        ])
+    return {
+        "n_numeric": n_numeric, "n_dense": state["n_dense"],
+        "n_vectors": len(state["vector_fields"]), "cardinalities": cardinalities,
+        "continuous_indices": data["protocol"]["continuous_indices"],
+        "embedding_dimensions": dims,
+        "numerical_encoding": numerical_encoding if numerical_encoding != "quantile" else "none",
+        "bins": bins, "vector_projection": bool(spec.get("vector_projection")),
+        "vector_dropout": spec.get("vector_dropout", 0.0),
+        "vector_crosses": bool(spec.get("vector_crosses")),
+        "summary_groups": summary_groups, "indicator_groups": indicator_groups,
+        "numeric_dropout": spec.get("numeric_dropout", 0.0),
+    }
+
+
 def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed=42):
     name = spec["name"]
     destination = output / name
@@ -224,31 +253,7 @@ def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed
         or spec.get("architecture", "tabm") != "tabm"
     )
     if adapted:
-        state = data["state"]
-        summary_groups, indicator_groups = [], []
-        indicator_source = state["imputer"].indicator_.features_.tolist()
-        for field in state["vector_fields"]:
-            group = [
-                i for i, column in enumerate(state["numeric_columns"])
-                if column.startswith(field + "_")
-            ]
-            summary_groups.append(group)
-            indicator_groups.append([
-                len(state["numeric_columns"]) + position
-                for position, source in enumerate(indicator_source) if source in group
-            ])
-        encoder_config = {
-            "n_numeric": x_train.shape[1], "n_dense": state["n_dense"],
-            "n_vectors": len(state["vector_fields"]), "cardinalities": cardinalities,
-            "continuous_indices": data["protocol"]["continuous_indices"],
-            "embedding_dimensions": dims,
-            "numerical_encoding": numerical_encoding if numerical_encoding != "quantile" else "none",
-            "bins": bins, "vector_projection": bool(spec.get("vector_projection")),
-            "vector_dropout": spec.get("vector_dropout", 0.0),
-            "vector_crosses": bool(spec.get("vector_crosses")),
-            "summary_groups": summary_groups, "indicator_groups": indicator_groups,
-            "numeric_dropout": spec.get("numeric_dropout", 0.0),
-        }
+        encoder_config = adapted_encoder_config(data, x_train.shape[1], cardinalities, dims, spec, bins)
         config = {
             "encoder_config": encoder_config, "architecture": spec.get("architecture", "tabm"),
             "width": spec.get("width", 128), "dropout": spec.get("dropout", 0.2),

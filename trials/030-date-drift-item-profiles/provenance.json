@@ -1,0 +1,15 @@
+{
+  "status": "PREPARED",
+  "baseline_trial": "T026",
+  "stages": [
+    "stationarity"
+  ],
+  "replaces": "T030 v1 (dates, profiles)",
+  "source_sha256": {
+    "feature_screen.py": "b8ae57d999deaca182375c63c90fadcaa8e0042ca57eef2f259525be416b2315",
+    "request_screen.py": "4a473091fadf8b4d928b01a29c9af143deec94987546ab65c770ee14e8bd56f2",
+    "drift_context_screen.py": "3b9b76c31346e0a33fca0fbd1ff7f7b84d524e501fae48ae0029a539b61ed342"
+  },
+  "notebook_sha256": "959d0fb58715465d10854a86684c2dd470d8d0819dd0c74b6330289d3ad2c6fb",
+  "competition_submission": false
+}

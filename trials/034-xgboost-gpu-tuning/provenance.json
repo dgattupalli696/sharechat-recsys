@@ -1,0 +1,24 @@
+{
+  "status": "PREPARED",
+  "baseline_trial": "T029",
+  "configs": [
+    "t029_gpu",
+    "leaves255_eta02",
+    "leaves511_eta02",
+    "leaves63_eta02",
+    "depth10",
+    "depth12_node",
+    "bin255",
+    "native_cat",
+    "subsample06",
+    "lambda50"
+  ],
+  "source_sha256": {
+    "feature_screen.py": "b8ae57d999deaca182375c63c90fadcaa8e0042ca57eef2f259525be416b2315",
+    "request_screen.py": "4a473091fadf8b4d928b01a29c9af143deec94987546ab65c770ee14e8bd56f2",
+    "classic_screen.py": "2ce2c22697c04187771dd06935842b4d06a4ed84f612b80724b9b80b123174ee",
+    "xgb_tune.py": "fdc55318b06521f8d7dab2105397c8e13eede03cf25a1ac672d747cfb5f2f85c"
+  },
+  "notebook_sha256": "975330a2b0203c4d0ee7ac54a4ebb8afdefe9015e5679fe18833117a34777725",
+  "competition_submission": false
+}

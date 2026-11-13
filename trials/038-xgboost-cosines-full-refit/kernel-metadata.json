@@ -1,0 +1,16 @@
+{
+  "id": "dheerajgattupalli/sharechat-full-refit-xgb",
+  "title": "ShareChat Full Refit XGB",
+  "code_file": "notebook.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": false,
+  "dataset_sources": [],
+  "competition_sources": [
+    "sharechat"
+  ],
+  "kernel_sources": [],
+  "model_sources": []
+}

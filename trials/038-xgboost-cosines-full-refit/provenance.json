@@ -1,0 +1,23 @@
+{
+  "status": "PREPARED",
+  "selection_trial": "T036",
+  "configs": [
+    "depth12_node@42:1050",
+    "depth12_node@43:1050",
+    "leaves63_eta02@42:1598",
+    "leaves63_eta02@43:1598",
+    "leaves511_eta02@42:1099",
+    "leaves511_eta02@43:1099"
+  ],
+  "full_training_rows": 1537638,
+  "source_sha256": {
+    "feature_screen.py": "b8ae57d999deaca182375c63c90fadcaa8e0042ca57eef2f259525be416b2315",
+    "request_screen.py": "4a473091fadf8b4d928b01a29c9af143deec94987546ab65c770ee14e8bd56f2",
+    "classic_screen.py": "61d8a39d2b5a4ccf70b48d007055024ccba8578317def5e249a7f45b294676ad",
+    "xgb_tune.py": "f109202c611228637a5ff18ad8b0d3f97edac384a4333f4fd962fac50723531f",
+    "embed_screen.py": "cfe6446b64db7b91e10b781f7aec6042b042671d002593f8b7c3c940296cb48a",
+    "cf_screen.py": "7fe9c68142a12fedeed36ba92ddf181b6cbe033923f7aee8321d53bdec879b3c"
+  },
+  "notebook_sha256": "a1f699d7006dbdd00395e7f34ab63a43832a625916348db2920c514d8912f969",
+  "competition_submission": false
+}

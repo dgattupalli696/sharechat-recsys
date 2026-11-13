@@ -1,0 +1,16 @@
+{
+  "status": "PREPARED",
+  "baseline_trial": "T026",
+  "models": [
+    "xgboost",
+    "logreg",
+    "catboost"
+  ],
+  "source_sha256": {
+    "feature_screen.py": "b8ae57d999deaca182375c63c90fadcaa8e0042ca57eef2f259525be416b2315",
+    "request_screen.py": "4a473091fadf8b4d928b01a29c9af143deec94987546ab65c770ee14e8bd56f2",
+    "classic_screen.py": "703125f408cf72caf0ff369f9d4a20e8600fd0a1021a1164884a5ae451f27ce3"
+  },
+  "notebook_sha256": "58a430372e22bf39e8fb3a158ba4b3c61d3e31b0eb94cfe93353a14ed7852657",
+  "competition_submission": false
+}

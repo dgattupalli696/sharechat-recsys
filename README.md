@@ -4,7 +4,7 @@ Predict the probability that a user watches a video. Competition metric: ROC AUC
 
 ## Run ledger
 
-The campaign began November 12 and continued November 13, 2026.
+The campaign began November 12 and continues through November 25, 2026.
 A trial is not a leaderboard
 submission unless it has an entry in `submitted/`.
 
@@ -39,6 +39,17 @@ submission unless it has an entry in `submitted/`.
 | T023 | [Request/count/target-encoding screen](trials/023-request-count-target-screen/README.md) | Local LightGBM screen (scalar features) / original holdout | Holdout early stopping (optimistic) | Not submitted | Request context 0.828722 → 0.882612; counts 0.878542; target encoding no gain |
 | T024 | [Request context in full models](trials/024-request-context-full-models/README.md) | T014/T011 protocols + 33 request features / original holdout | Holdout model selection (as T014) | S005/S006 | k32 0.889350, k8 0.888989, DCN 0.887607, LightGBM 0.880290; T016-weight ensemble 0.889809 (vs 0.840806) |
 | T025 | [Request-context TabM k32 full refit](trials/025-request-tabm-k32-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No independent holdout | 0.88467 (S007) | 26,629 fixed steps (17.73 epochs from T024); test rank correlation with S005 0.9938 |
+| T026 | Wider request-context screen (`request_screen.py`) | Local LightGBM / original holdout | 0.883979 wide | Not submitted | rank/dev/gap for 51 gain-ranked fields beat control 0.882612; request mean/std no gain |
+| T027 | [Wide request TabM k32](trials/027-wide-request-tabm-k32/) | Kaggle T4 / original holdout | **0.889850** | Not submitted | Best single model; +0.0005 vs T024 k32; best fractional epoch 8.985 |
+| T028 | [Feed attention](trials/028-feed-attention/) | Kaggle T4 / original holdout | 0.889556 | Not submitted | Within-request attention; no gain over T027 (corr 0.995) |
+| T029 | [Classic learners on wide features](trials/029-classic-wide-screen/) | Kaggle CPU / original holdout | 0.88728 XGBoost | Not submitted | 757 features; logreg OOM, CatBoost not run; 0.7 T027 + 0.3 XGB 0.89032 |
+| T030 | [Date drift and item profiles](trials/030-date-drift-item-profiles/) | Kaggle CPU / original holdout | No gain | Not submitted | Dropping/normalising drifting fields and item profiles did not help |
+| T031–T033 | CF, hurdle, residual/stack screens (`cf_screen.py`, `hurdle_screen.py`, `residual_screen.py`) | Local / original holdout | No gain | Not submitted | Residual on T027 0.88985 (no change); stacking raises within-request AUC but lowers global AUC |
+| T034 | [XGBoost GPU tuning](trials/034-xgboost-gpu-tuning/) (`xgb_tune.py`) | Kaggle T4 / original holdout | 0.88849 | Not submitted | leaves511 eta .02 best; leaves63 0.88845, depth12 0.88842; native categorical 0.88532 |
+| T035 | User × item cosine / kNN screen (`embed_screen.py`) | Local LightGBM / original holdout | 0.88488 | Not submitted | +0.0023 from 10 cosines with request rank/dev; embedding context and kNN video rates no extra gain |
+| T036 | [XGBoost + cosines](trials/036-xgboost-cosines/) | Kaggle T4 / original holdout | **0.88967** depth12 | Not submitted | leaves63 0.88961, leaves511 0.88959; rank blend 0.45 T027 + .15/.15/.25 XGB **0.89081** |
+| T037 | [Wide TabM k32 full refit](trials/037-wide-tabm-k32-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No holdout | Pending | T027 recipe, 8.985 epochs, seeds 42/43/44; per-seed and seed-mean CSVs |
+| T038 | [XGBoost + cosines full refit](trials/038-xgboost-cosines-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No holdout | Pending | T036 configs × seeds 42/43, rounds = best iteration × 1.25; `blend_submissions.py` builds candidates |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 | S003 | [Submitted best TabM k32](submitted/003-tabm-k32/README.md) | Unchanged T014 seed-42 checkpoint | **0.840454** | **0.83349** | Submission 58291755; no refit; +0.01444 vs S002 |

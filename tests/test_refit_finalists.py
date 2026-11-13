@@ -80,6 +80,24 @@ class FullRefitTests(unittest.TestCase):
             actual = pl.read_csv(output / "submission-full-tabm.csv")
             np.testing.assert_array_equal(actual["id"].to_numpy(), np.arange(1000, 1020))
 
+    def test_tabm_only_refit_trains_seeded_members_and_writes_seed_mean(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            output = root / "output"
+            member = {"members": 2, "architecture": "tabm", "fractional_epochs": 2.,
+                      "model_config": {"width": 16, "rank": 4, "gating": False}}
+            selected = {"tabm_only": True, "full_training_rows": 160,
+                        "neural": {"tabm32": member, "tabm32-seed43": {**member, "seed": 43}}}
+            report = run(root, output, selected, device="cpu")
+            self.assertEqual(report["neural"]["tabm32-seed43"]["seed"], 43)
+            self.assertEqual(list(report["submissions"]), ["tabm", "tabm32-seed43", "tabm-seed-mean"])
+            first = pl.read_csv(output / "submission-full-tabm.csv")["watched"].to_numpy()
+            second = pl.read_csv(output / "submission-full-tabm32-seed43.csv")["watched"].to_numpy()
+            mean = pl.read_csv(output / "submission-full-tabm-seed-mean.csv")["watched"].to_numpy()
+            self.assertFalse(np.allclose(first, second))
+            np.testing.assert_allclose(mean, (first + second) / 2, rtol=1e-5)
+
     def test_full_refit_exports_ordered_fixed_weight_csvs_without_validation(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

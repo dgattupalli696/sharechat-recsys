@@ -5,6 +5,7 @@ train/holdout/test boundaries, so these features are computed per request and
 use no labels. request_id itself is never a model input.
 """
 import argparse
+import json
 from pathlib import Path
 
 import numpy as np
@@ -18,30 +19,33 @@ RANKED = ["feature418", "feature419", "feature411", "feature410", "feature430",
           "feature431", "feature417", "feature352", "feature346", "feature480"]
 
 
-def request_expressions():
+def request_expressions(ranked=RANKED, stats=()):
     group = "request_id"
     size = pl.len().over(group)
     exprs = [size.alias("rq_size"),
              pl.col(ITEM).n_unique().over(group).alias("rq_items"),
              pl.len().over([group, ITEM]).alias("rq_item_dup")]
-    for c in RANKED:
+    for c in ranked:
         exprs += [
             (pl.col(c).rank("average").over(group) / size).alias(f"rq_rank_{c}"),
             (pl.col(c) - pl.col(c).mean().over(group)).alias(f"rq_dev_{c}"),
             (pl.col(c) - pl.col(c).max().over(group)).alias(f"rq_gap_{c}"),
         ]
+    for c in stats:
+        exprs += [pl.col(c).mean().over(group).alias(f"rq_mean_{c}"),
+                  pl.col(c).std().over(group).alias(f"rq_std_{c}")]
     return [e.cast(pl.Float32) for e in exprs]
 
 
-def request_features(frame):
+def request_features(frame, ranked=RANKED, stats=()):
     """Return request features in the same row order as ``frame``."""
-    return frame.select(request_expressions())
+    return frame.select(request_expressions(ranked, stats))
 
 
-def augment(source, destination, batch_size=65536):
+def augment(source, destination, batch_size=65536, ranked=RANKED, stats=()):
     """Copy ``source`` to ``destination`` with request features appended, preserving row order."""
-    narrow = pl.read_parquet(source, columns=["request_id", ITEM, *RANKED])
-    extra = request_features(narrow)
+    narrow = pl.read_parquet(source, columns=list(dict.fromkeys(["request_id", ITEM, *ranked, *stats])))
+    extra = request_features(narrow, ranked, stats)
     del narrow
     parquet = pq.ParquetFile(source)
     if parquet.metadata.num_rows != len(extra):
@@ -73,9 +77,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--ranked-json", type=Path, help="JSON list of fields to rank within requests")
     args = parser.parse_args()
     for name in ["train", "test"]:
-        columns = augment(args.data_dir / f"{name}.parquet", args.output_dir / f"{name}.parquet")
+        ranked = json.loads(args.ranked_json.read_text()) if args.ranked_json else RANKED
+        columns = augment(args.data_dir / f"{name}.parquet", args.output_dir / f"{name}.parquet", ranked=ranked)
         print(f"{name}: appended {len(columns)} request features", flush=True)
     sample = args.data_dir / "sample_submission.csv"
     target = args.output_dir / "sample_submission.csv"
