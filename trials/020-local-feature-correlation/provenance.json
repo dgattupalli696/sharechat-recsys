@@ -1,0 +1,22 @@
+{
+  "status": "VERIFIED",
+  "competition_submission": false,
+  "source_sha256": {
+    "feature_correlation.py": "eafe99d8241623e3989ac82b818c73febe606a24dcee152b5bbf2fe0f51d5d79",
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc"
+  },
+  "full_matrix_sha256": "f93283178cc7422f38c27023b37ca65a505e28279f39818d791cee7220317559",
+  "results_sha256": "5c4d879996910378134959e8a3a825a1f7784ad330a36fe22b70f9f45b5dcff4",
+  "training_rows": 1230110,
+  "target_association_rows": 710330,
+  "independent_scalar_pair": {
+    "fields": [
+      "feature418",
+      "feature419"
+    ],
+    "numpy_float64": 0.9590229809925174,
+    "streaming_block_result": 0.9590229262877892,
+    "absolute_error": 5.4704728191801166e-08
+  },
+  "interpretation": "Descriptive audit only; no changes made to T019 recipes or any submitted model."
+}
