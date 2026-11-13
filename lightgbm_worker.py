@@ -77,11 +77,32 @@ def main():
     inputs = parser.add_mutually_exclusive_group(required=True)
     inputs.add_argument("--input-dir", type=Path)
     inputs.add_argument("--array-dir", type=Path)
+    inputs.add_argument("--predict-array", type=Path)
+    parser.add_argument("--model-file", type=Path)
+    parser.add_argument("--feature-columns", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--iterations", type=int, default=1000)
     parser.add_argument("--threads", type=int, default=2)
     parser.add_argument("--fixed-budget", action="store_true")
     args = parser.parse_args()
+    if args.predict_array is not None:
+        if args.model_file is None or args.feature_columns is None:
+            parser.error("--model-file and --feature-columns are required for prediction")
+        booster = lgb.Booster(model_file=str(args.model_file))
+        columns = json.loads(args.feature_columns.read_text())
+        matrix = np.load(args.predict_array, mmap_mode="r")
+        if matrix.ndim != 2 or matrix.shape[1] != booster.num_feature() or columns != booster.feature_name():
+            raise ValueError("Prediction features differ from the saved LightGBM model")
+        probabilities = np.empty(len(matrix), dtype=np.float64)
+        for start in range(0, len(matrix), 8192):
+            probabilities[start:start + 8192] = booster.predict(
+                np.asarray(matrix[start:start + 8192], dtype=np.float64),
+                num_threads=args.threads,
+            )
+        if not np.isfinite(probabilities).all() or not ((probabilities >= 0) & (probabilities <= 1)).all():
+            raise ValueError("Invalid saved-model LightGBM predictions")
+        np.save(args.output_dir / "probabilities.npy", probabilities)
+        return
     if args.array_dir is not None:
         train_arrays(
             args.array_dir, args.output_dir, args.iterations, args.threads,
