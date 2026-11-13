@@ -1,0 +1,104 @@
+[{"stream_name":"stderr","time":6.252479779,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.252533241,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.252537551,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.252540072,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":6.792832365,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.7928608520000004,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.79286602,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.792869788,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":8.848130963,"data":"Processing /tmp/tmpil1sk0yi/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":8.855369063,"data":"Processing /tmp/tmpil1sk0yi/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":8.877583441,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":8.930449292,"data":"\n"}
+,{"stream_name":"stdout","time":9.002138646,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":9.050692779,"data":"Processing /tmp/tmpil1sk0yi/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.0507208,"data":"Processing /tmp/tmpil1sk0yi/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.050724876,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":9.050728275,"data":"\n"}
+,{"stream_name":"stdout","time":9.050731458,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":9.069990511,"data":"Pinned offline TabM dependencies verified\n"}
+,{"stream_name":"stdout","time":128.32549781,"data":"train ['rq_size', 'rq_items', 'rq_item_dup']\n"}
+,{"stream_name":"stdout","time":203.362265832,"data":"test ['rq_size', 'rq_items', 'rq_item_dup']\n"}
+,{"stream_name":"stdout","time":297.625412612,"data":"Full validation replay passed: {\"tabm32\": {\"validation_auc\": 0.8893497968342683, \"reference_auc\": 0.8893497968342682, \"max_probability_error\": 7.450580596923828e-08}, \"tabm8\": {\"validation_auc\": 0.8889892517329304, \"reference_auc\": 0.8889892517329302, \"max_probability_error\": 8.940696716308594e-08}, \"dcn32\": {\"validation_auc\": 0.8876068703637654, \"reference_auc\": 0.8876068703637656, \"max_probability_error\": 1.1920928955078125e-07}, \"lightgbm\": {\"validation_auc\": 0.880289666034548, \"reference_auc\": 0.880289666034548, \"max_probability_error\": 1.1102230246251565e-16}, \"ensemble\": {\"validation_auc\": 0.8898181167018704, \"reference_auc\": 0.8898181167018704, \"max_probability_error\": 6.034970284618524e-08}}\n"}
+,{"stream_name":"stdout","time":329.49489412,"data":"Test: 163,840/1,037,090\n"}
+,{"stream_name":"stdout","time":361.969876165,"data":"Test: 327,680/1,037,090\n"}
+,{"stream_name":"stdout","time":395.016616776,"data":"Test: 491,520/1,037,090\n"}
+,{"stream_name":"stdout","time":427.837761823,"data":"Test: 655,360/1,037,090\n"}
+,{"stream_name":"stdout","time":460.992435435,"data":"Test: 819,200/1,037,090\n"}
+,{"stream_name":"stdout","time":494.32407827,"data":"Test: 983,040/1,037,090\n"}
+,{"stream_name":"stdout","time":533.507850611,"data":"{\n"}
+,{"stream_name":"stdout","time":533.507901789,"data":"  \"status\": \"COMPLETE\",\n"}
+,{"stream_name":"stdout","time":533.507908312,"data":"  \"refit\": false,\n"}
+,{"stream_name":"stdout","time":533.507913028,"data":"  \"automatic_competition_submission\": false,\n"}
+,{"stream_name":"stdout","time":533.507917757,"data":"  \"bundle_manifest_sha256\": \"7a87e6952eb1efde912cdf59af44f0d56d48ee4c16ffe61c32dc20683fb269e2\",\n"}
+,{"stream_name":"stdout","time":533.507922816,"data":"  \"versions\": {\n"}
+,{"stream_name":"stdout","time":533.507927433,"data":"    \"torch\": \"2.11.0+cu130\",\n"}
+,{"stream_name":"stdout","time":533.507932104,"data":"    \"tabm\": \"0.0.3\",\n"}
+,{"stream_name":"stdout","time":533.507936708,"data":"    \"rtdl_num_embeddings\": \"0.0.12\",\n"}
+,{"stream_name":"stdout","time":533.507941528,"data":"    \"numpy\": \"2.1.3\",\n"}
+,{"stream_name":"stdout","time":533.507946174,"data":"    \"polars\": \"1.35.2\",\n"}
+,{"stream_name":"stdout","time":533.507950568,"data":"    \"scikit-learn\": \"1.6.1\",\n"}
+,{"stream_name":"stdout","time":533.507955294,"data":"    \"lightgbm\": \"4.6.0\"\n"}
+,{"stream_name":"stdout","time":533.507959859,"data":"  },\n"}
+,{"stream_name":"stdout","time":533.50796403,"data":"  \"validation_replay\": {\n"}
+,{"stream_name":"stdout","time":533.507968735,"data":"    \"tabm32\": {\n"}
+,{"stream_name":"stdout","time":533.507973185,"data":"      \"validation_auc\": 0.8893497968342683,\n"}
+,{"stream_name":"stdout","time":533.507977936,"data":"      \"reference_auc\": 0.8893497968342682,\n"}
+,{"stream_name":"stdout","time":533.507982664,"data":"      \"max_probability_error\": 7.450580596923828e-08\n"}
+,{"stream_name":"stdout","time":533.507987361,"data":"    },\n"}
+,{"stream_name":"stdout","time":533.50799162,"data":"    \"tabm8\": {\n"}
+,{"stream_name":"stdout","time":533.507996004,"data":"      \"validation_auc\": 0.8889892517329304,\n"}
+,{"stream_name":"stdout","time":533.508000677,"data":"      \"reference_auc\": 0.8889892517329302,\n"}
+,{"stream_name":"stdout","time":533.508005225,"data":"      \"max_probability_error\": 8.940696716308594e-08\n"}
+,{"stream_name":"stdout","time":533.50800991,"data":"    },\n"}
+,{"stream_name":"stdout","time":533.508014002,"data":"    \"dcn32\": {\n"}
+,{"stream_name":"stdout","time":533.508018351,"data":"      \"validation_auc\": 0.8876068703637654,\n"}
+,{"stream_name":"stdout","time":533.508022882,"data":"      \"reference_auc\": 0.8876068703637656,\n"}
+,{"stream_name":"stdout","time":533.50802741,"data":"      \"max_probability_error\": 1.1920928955078125e-07\n"}
+,{"stream_name":"stdout","time":533.508032307,"data":"    },\n"}
+,{"stream_name":"stdout","time":533.508036705,"data":"    \"lightgbm\": {\n"}
+,{"stream_name":"stdout","time":533.508041112,"data":"      \"validation_auc\": 0.880289666034548,\n"}
+,{"stream_name":"stdout","time":533.50804563,"data":"      \"reference_auc\": 0.880289666034548,\n"}
+,{"stream_name":"stdout","time":533.508050341,"data":"      \"max_probability_error\": 1.1102230246251565e-16\n"}
+,{"stream_name":"stdout","time":533.508055447,"data":"    },\n"}
+,{"stream_name":"stdout","time":533.508059698,"data":"    \"ensemble\": {\n"}
+,{"stream_name":"stdout","time":533.508064105,"data":"      \"validation_auc\": 0.8898181167018704,\n"}
+,{"stream_name":"stdout","time":533.50806871,"data":"      \"reference_auc\": 0.8898181167018704,\n"}
+,{"stream_name":"stdout","time":533.50807317,"data":"      \"max_probability_error\": 6.034970284618524e-08\n"}
+,{"stream_name":"stdout","time":533.508077696,"data":"    }\n"}
+,{"stream_name":"stdout","time":533.508086823,"data":"  },\n"}
+,{"stream_name":"stdout","time":533.508091339,"data":"  \"submissions\": {\n"}
+,{"stream_name":"stdout","time":533.508095741,"data":"    \"tabm\": {\n"}
+,{"stream_name":"stdout","time":533.508100249,"data":"      \"file\": \"submission-tabm.csv\",\n"}
+,{"stream_name":"stdout","time":533.508104919,"data":"      \"sha256\": \"1f5a0a6a9f73d56eb64b47787f54373eda5cdc7daef62fe573cddca9dadef6ea\",\n"}
+,{"stream_name":"stdout","time":533.508110045,"data":"      \"rows\": 1037090,\n"}
+,{"stream_name":"stdout","time":533.50811465,"data":"      \"minimum\": 1.084581047194888e-08,\n"}
+,{"stream_name":"stdout","time":533.508119242,"data":"      \"mean\": 0.05052283778786659,\n"}
+,{"stream_name":"stdout","time":533.508123692,"data":"      \"maximum\": 0.851868748664856\n"}
+,{"stream_name":"stdout","time":533.508128471,"data":"    },\n"}
+,{"stream_name":"stdout","time":533.50813278,"data":"    \"ensemble\": {\n"}
+,{"stream_name":"stdout","time":533.508137365,"data":"      \"file\": \"submission-ensemble.csv\",\n"}
+,{"stream_name":"stdout","time":533.508142119,"data":"      \"sha256\": \"e1744e944fa5d95903f511cc5a6ec278e97268cb0fa7eb15b4fca2c250642a21\",\n"}
+,{"stream_name":"stdout","time":533.508147439,"data":"      \"rows\": 1037090,\n"}
+,{"stream_name":"stdout","time":533.508151872,"data":"      \"minimum\": 3.5900047912883024e-05,\n"}
+,{"stream_name":"stdout","time":533.508156485,"data":"      \"mean\": 0.049369230189209176,\n"}
+,{"stream_name":"stdout","time":533.508161089,"data":"      \"maximum\": 0.8226756868120113\n"}
+,{"stream_name":"stdout","time":533.508165339,"data":"    }\n"}
+,{"stream_name":"stdout","time":533.508170258,"data":"  },\n"}
+,{"stream_name":"stdout","time":533.508174588,"data":"  \"ensemble_weights\": {\n"}
+,{"stream_name":"stdout","time":533.508179075,"data":"    \"tabm32\": 0.45,\n"}
+,{"stream_name":"stdout","time":533.508183388,"data":"    \"tabm8\": 0.225,\n"}
+,{"stream_name":"stdout","time":533.50818777,"data":"    \"dcn32\": 0.225,\n"}
+,{"stream_name":"stdout","time":533.508191987,"data":"    \"lightgbm\": 0.1\n"}
+,{"stream_name":"stdout","time":533.508196287,"data":"  },\n"}
+,{"stream_name":"stdout","time":533.508200342,"data":"  \"inference_seconds\": 329.76176254\n"}
+,{"stream_name":"stdout","time":533.508205004,"data":"}\n"}
+,{"stream_name":"stderr","time":538.732643692,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":538.732667932,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":538.883126065,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":538.883149157,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":539.627573771,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":539.708688144,"data":"[NbConvertApp] Writing 150334 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":542.204833497,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":543.072706494,"data":"[NbConvertApp] Writing 720558 bytes to __results__.html\n"}
+]

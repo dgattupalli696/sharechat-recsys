@@ -1,0 +1,9 @@
+{
+  "ref": "58300782",
+  "fileName": "submission-ensemble.csv",
+  "date": "2026-11-13 07:37:04.840000",
+  "description": "S006 ensemble k32/k8/DCN/LGBM + request-context (T024, holdout 0.88982, no refit)",
+  "status": "SubmissionStatus.COMPLETE",
+  "publicScore": "0.88438",
+  "privateScore": ""
+}

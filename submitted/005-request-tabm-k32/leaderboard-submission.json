@@ -1,0 +1,9 @@
+{
+  "ref": "58300770",
+  "fileName": "submission-tabm.csv",
+  "date": "2026-11-13 07:36:50.487000",
+  "description": "S005 TabM k32 + request-context features (T024 checkpoint, holdout 0.88935, no refit)",
+  "status": "SubmissionStatus.COMPLETE",
+  "publicScore": "0.88394",
+  "privateScore": ""
+}

@@ -37,11 +37,13 @@ submission unless it has an entry in `submitted/`.
 | T021 | [Final full-data refit](trials/021-full-data-finalist-refit/README.md) | Kaggle GPU/CPU / all 1,537,638 labeled rows | No independent holdout | Not submitted | Complete and independently verified; both 1,037,090-row CSVs ready; frozen budgets and weights |
 | T022 | [Saved-checkpoint sanity check](trials/022-checkpoint-former-holdout-sanity/README.md) | Inference only / former 307,528-row holdout | Not independent | Not submitted | Complete and verified; in-sample AUC: k32 0.846229, k8 0.847834, DCN 0.841304, LightGBM 0.851726, fixed ensemble 0.848533; no additional training |
 | T023 | [Request/count/target-encoding screen](trials/023-request-count-target-screen/README.md) | Local LightGBM screen (scalar features) / original holdout | Holdout early stopping (optimistic) | Not submitted | Request context 0.828722 → 0.882612; counts 0.878542; target encoding no gain |
-| T024 | [Request context in full models](trials/024-request-context-full-models/README.md) | T014/T011 protocols + 33 request features / original holdout | Holdout model selection (as T014) | Not submitted | k32 0.889350, k8 0.888989, DCN 0.887607, LightGBM 0.880290; T016-weight ensemble 0.889809 (vs 0.840806) |
+| T024 | [Request context in full models](trials/024-request-context-full-models/README.md) | T014/T011 protocols + 33 request features / original holdout | Holdout model selection (as T014) | S005/S006 | k32 0.889350, k8 0.888989, DCN 0.887607, LightGBM 0.880290; T016-weight ensemble 0.889809 (vs 0.840806) |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 | S003 | [Submitted best TabM k32](submitted/003-tabm-k32/README.md) | Unchanged T014 seed-42 checkpoint | **0.840454** | **0.83349** | Submission 58291755; no refit; +0.01444 vs S002 |
-| S004 | [Submitted best frozen ensemble](submitted/004-best-ensemble/README.md) | Unchanged T014/T011 checkpoints | **0.840806** | **0.83365** | Submission 58291773; no refit; +0.00016 vs S003; best public score |
+| S004 | [Submitted best frozen ensemble](submitted/004-best-ensemble/README.md) | Unchanged T014/T011 checkpoints | **0.840806** | **0.83365** | Submission 58291773; no refit; +0.00016 vs S003 |
+| S005 | [Submitted request-context TabM k32](submitted/005-request-tabm-k32/README.md) | Unchanged T024 k32 checkpoint | **0.889350** | **0.88394** | Submission 58300770; no refit; +0.05045 vs S003 |
+| S006 | [Submitted request-context ensemble](submitted/006-request-ensemble/README.md) | Unchanged T024 checkpoints, T016 weights | **0.889818** | **0.88438** | Submission 58300782; no refit; +0.05073 vs S004; best public score |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
 comparable. Do not infer that either beats B001: B001 used a different, full-data

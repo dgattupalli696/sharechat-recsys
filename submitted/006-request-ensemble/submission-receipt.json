@@ -1,0 +1,15 @@
+{
+  "ref": "58300782",
+  "description": "S006 ensemble k32/k8/DCN/LGBM + request-context (T024, holdout 0.88982, no refit)",
+  "model_trial": "T024 ensemble",
+  "training_rows": 1230110,
+  "validation_rows": 307528,
+  "test_rows": 1037090,
+  "refit": false,
+  "submission_sha256": "e1744e944fa5d95903f511cc5a6ec278e97268cb0fa7eb15b4fca2c250642a21",
+  "inference_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "inference_kernel_version": 22,
+  "user_approved_once": true,
+  "approval_consumed": true,
+  "public_score": "0.88438"
+}

@@ -1,0 +1,15 @@
+{
+  "ref": "58300770",
+  "description": "S005 TabM k32 + request-context features (T024 checkpoint, holdout 0.88935, no refit)",
+  "model_trial": "T024/ensemble-32",
+  "training_rows": 1230110,
+  "validation_rows": 307528,
+  "test_rows": 1037090,
+  "refit": false,
+  "submission_sha256": "1f5a0a6a9f73d56eb64b47787f54373eda5cdc7daef62fe573cddca9dadef6ea",
+  "inference_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "inference_kernel_version": 22,
+  "user_approved_once": true,
+  "approval_consumed": true,
+  "public_score": "0.88394"
+}
