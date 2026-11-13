@@ -3,13 +3,15 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import shutil
 
 import numpy as np
 import polars as pl
 import torch
 
 from relational_audit import history_features
-from relational_experiment import GraphTabM, METHODS, MatrixFactorization, graph_arrays, run_fold
+from full_experiments import prepare_data
+from relational_experiment import GraphTabM, METHODS, MatrixFactorization, graph_arrays, run_fold, stream_frozen_data
 
 
 class RelationalTests(unittest.TestCase):
@@ -97,10 +99,25 @@ class RelationalTests(unittest.TestCase):
                 "feature26": [[float((i + j) % 4) for j in range(32)] for i in range(rows)],
                 "watched": [i % 2 for i in range(rows)],
             }).write_parquet(root / "train.parquet")
+            reference_output = root / "reference"
+            reference_output.mkdir()
+            reference = prepare_data(root / "train.parquet", reference_output)
+            bundle = root / "preprocessing"
+            bundle.mkdir()
+            shutil.copyfile(reference_output / "preprocessing.joblib", bundle / "primary-preprocessing.joblib")
+            shutil.copyfile(reference_output / "protocol.json", bundle / "primary-protocol.json")
+            np.save(bundle / "primary-validation-row-ids.npy", reference["validation_row_ids"])
+            streamed_output = root / "streamed"
+            streamed_output.mkdir()
+            streamed = stream_frozen_data(root / "train.parquet", streamed_output, bundle, "primary")
+            for name in ["x_train", "x_valid", "c_train", "c_valid", "y_train"]:
+                torch.testing.assert_close(streamed[name], reference[name], rtol=0, atol=1e-6)
+            for name in ["training_row_ids", "validation_row_ids", "y_valid"]:
+                np.testing.assert_array_equal(streamed[name], reference[name])
             output = root / "output"
             results = run_fold(
                 root / "train.parquet", output, ["feature5", "feature18"],
-                "primary", epochs=1, device="cpu",
+                "primary", epochs=1, device="cpu", preprocessing_dir=bundle,
             )
             self.assertEqual([row["method"] for row in results], METHODS)
             for result in results:
@@ -114,6 +131,37 @@ class RelationalTests(unittest.TestCase):
             self.assertFalse(protocol["graph_uses_validation_rows"])
             self.assertFalse(protocol["graph_uses_labels"])
             self.assertFalse(protocol["competition_submission"])
+
+    def test_streamed_earlier_fold_preserves_ties_and_excludes_later_rows(self):
+        start = datetime(2026, 10, 26)
+        order = np.random.default_rng(42).permutation(400)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            frame = pl.DataFrame({
+                "request_id": [f"request-{i}" for i in range(400)],
+                "feature1": [start + timedelta(minutes=20 * (i // 2)) for i in range(400)],
+                "feature5": [f"left-{i % 7}" for i in range(400)],
+                "feature18": [f"right-{i % 11}" for i in range(400)],
+                "feature33": [float(i % 30) for i in range(400)],
+                "feature26": [[float((i + j) % 4) for j in range(32)] for i in range(400)],
+                "watched": [i % 2 for i in range(400)],
+            })
+            frame[order].write_parquet(root / "train.parquet")
+            original = root / "reference"
+            original.mkdir()
+            reference = prepare_data(root / "train.parquet", original, secondary=True)
+            bundle = root / "bundle"
+            bundle.mkdir()
+            shutil.copyfile(original / "preprocessing.joblib", bundle / "earlier-preprocessing.joblib")
+            shutil.copyfile(original / "protocol.json", bundle / "earlier-protocol.json")
+            np.save(bundle / "earlier-validation-row-ids.npy", reference["validation_row_ids"])
+            output = root / "streamed"
+            output.mkdir()
+            streamed = stream_frozen_data(root / "train.parquet", output, bundle, "earlier")
+            for name in ["x_train", "x_valid", "c_train", "c_valid", "y_train"]:
+                torch.testing.assert_close(streamed[name], reference[name], rtol=0, atol=1e-6)
+            for name in ["training_row_ids", "validation_row_ids", "y_valid"]:
+                np.testing.assert_array_equal(streamed[name], reference[name])
 
 
 if __name__ == "__main__":

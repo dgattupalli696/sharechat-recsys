@@ -4,7 +4,7 @@ Validation-only campaign approved November 13, 2026. No competition submission.
 
 ## Frozen design
 
-Audit all 24 anonymous categorical fields using the complete primary training
+Audit all 23 anonymous categorical fields using the complete primary training
 partition. Select a pair using only the earliest training prefix, before either
 holdout, by cardinality, repeated coverage and many-to-many connectivity,
 without consulting held-out labels or coverage.
@@ -44,6 +44,15 @@ fold in a fresh subprocess. Archive original validation row identities and all
 ten full-model prediction arrays. Compare graph vs node-only, relational models
 vs matched control, and primary results vs the existing 0.840806 best ensemble.
 The earlier fold is confirmation evidence, not the primary leaderboard proxy.
+
+Version 11 failed at the dependency bootstrap; version 12 passed bootstrap but
+its preparation worker received SIGKILL before any model fit. Preserve both
+failures. Recovery reuses the original T018 fold-specific, train-fitted
+preprocessing (primary byte-identical to T014) and streams every row into
+preallocated numeric/category arrays, avoiding full-frame copies and sorting.
+Frozen validation row indices preserve the original order. Fold workers launch
+directly from the lightweight notebook, not another Torch-importing parent.
+The model recipes, complete populations and fixed budgets remain unchanged.
 
 After this campaign is archived, separately refit the selected best model on
 all 1,537,638 labeled rows using a validation-frozen training budget. This is

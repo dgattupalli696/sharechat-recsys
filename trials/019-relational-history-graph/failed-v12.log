@@ -1,0 +1,116 @@
+[{"stream_name":"stderr","time":6.684528221,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.684576138,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.684580926,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.6845835220000005,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":7.266032107,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.266064394,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.26607273,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.266075482,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":9.018909179,"data":"Processing /tmp/tmpwd_0d2vy/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.026489404,"data":"Processing /tmp/tmpwd_0d2vy/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.049049456,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":9.10608414,"data":"\n"}
+,{"stream_name":"stdout","time":9.184881138,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":9.22194722,"data":"Processing /tmp/tmpwd_0d2vy/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.221972562,"data":"Processing /tmp/tmpwd_0d2vy/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":9.221977006,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":9.221982588,"data":"\n"}
+,{"stream_name":"stdout","time":9.221989738,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":9.253108917,"data":"Pinned offline TabM dependencies verified\n"}
+,{"stream_name":"stderr","time":231.47359512,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":231.475808328,"data":"  File \"/kaggle/working/frozen-source/relational_experiment.py\", line 339, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":231.475821512,"data":"    main()\n"}
+,{"stream_name":"stderr","time":231.475824878,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":231.475827752,"data":"  File \"/kaggle/working/frozen-source/relational_experiment.py\", line 323, in main\n"}
+,{"stream_name":"stderr","time":231.475830738,"data":"    subprocess.run([\n"}
+,{"stream_name":"stderr","time":231.475833505,"data":"    ~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":231.475836398,"data":"        sys.executable, str(Path(__file__).resolve()), \"--input\", str(args.input),\n"}
+,{"stream_name":"stderr","time":231.475839378,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.475842288,"data":"        \"--output\", str(args.output), \"--fields\", *args.fields,\n"}
+,{"stream_name":"stderr","time":231.475845323,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.475862025,"data":"        \"--fold\", fold, \"--epochs\", str(args.epochs), \"--device\", args.device,\n"}
+,{"stream_name":"stderr","time":231.475867844,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.475883893,"data":"    ], check=True)\n"}
+,{"stream_name":"stderr","time":231.475887545,"data":"    ^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.475890748,"data":"  File \"/usr/lib/python3.13/subprocess.py\", line 578, in run\n"}
+,{"stream_name":"stderr","time":231.475894207,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":231.475897475,"data":"                             output=stdout, stderr=stderr)\n"}
+,{"stream_name":"stderr","time":231.47590156,"data":"subprocess.CalledProcessError: Command '['/usr/bin/python3', '/kaggle/working/frozen-source/relational_experiment.py', '--input', '/kaggle/input/competitions/sharechat/train.parquet', '--output', '/kaggle/working/relational', '--fields', 'feature5', 'feature18', '--fold', 'primary', '--epochs', '8', '--device', 'cuda']' died with \u003cSignals.SIGKILL: 9\u003e.\n"}
+,{"stream_name":"stderr","time":231.694795323,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":231.69482058,"data":"  File \"/kaggle/working/frozen-source/relational_experiment.py\", line 339, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":231.694825531,"data":"    main()\n"}
+,{"stream_name":"stderr","time":231.694828937,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":231.694832243,"data":"  File \"/kaggle/working/frozen-source/relational_experiment.py\", line 323, in main\n"}
+,{"stream_name":"stderr","time":231.694836068,"data":"    subprocess.run([\n"}
+,{"stream_name":"stderr","time":231.694839413,"data":"    ~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":231.69484253,"data":"        sys.executable, str(Path(__file__).resolve()), \"--input\", str(args.input),\n"}
+,{"stream_name":"stderr","time":231.69484574,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.694848863,"data":"        \"--output\", str(args.output), \"--fields\", *args.fields,\n"}
+,{"stream_name":"stderr","time":231.694852529,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.694855684,"data":"        \"--fold\", fold, \"--epochs\", str(args.epochs), \"--device\", args.device,\n"}
+,{"stream_name":"stderr","time":231.694859275,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.694862639,"data":"    ], check=True)\n"}
+,{"stream_name":"stderr","time":231.694865918,"data":"    ^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.694868945,"data":"  File \"/usr/lib/python3.13/subprocess.py\", line 578, in run\n"}
+,{"stream_name":"stderr","time":231.694872025,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":231.694874989,"data":"                             output=stdout, stderr=stderr)\n"}
+,{"stream_name":"stderr","time":231.694879138,"data":"subprocess.CalledProcessError: Command '['/usr/bin/python3', '/kaggle/working/frozen-source/relational_experiment.py', '--input', '/kaggle/input/competitions/sharechat/train.parquet', '--output', '/kaggle/working/relational', '--fields', 'feature5', 'feature18', '--fold', 'primary', '--epochs', '8', '--device', 'cuda']' died with \u003cSignals.SIGKILL: 9\u003e.\n"}
+,{"stream_name":"stderr","time":231.694884675,"data":"\n"}
+,{"stream_name":"stderr","time":231.694887698,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":231.694890923,"data":"  File \"/kaggle/working/frozen-source/relational_experiment.py\", line 339, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":231.694894408,"data":"    main()\n"}
+,{"stream_name":"stderr","time":231.694907463,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":231.694910589,"data":"  File \"/kaggle/working/frozen-source/relational_experiment.py\", line 323, in main\n"}
+,{"stream_name":"stderr","time":231.694913843,"data":"    subprocess.run([\n"}
+,{"stream_name":"stderr","time":231.694917111,"data":"    ~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":231.694920248,"data":"        sys.executable, str(Path(__file__).resolve()), \"--input\", str(args.input),\n"}
+,{"stream_name":"stderr","time":231.694923568,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.694927179,"data":"        \"--output\", str(args.output), \"--fields\", *args.fields,\n"}
+,{"stream_name":"stderr","time":231.694930603,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.69495078,"data":"        \"--fold\", fold, \"--epochs\", str(args.epochs), \"--device\", args.device,\n"}
+,{"stream_name":"stderr","time":231.694954588,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.694957988,"data":"    ], check=True)\n"}
+,{"stream_name":"stderr","time":231.69496106,"data":"    ^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":231.694965693,"data":"  File \"/usr/lib/python3.13/subprocess.py\", line 578, in run\n"}
+,{"stream_name":"stderr","time":231.694969933,"data":"    raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":231.694973562,"data":"                             output=stdout, stderr=stderr)\n"}
+,{"stream_name":"stderr","time":231.694976861,"data":"subprocess.CalledProcessError: Command '['/usr/bin/python3', '/kaggle/working/frozen-source/relational_experiment.py', '--input', '/kaggle/input/competitions/sharechat/train.parquet', '--output', '/kaggle/working/relational', '--fields', 'feature5', 'feature18', '--fold', 'primary', '--epochs', '8', '--device', 'cuda']' died with \u003cSignals.SIGKILL: 9\u003e.\n"}
+,{"stream_name":"stderr","time":235.240316332,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":235.241096135,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":235.241130697,"data":"    import sys;import papermill as pm;pm.execute_notebook(\"__notebook__.ipynb\",\"__notebook__.ipynb\",progress_bar=False,log_output=True,stdout_file=sys.stdout,stderr_file=sys.stderr,allow_errors=False,timeout=43200)\n"}
+,{"stream_name":"stderr","time":235.241137199,"data":"                                      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":235.241142467,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":235.241147722,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":235.241151725,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":235.241155578,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":235.241159843,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":235.241163669,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":235.241173802,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":235.241182673,"data":"Exception encountered at \"In [2]\":\n"}
+,{"stream_name":"stderr","time":235.241194353,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":235.24119729,"data":"CalledProcessError                        Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":235.241199982,"data":"/tmp/ipykernel_24/608630659.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":235.241202902,"data":"     19     raise RuntimeError(f\"Expected one competition dataset: {data}\")\n"}
+,{"stream_name":"stderr","time":235.241206215,"data":"     20 output = Path(\"/kaggle/working/relational\")\n"}
+,{"stream_name":"stderr","time":235.24120896,"data":"---\u003e 21 subprocess.run([\n"}
+,{"stream_name":"stderr","time":235.241211666,"data":"     22     sys.executable, str(frozen / \"relational_experiment.py\"),\n"}
+,{"stream_name":"stderr","time":235.2412146,"data":"     23     \"--input\", str(data[0]), \"--output\", str(output),\n"}
+,{"stream_name":"stderr","time":235.2412175,"data":"\n"}
+,{"stream_name":"stderr","time":235.241220103,"data":"/usr/lib/python3.13/subprocess.py in run(input, capture_output, timeout, check, *popenargs, **kwargs)\n"}
+,{"stream_name":"stderr","time":235.241222917,"data":"    576         retcode = process.poll()\n"}
+,{"stream_name":"stderr","time":235.241225608,"data":"    577         if check and retcode:\n"}
+,{"stream_name":"stderr","time":235.24122832,"data":"--\u003e 578             raise CalledProcessError(retcode, process.args,\n"}
+,{"stream_name":"stderr","time":235.241231058,"data":"    579                                      output=stdout, stderr=stderr)\n"}
+,{"stream_name":"stderr","time":235.241233812,"data":"    580     return CompletedProcess(process.args, retcode, stdout, stderr)\n"}
+,{"stream_name":"stderr","time":235.241236701,"data":"\n"}
+,{"stream_name":"stderr","time":235.241240103,"data":"CalledProcessError: Command '['/usr/bin/python3', '/kaggle/working/frozen-source/relational_experiment.py', '--input', '/kaggle/input/competitions/sharechat/train.parquet', '--output', '/kaggle/working/relational', '--fields', 'feature5', 'feature18', '--epochs', '8', '--device', 'cuda']' returned non-zero exit status 1.\n"}
+,{"stream_name":"stderr","time":235.241243514,"data":"\n"}
+,{"stream_name":"stderr","time":237.900716596,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":237.900748442,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":238.169701187,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":238.169728088,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":239.578597644,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":239.657219424,"data":"[NbConvertApp] Writing 187008 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":242.315755156,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":243.11885172,"data":"[NbConvertApp] Writing 593793 bytes to __results__.html\n"}
+]

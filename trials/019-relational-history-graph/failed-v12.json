@@ -1,0 +1,14 @@
+{
+  "kernel_version": 12,
+  "source_revision": "d6bbd4d",
+  "status": "ERROR",
+  "phase": "primary fold preparation, before any model started",
+  "error": "Primary subprocess received SIGKILL after approximately 222 seconds",
+  "interpretation": "Consistent with host memory pressure during full-frame feature preparation; no Python exception in the worker.",
+  "fix": "Reuse original T018 fold-fitted preprocessing, stream-transform all rows into preallocated arrays, and launch fold workers directly from the lightweight notebook.",
+  "verification": "Compare streamed numeric arrays, categorical arrays, labels and row identities against the original eager preparation on a complete synthetic partition.",
+  "completed_model_fits": 0,
+  "training_or_validation_subsampling": false,
+  "model_protocol_changed": false,
+  "competition_submission": false
+}

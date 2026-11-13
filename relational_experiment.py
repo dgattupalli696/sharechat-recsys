@@ -1,5 +1,6 @@
 import argparse
 import gc
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -8,6 +9,7 @@ import time
 
 import numpy as np
 import polars as pl
+import pyarrow.parquet as pq
 from scipy.sparse import csr_matrix
 from sklearn.preprocessing import StandardScaler
 import torch
@@ -15,12 +17,99 @@ from torch import nn
 from torch.nn import functional as F
 
 from feature_models import HeterogeneousClassifier
-from full_experiments import category_view, prepare_data
+from custom_network import transform_custom_features
+from full_experiments import category_view
 from relational_audit import EARLIER, EARLIER_END, PRIMARY, history_features
 from tabm_experiment import fit_model_steps
+from train import features
 
 
 METHODS = ["tabm-control", "history-tabm", "matrix-factorization", "node-only-tabm", "graphsage-tabm"]
+
+
+def stream_frozen_data(path, output, bundle, fold):
+    import joblib
+
+    started = time.monotonic()
+    state = joblib.load(bundle / f"{fold}-preprocessing.joblib")
+    reference = json.loads((bundle / f"{fold}-protocol.json").read_text())
+    valid_ids = np.load(bundle / f"{fold}-validation-row-ids.npy")
+    metadata = (
+        pl.scan_parquet(path).select("request_id", "feature1", "watched")
+        .with_row_index("_row_id").collect()
+    )
+    ordered = metadata.with_columns(pl.col("feature1").alias("_time")).sort("_time")
+    cutoff = EARLIER if fold == "earlier" else PRIMARY
+    train_ids = ordered.filter(pl.col("_time") < cutoff)["_row_id"].to_numpy()
+    expected_valid = ordered.filter(
+        (pl.col("_time") >= cutoff)
+        & (pl.col("_time") < EARLIER_END if fold == "earlier" else pl.lit(True))
+    )["_row_id"].to_numpy()
+    np.testing.assert_array_equal(np.sort(expected_valid), np.sort(valid_ids))
+    if (len(train_ids), len(valid_ids)) != (reference["training_rows"], reference["validation_rows"]):
+        raise ValueError("Frozen preprocessing population differs from the requested fold")
+    y_train = metadata["watched"].to_numpy()[train_ids].copy()
+    y_valid = metadata["watched"].to_numpy()[valid_ids].copy()
+    label_hash = hashlib.sha256(y_valid.astype(np.uint8).tobytes()).hexdigest()
+    if label_hash != reference["validation_labels_sha256"]:
+        raise ValueError("Frozen validation row identities or labels changed")
+    identity = metadata.select("_row_id", "request_id", "feature1")[valid_ids]
+    identity.write_parquet(output / "validation-identities.parquet")
+    with (output / "validation-identities.parquet").open("rb") as stream:
+        identity_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+    total = len(metadata)
+    position = np.full(total, -1, dtype=np.int64)
+    position[train_ids] = np.arange(len(train_ids))
+    position[valid_ids] = len(train_ids) + np.arange(len(valid_ids))
+    width = state["n_dense"] + 34 * len(state["vector_fields"])
+    category_width = len(state["categorical_columns"])
+    numeric = [np.empty((n, width), dtype=np.float32) for n in [len(train_ids), len(valid_ids)]]
+    original = [np.empty((n, category_width), dtype=np.int64) for n in [len(train_ids), len(valid_ids)]]
+    remapped = [np.empty_like(array) for array in original]
+    offset = 0
+    print(f"PREPARE {fold}: stream-transform all rows with the original train-fitted preprocessing", flush=True)
+    for batch in pq.ParquetFile(path).iter_batches(batch_size=8192):
+        positions = position[offset:offset + batch.num_rows]
+        offset += batch.num_rows
+        retained = np.flatnonzero(positions >= 0)
+        if not len(retained):
+            continue
+        frame = features(pl.from_arrow(batch.take(retained)), expand_embeddings=True)
+        x, c = transform_custom_features(frame, state)
+        codes = state["encoder"].transform(
+            frame.select(state["categorical_columns"]).fill_null("__MISSING__").to_numpy()
+        ).astype(np.int64) + 1
+        destinations = positions[retained]
+        for index, mask in enumerate([destinations < len(train_ids), destinations >= len(train_ids)]):
+            target = destinations[mask] - (len(train_ids) if index else 0)
+            numeric[index][target] = x.numpy()[mask]
+            original[index][target] = codes[mask]
+            remapped[index][target] = c.numpy()[mask]
+    if offset != total:
+        raise ValueError("Parquet source population changed during preparation")
+    protocol = {
+        **reference, "preparation_seconds": time.monotonic() - started,
+        "validation_identities_sha256": identity_hash,
+        "reference_validation_identities_sha256": reference["validation_identities_sha256"],
+        "preprocessing_reused_without_refitting": True,
+        "preprocessing_source": f"{fold}-preprocessing.joblib",
+        "competition_submission": False,
+    }
+    joblib.dump(state, output / "preprocessing.joblib")
+    (output / "protocol.json").write_text(json.dumps(protocol, indent=2) + "\n")
+    return {
+        "x_train": torch.from_numpy(numeric[0]), "x_valid": torch.from_numpy(numeric[1]),
+        "c_train": torch.from_numpy(remapped[0]), "c_valid": torch.from_numpy(remapped[1]),
+        "original_train": [original[0][:, i] for i in range(category_width)],
+        "original_valid": [original[1][:, i] for i in range(category_width)],
+        "category_counts": [
+            np.bincount(original[0][:, i], minlength=n)
+            for i, n in enumerate(state["original_cardinalities"])
+        ],
+        "y_train": torch.tensor(y_train, dtype=torch.float32), "y_valid": y_valid,
+        "training_row_ids": train_ids, "validation_row_ids": valid_ids,
+        "state": state, "protocol": protocol,
+    }
 
 
 def graph_arrays(left, right, cardinalities, values, fanout=8, seed=42):
@@ -172,11 +261,11 @@ def base_configuration(data, cardinalities, history_width=0):
     }
 
 
-def run_fold(path, output, fields, fold, epochs=8, device="cuda"):
+def run_fold(path, output, fields, fold, epochs=8, device="cuda", *, preprocessing_dir):
     started = time.monotonic()
     torch.set_num_threads(4)
     output.mkdir(parents=True, exist_ok=True)
-    data = prepare_data(path, output, secondary=fold == "earlier")
+    data = stream_frozen_data(path, output, preprocessing_dir, fold)
     raw = pl.read_parquet(path, columns=["feature1", "watched", *fields])
     train = raw[data["training_row_ids"]]
     valid = raw[data["validation_row_ids"]]
@@ -307,6 +396,7 @@ def main():
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--fields", nargs=2, required=True)
+    parser.add_argument("--preprocessing-dir", type=Path, required=True)
     parser.add_argument("--fold", choices=["primary", "earlier"])
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cuda")
@@ -317,13 +407,17 @@ def main():
         raise RuntimeError("The requested CUDA device is unavailable")
     args.output.mkdir(parents=True, exist_ok=True)
     if args.fold:
-        run_fold(args.input, args.output / args.fold, args.fields, args.fold, args.epochs, args.device)
+        run_fold(
+            args.input, args.output / args.fold, args.fields, args.fold,
+            args.epochs, args.device, preprocessing_dir=args.preprocessing_dir,
+        )
     else:
         for fold in ["primary", "earlier"]:
             subprocess.run([
                 sys.executable, str(Path(__file__).resolve()), "--input", str(args.input),
                 "--output", str(args.output), "--fields", *args.fields,
                 "--fold", fold, "--epochs", str(args.epochs), "--device", args.device,
+                "--preprocessing-dir", str(args.preprocessing_dir),
             ], check=True)
         summary = {
             "status": "COMPLETE", "competition_submission": False,

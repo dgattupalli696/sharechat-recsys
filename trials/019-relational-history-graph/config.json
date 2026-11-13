@@ -22,5 +22,6 @@
   ],
   "selection": "fixed eight-epoch endpoints; no held-out checkpoint selection",
   "training_uses_complete_partitions": true,
-  "competition_submission": false
+  "competition_submission": false,
+  "preparation": "stream-transform with original fold-fitted T018 preprocessing; primary identical to T014"
 }

@@ -10,10 +10,11 @@
     "lightgbm_worker.py": "7e09638d5d1d6aa89689c64bb8fe0f89fe1408894895024c80cea3b51c54a647",
     "full_experiments.py": "67beb5dc134cfb7adf246fe699d423fbae987fe981f57bd5f5866806afcdc846",
     "relational_audit.py": "7df2dc9e629659097765ccc4b866358b5f8c1efd4639064188ea7a624532a45c",
-    "relational_experiment.py": "ba3c9db949c0fb4ca2d1a7afcdac967909117ad89ea86587310fe6df422b501d"
+    "relational_experiment.py": "bbe9bc4b0559018bd9c39b736c45683cb84bdd0fe78c323c776ba65339a4c6a2"
   },
-  "notebook_sha256": "d3a9c6e6e236f12c3f3ad474bc764697d0937fbcb05ea9f336cb65697550bb6f",
-  "configuration_sha256": "1c962f85ad5233411d2458bb7610cadb827ab6ce2b65f623615526a13895c5ad",
+  "notebook_sha256": "697ddcb212b6fd18a7c3b939c3a53efcf048b81f8d9436d80d9bb4914f613c55",
+  "configuration_sha256": "b6a91f9d3327cf3f6649386f5ccd8ff10b7623a886ee8bb1ec83edb114915c47",
   "audit_sha256": "4a5795ea0a7a9e15621529d936e93cdfa41ef159a5efcc0627d4a2dceb8197dd",
-  "competition_submission": false
+  "competition_submission": false,
+  "preprocessing_manifest_sha256": "c2d5360274b21b48bbd14711c27b62d1d45c5ca68839cfd16a97e19cf7dcb126"
 }
