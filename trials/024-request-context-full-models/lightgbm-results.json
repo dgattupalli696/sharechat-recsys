@@ -1,0 +1,30 @@
+{
+  "name": "lightgbm",
+  "best_iteration": 255,
+  "library_version": "4.6.0",
+  "selection_mode": "validation",
+  "backend": "CPU isolated disk-backed process",
+  "parameters": {
+    "objective": "binary",
+    "metric": "auc",
+    "learning_rate": 0.03,
+    "num_leaves": 31,
+    "max_depth": -1,
+    "min_data_in_leaf": 100,
+    "feature_fraction": 0.8,
+    "lambda_l2": 1,
+    "seed": 42,
+    "num_threads": 6,
+    "verbosity": -1,
+    "device_type": "cpu",
+    "force_col_wise": true,
+    "histogram_pool_size": 512
+  },
+  "peak_rss_bytes": 5535891456,
+  "full_training": false,
+  "training_rows": 1230110,
+  "validation_auc": 0.8802896660345482,
+  "validation_logloss": 0.14182762014155853,
+  "training_and_prediction_seconds": 431.0092427080963,
+  "preparation_seconds": 41.37614133406896
+}
