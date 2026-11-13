@@ -1,0 +1,23 @@
+[
+  {
+    "name": "cross-masked-plr",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr"
+  },
+  {
+    "name": "ensemble-32",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "members": 32
+  },
+  {
+    "name": "dcnv2-r32",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "architecture": "dcnv2",
+    "rank": 32
+  }
+]
