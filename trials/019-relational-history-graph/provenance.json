@@ -1,0 +1,19 @@
+{
+  "trial": "T019",
+  "status": "PREPARED",
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "tabm_experiment.py": "7ddbb75066fc7b13e784f005b94d4cafb8c1fff4ec1abe9f25c637644b4f4e02",
+    "custom_network.py": "c2c057e1fff475309fcf6840edba4b6a92dc825f0d8b66bf1ff0ae7963e23d74",
+    "feature_models.py": "0ede9a201f776dacf3c474acf55405e1b798b6a8ad43d0588f8e10035b8fc525",
+    "tree_experiments.py": "3881d07c80fab2522b16019f47aa52c535f7171dec5aa55c156f8902308132bc",
+    "lightgbm_worker.py": "7e09638d5d1d6aa89689c64bb8fe0f89fe1408894895024c80cea3b51c54a647",
+    "full_experiments.py": "67beb5dc134cfb7adf246fe699d423fbae987fe981f57bd5f5866806afcdc846",
+    "relational_audit.py": "7df2dc9e629659097765ccc4b866358b5f8c1efd4639064188ea7a624532a45c",
+    "relational_experiment.py": "ba3c9db949c0fb4ca2d1a7afcdac967909117ad89ea86587310fe6df422b501d"
+  },
+  "notebook_sha256": "ba962aaf6fa0ed4ae8808d57aed9f22dd099bf4e10e00dbf8f34e662a69a00e6",
+  "configuration_sha256": "1c962f85ad5233411d2458bb7610cadb827ab6ce2b65f623615526a13895c5ad",
+  "audit_sha256": "4a5795ea0a7a9e15621529d936e93cdfa41ef159a5efcc0627d4a2dceb8197dd",
+  "competition_submission": false
+}

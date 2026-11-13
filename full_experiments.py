@@ -53,6 +53,7 @@ def prepare_data(path, output, *, secondary=False, cutoff_override=None, end_ove
         ))
         sample = sample.slice(0, end)
     train, valid = sample.slice(0, split), sample.slice(split)
+    training_row_ids = train["_row_id"].to_numpy().copy()
     validation_row_ids = valid["_row_id"].to_numpy().copy()
     train, valid = train.drop("_row_id"), valid.drop("_row_id")
     if train.is_empty() or valid.is_empty():
@@ -111,6 +112,7 @@ def prepare_data(path, output, *, secondary=False, cutoff_override=None, end_ove
         "y_train": y_train, "y_valid": y_valid, "state": state, "protocol": protocol,
         "original_train": original_train, "original_valid": original_valid,
         "category_counts": category_counts,
+        "training_row_ids": training_row_ids,
         "validation_row_ids": validation_row_ids,
     }
 

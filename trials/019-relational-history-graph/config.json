@@ -1,0 +1,26 @@
+{
+  "fields": [
+    "feature5",
+    "feature18"
+  ],
+  "folds": [
+    "primary",
+    "earlier"
+  ],
+  "epochs": 8,
+  "seed": 42,
+  "batch_size": 1024,
+  "members": 8,
+  "width": 128,
+  "neighbor_fanout": 8,
+  "methods": [
+    "tabm-control",
+    "history-tabm",
+    "matrix-factorization",
+    "node-only-tabm",
+    "graphsage-tabm"
+  ],
+  "selection": "fixed eight-epoch endpoints; no held-out checkpoint selection",
+  "training_uses_complete_partitions": true,
+  "competition_submission": false
+}
