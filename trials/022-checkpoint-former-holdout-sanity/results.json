@@ -1,0 +1,41 @@
+{
+  "status": "COMPLETE",
+  "evaluation": "in-sample sanity check on former holdout",
+  "evaluation_rows": 307528,
+  "training_overlap_rows": 307528,
+  "checkpoint_training_rows": 1537638,
+  "unbiased_validation": false,
+  "used_for_model_selection": false,
+  "additional_training": false,
+  "competition_submission": false,
+  "bundle_manifest_sha256": "da6c33fec33973ba32d6aadbc20a8de50aa16ed526d763691a595d8416231c8e",
+  "scores": {
+    "tabm32": {
+      "in_sample_auc": 0.8462285157277984,
+      "in_sample_logloss": 0.15429255266264244
+    },
+    "tabm8": {
+      "in_sample_auc": 0.8478343339178295,
+      "in_sample_logloss": 0.1538253962162135
+    },
+    "dcn32": {
+      "in_sample_auc": 0.8413036323111618,
+      "in_sample_logloss": 0.1552583627526938
+    },
+    "lightgbm": {
+      "in_sample_auc": 0.8517255680049443,
+      "in_sample_logloss": 0.1528331310925142
+    },
+    "ensemble": {
+      "in_sample_auc": 0.8485329009790468,
+      "in_sample_logloss": 0.15325428358817414
+    }
+  },
+  "ensemble_weights": {
+    "tabm32": 0.45,
+    "tabm8": 0.225,
+    "dcn32": 0.225,
+    "lightgbm": 0.1
+  },
+  "interpretation": "Every evaluated row was part of the full-data refit; these scores are not comparable to the original out-of-sample holdout AUCs."
+}

@@ -1,0 +1,110 @@
+[{"stream_name":"stderr","time":8.524454054,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.524507376,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.524512549,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.524515394,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.156679498,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.156725017,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.156731283,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.156735441,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":11.380817703,"data":"Processing /tmp/tmpxu_x2mig/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.391786912,"data":"Processing /tmp/tmpxu_x2mig/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.424533053,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":11.490189662,"data":"\n"}
+,{"stream_name":"stdout","time":11.576004009,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":11.584148318,"data":"Processing /tmp/tmpxu_x2mig/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.584184514,"data":"Processing /tmp/tmpxu_x2mig/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.584189122,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":11.584192551,"data":"\n"}
+,{"stream_name":"stdout","time":11.584195926,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":11.677356246,"data":"Pinned offline TabM dependencies verified\n"}
+,{"stream_name":"stdout","time":144.859221194,"data":"{\n"}
+,{"stream_name":"stdout","time":144.859265605,"data":"  \"status\": \"COMPLETE\",\n"}
+,{"stream_name":"stdout","time":144.859272051,"data":"  \"evaluation\": \"in-sample sanity check on former holdout\",\n"}
+,{"stream_name":"stdout","time":144.85927676,"data":"  \"evaluation_rows\": 307528,\n"}
+,{"stream_name":"stdout","time":144.859282513,"data":"  \"training_overlap_rows\": 307528,\n"}
+,{"stream_name":"stdout","time":144.859287173,"data":"  \"checkpoint_training_rows\": 1537638,\n"}
+,{"stream_name":"stdout","time":144.859292,"data":"  \"unbiased_validation\": false,\n"}
+,{"stream_name":"stdout","time":144.859296939,"data":"  \"used_for_model_selection\": false,\n"}
+,{"stream_name":"stdout","time":144.859301868,"data":"  \"additional_training\": false,\n"}
+,{"stream_name":"stdout","time":144.85930678,"data":"  \"competition_submission\": false,\n"}
+,{"stream_name":"stdout","time":144.859311276,"data":"  \"bundle_manifest_sha256\": \"da6c33fec33973ba32d6aadbc20a8de50aa16ed526d763691a595d8416231c8e\",\n"}
+,{"stream_name":"stdout","time":144.859316057,"data":"  \"scores\": {\n"}
+,{"stream_name":"stdout","time":144.859320997,"data":"    \"tabm32\": {\n"}
+,{"stream_name":"stdout","time":144.859325173,"data":"      \"in_sample_auc\": 0.8462285157277984,\n"}
+,{"stream_name":"stdout","time":144.85933002,"data":"      \"in_sample_logloss\": 0.15429255266264244\n"}
+,{"stream_name":"stdout","time":144.859352261,"data":"    },\n"}
+,{"stream_name":"stdout","time":144.859356433,"data":"    \"tabm8\": {\n"}
+,{"stream_name":"stdout","time":144.859360051,"data":"      \"in_sample_auc\": 0.8478343339178295,\n"}
+,{"stream_name":"stdout","time":144.859363586,"data":"      \"in_sample_logloss\": 0.1538253962162135\n"}
+,{"stream_name":"stdout","time":144.859367812,"data":"    },\n"}
+,{"stream_name":"stdout","time":144.859371252,"data":"    \"dcn32\": {\n"}
+,{"stream_name":"stdout","time":144.859374741,"data":"      \"in_sample_auc\": 0.8413036323111618,\n"}
+,{"stream_name":"stdout","time":144.85937833,"data":"      \"in_sample_logloss\": 0.1552583627526938\n"}
+,{"stream_name":"stdout","time":144.859382112,"data":"    },\n"}
+,{"stream_name":"stdout","time":144.859386082,"data":"    \"lightgbm\": {\n"}
+,{"stream_name":"stdout","time":144.859400933,"data":"      \"in_sample_auc\": 0.8517255680049443,\n"}
+,{"stream_name":"stdout","time":144.859404809,"data":"      \"in_sample_logloss\": 0.1528331310925142\n"}
+,{"stream_name":"stdout","time":144.859408152,"data":"    },\n"}
+,{"stream_name":"stdout","time":144.859414856,"data":"    \"ensemble\": {\n"}
+,{"stream_name":"stdout","time":144.859418838,"data":"      \"in_sample_auc\": 0.8485329009790468,\n"}
+,{"stream_name":"stdout","time":144.859422876,"data":"      \"in_sample_logloss\": 0.15325428358817414\n"}
+,{"stream_name":"stdout","time":144.859426315,"data":"    }\n"}
+,{"stream_name":"stdout","time":144.859430198,"data":"  },\n"}
+,{"stream_name":"stdout","time":144.859433585,"data":"  \"ensemble_weights\": {\n"}
+,{"stream_name":"stdout","time":144.859437624,"data":"    \"tabm32\": 0.45,\n"}
+,{"stream_name":"stdout","time":144.859441737,"data":"    \"tabm8\": 0.225,\n"}
+,{"stream_name":"stdout","time":144.859445618,"data":"    \"dcn32\": 0.225,\n"}
+,{"stream_name":"stdout","time":144.859449346,"data":"    \"lightgbm\": 0.1\n"}
+,{"stream_name":"stdout","time":144.859452814,"data":"  },\n"}
+,{"stream_name":"stdout","time":144.859456464,"data":"  \"interpretation\": \"Every evaluated row was part of the full-data refit; these scores are not comparable to the original out-of-sample holdout AUCs.\"\n"}
+,{"stream_name":"stdout","time":144.85946059,"data":"}\n"}
+,{"stream_name":"stdout","time":145.064945189,"data":"{\n"}
+,{"stream_name":"stdout","time":145.065060807,"data":"  \"status\": \"COMPLETE\",\n"}
+,{"stream_name":"stdout","time":145.06507463,"data":"  \"evaluation\": \"in-sample sanity check on former holdout\",\n"}
+,{"stream_name":"stdout","time":145.065079101,"data":"  \"evaluation_rows\": 307528,\n"}
+,{"stream_name":"stdout","time":145.065082823,"data":"  \"training_overlap_rows\": 307528,\n"}
+,{"stream_name":"stdout","time":145.065086121,"data":"  \"checkpoint_training_rows\": 1537638,\n"}
+,{"stream_name":"stdout","time":145.065089536,"data":"  \"unbiased_validation\": false,\n"}
+,{"stream_name":"stdout","time":145.065092965,"data":"  \"used_for_model_selection\": false,\n"}
+,{"stream_name":"stdout","time":145.065118195,"data":"  \"additional_training\": false,\n"}
+,{"stream_name":"stdout","time":145.065123175,"data":"  \"competition_submission\": false,\n"}
+,{"stream_name":"stdout","time":145.065127734,"data":"  \"bundle_manifest_sha256\": \"da6c33fec33973ba32d6aadbc20a8de50aa16ed526d763691a595d8416231c8e\",\n"}
+,{"stream_name":"stdout","time":145.065132321,"data":"  \"scores\": {\n"}
+,{"stream_name":"stdout","time":145.065136582,"data":"    \"tabm32\": {\n"}
+,{"stream_name":"stdout","time":145.065140583,"data":"      \"in_sample_auc\": 0.8462285157277984,\n"}
+,{"stream_name":"stdout","time":145.065144845,"data":"      \"in_sample_logloss\": 0.15429255266264244\n"}
+,{"stream_name":"stdout","time":145.065161663,"data":"    },\n"}
+,{"stream_name":"stdout","time":145.065165742,"data":"    \"tabm8\": {\n"}
+,{"stream_name":"stdout","time":145.065169809,"data":"      \"in_sample_auc\": 0.8478343339178295,\n"}
+,{"stream_name":"stdout","time":145.065173899,"data":"      \"in_sample_logloss\": 0.1538253962162135\n"}
+,{"stream_name":"stdout","time":145.065177645,"data":"    },\n"}
+,{"stream_name":"stdout","time":145.065181094,"data":"    \"dcn32\": {\n"}
+,{"stream_name":"stdout","time":145.065184611,"data":"      \"in_sample_auc\": 0.8413036323111618,\n"}
+,{"stream_name":"stdout","time":145.065188369,"data":"      \"in_sample_logloss\": 0.1552583627526938\n"}
+,{"stream_name":"stdout","time":145.065194403,"data":"    },\n"}
+,{"stream_name":"stdout","time":145.065202574,"data":"    \"lightgbm\": {\n"}
+,{"stream_name":"stdout","time":145.065205453,"data":"      \"in_sample_auc\": 0.8517255680049443,\n"}
+,{"stream_name":"stdout","time":145.065207942,"data":"      \"in_sample_logloss\": 0.1528331310925142\n"}
+,{"stream_name":"stdout","time":145.065210409,"data":"    },\n"}
+,{"stream_name":"stdout","time":145.065212705,"data":"    \"ensemble\": {\n"}
+,{"stream_name":"stdout","time":145.065215185,"data":"      \"in_sample_auc\": 0.8485329009790468,\n"}
+,{"stream_name":"stdout","time":145.065217672,"data":"      \"in_sample_logloss\": 0.15325428358817414\n"}
+,{"stream_name":"stdout","time":145.065220097,"data":"    }\n"}
+,{"stream_name":"stdout","time":145.065222514,"data":"  },\n"}
+,{"stream_name":"stdout","time":145.065224841,"data":"  \"ensemble_weights\": {\n"}
+,{"stream_name":"stdout","time":145.065227225,"data":"    \"tabm32\": 0.45,\n"}
+,{"stream_name":"stdout","time":145.065229614,"data":"    \"tabm8\": 0.225,\n"}
+,{"stream_name":"stdout","time":145.065232039,"data":"    \"dcn32\": 0.225,\n"}
+,{"stream_name":"stdout","time":145.065234539,"data":"    \"lightgbm\": 0.1\n"}
+,{"stream_name":"stdout","time":145.065236919,"data":"  },\n"}
+,{"stream_name":"stdout","time":145.065239445,"data":"  \"interpretation\": \"Every evaluated row was part of the full-data refit; these scores are not comparable to the original out-of-sample holdout AUCs.\"\n"}
+,{"stream_name":"stdout","time":145.065242249,"data":"}\n"}
+,{"stream_name":"stderr","time":150.429376655,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":150.429404558,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":150.59705048,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":150.597074098,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":151.460391432,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":151.54072344,"data":"[NbConvertApp] Writing 214650 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":154.487608569,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":155.041217352,"data":"[NbConvertApp] Writing 646320 bytes to __results__.html\n"}
+]

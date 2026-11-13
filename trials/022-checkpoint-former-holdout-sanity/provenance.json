@@ -1,5 +1,5 @@
 {
-  "status": "PREPARED",
+  "status": "VERIFIED",
   "checkpoint_source": "T021",
   "additional_training": false,
   "unbiased_validation": false,
@@ -18,5 +18,39 @@
     "evaluate_refit.py": "0621406e219db3fb9a9afe52cb958e69b7adec343a2c730058802a7ee4d44e61"
   },
   "bundle_manifest_sha256": "da6c33fec33973ba32d6aadbc20a8de50aa16ed526d763691a595d8416231c8e",
-  "notebook_sha256": "d2865ec8790c95e9cb4e70f6146dec2f1c3017962812ca256c53f1b14b5d991c"
+  "notebook_sha256": "d2865ec8790c95e9cb4e70f6146dec2f1c3017962812ca256c53f1b14b5d991c",
+  "source_revision": "02598f6",
+  "kernel_version": 15,
+  "evaluation": "in-sample sanity check on former holdout",
+  "evaluation_rows": 307528,
+  "training_overlap_rows": 307528,
+  "checkpoint_training_rows": 1537638,
+  "used_for_model_selection": false,
+  "predictions_sha256": "c0f1d8e657fac31710fd882ef7ea61068e8712dd72822ffcea671962acf118e1",
+  "reference_npz_sha256": "224ff96a1a50bf867c02c0cf3b01fd58d9e2bdd13b9f5763156441c99b319b53",
+  "scores": {
+    "tabm32": {
+      "in_sample_auc": 0.8462285157277984,
+      "in_sample_logloss": 0.15429255266264244
+    },
+    "tabm8": {
+      "in_sample_auc": 0.8478343339178295,
+      "in_sample_logloss": 0.1538253962162135
+    },
+    "dcn32": {
+      "in_sample_auc": 0.8413036323111618,
+      "in_sample_logloss": 0.1552583627526938
+    },
+    "lightgbm": {
+      "in_sample_auc": 0.8517255680049443,
+      "in_sample_logloss": 0.1528331310925142
+    },
+    "ensemble": {
+      "in_sample_auc": 0.8485329009790468,
+      "in_sample_logloss": 0.15325428358817414
+    }
+  },
+  "executed_notebook_sha256": "322fcb32eddabe8939dce42c02d0278e35c19a2045fc0bb702ce56152b1cf485",
+  "executed_metadata_sha256": "0f968e6e3e86482e47ad67abd6798ad725b4a01bdf71506e174fdddb8503811a",
+  "artifacts": "artifacts/kaggle-t022"
 }

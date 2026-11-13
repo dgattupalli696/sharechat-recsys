@@ -1,0 +1,37 @@
+{
+  "status": "VERIFIED",
+  "source_revision": "02598f6",
+  "kernel_version": 15,
+  "evaluation": "in-sample sanity check on former holdout",
+  "evaluation_rows": 307528,
+  "training_overlap_rows": 307528,
+  "checkpoint_training_rows": 1537638,
+  "additional_training": false,
+  "unbiased_validation": false,
+  "used_for_model_selection": false,
+  "competition_submission": false,
+  "predictions_sha256": "c0f1d8e657fac31710fd882ef7ea61068e8712dd72822ffcea671962acf118e1",
+  "reference_npz_sha256": "224ff96a1a50bf867c02c0cf3b01fd58d9e2bdd13b9f5763156441c99b319b53",
+  "scores": {
+    "tabm32": {
+      "in_sample_auc": 0.8462285157277984,
+      "in_sample_logloss": 0.15429255266264244
+    },
+    "tabm8": {
+      "in_sample_auc": 0.8478343339178295,
+      "in_sample_logloss": 0.1538253962162135
+    },
+    "dcn32": {
+      "in_sample_auc": 0.8413036323111618,
+      "in_sample_logloss": 0.1552583627526938
+    },
+    "lightgbm": {
+      "in_sample_auc": 0.8517255680049443,
+      "in_sample_logloss": 0.1528331310925142
+    },
+    "ensemble": {
+      "in_sample_auc": 0.8485329009790468,
+      "in_sample_logloss": 0.15325428358817414
+    }
+  }
+}
