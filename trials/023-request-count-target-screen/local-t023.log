@@ -1,0 +1,15 @@
+[250]	holdout's auc: 0.827625
+base {"holdout_auc": 0.8287220897533586, "best_iteration": 117, "auc_at_140": 0.8283431718642449, "features": 601, "seconds": 153.91756892204285}
+ top: ['feature12', 'feature54', 'feature493', 'feature418', 'feature352', 'feature419', 'feature358', 'feature9', 'feature515', 'feature430', 'feature490', 'feature429', 'feature492', 'feature417', 'feature431']
+[250]	holdout's auc: 0.8825
+request {"holdout_auc": 0.8826116368472525, "best_iteration": 198, "auc_at_140": 0.8823884909677505, "features": 634, "seconds": 220.19199466705322}
+ top: ['feature12', 'rq_size', 'feature54', 'rq_rank_feature352', 'feature9', 'rq_rank_feature346', 'feature419', 'feature484', 'feature418', 'feature493', 'rq_items', 'feature515', 'feature352', 'feature331', 'feature411']
+[250]	holdout's auc: 0.878439
+counts {"holdout_auc": 0.878542403444985, "best_iteration": 185, "auc_at_140": 0.8784227295639464, "features": 629, "seconds": 211.92639994621277}
+ top: ['cnt_feature5', 'feature12', 'feature54', 'feature9', 'feature419', 'feature493', 'feature418', 'feature352', 'feature331', 'feature484', 'feature515', 'feature429', 'feature490', 'feature358', 'feature7']
+[250]	holdout's auc: 0.827802
+target {"holdout_auc": 0.8284677070613131, "best_iteration": 131, "auc_at_140": 0.8284152325536427, "features": 617, "seconds": 178.6348807811737}
+ top: ['feature12', 'feature493', 'feature54', 'feature9', 'te_feature18', 'feature418', 'feature352', 'feature358', 'feature419', 'feature417', 'feature429', 'feature430', 'te_feature20', 'feature7', 'feature19']
+[250]	holdout's auc: 0.88228
+all {"holdout_auc": 0.8825258075513115, "best_iteration": 191, "auc_at_140": 0.882178658273666, "features": 678, "seconds": 268.4228467941284}
+ top: ['feature54', 'feature12', 'rq_size', 'rq_rank_feature352', 'feature9', 'rq_rank_feature346', 'rq_items', 'te_feature18', 'feature484', 'feature419', 'feature490', 'feature493', 'feature331', 'feature352', 'feature19']
