@@ -1,0 +1,283 @@
+{
+  "status": "VERIFIED",
+  "folds": {
+    "primary": {
+      "scores": {
+        "tabm-control": 0.8392367454775699,
+        "history-tabm": 0.8391971118878214,
+        "matrix-factorization": 0.6918751620454328,
+        "node-only-tabm": 0.6835815383514465,
+        "graphsage-tabm": 0.7099571127228278,
+        "previous-best-ensemble": 0.8408057533245857
+      },
+      "paired_comparisons": {
+        "history-tabm-minus-tabm-control": {
+          "delta_auc": -3.9633589748455655e-05,
+          "group_count": 85985,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": -4.246702949581682e-05,
+          "percentile_95_interval": [
+            -0.00028285986283920205,
+            0.00022530040785894158
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        },
+        "matrix-factorization-minus-tabm-control": {
+          "delta_auc": -0.14736158343213712,
+          "group_count": 85985,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": -0.14728622042896514,
+          "percentile_95_interval": [
+            -0.1508262827617862,
+            -0.14324020978560198
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        },
+        "node-only-tabm-minus-tabm-control": {
+          "delta_auc": -0.15565520712612335,
+          "group_count": 85985,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": -0.1555515963804467,
+          "percentile_95_interval": [
+            -0.16000130268536752,
+            -0.15111104893113153
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        },
+        "graphsage-tabm-minus-tabm-control": {
+          "delta_auc": -0.12927963275474208,
+          "group_count": 85985,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": -0.1292895196464224,
+          "percentile_95_interval": [
+            -0.13316995000300863,
+            -0.12524400167710736
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        },
+        "graphsage-tabm-minus-node-only-tabm": {
+          "delta_auc": 0.026375574371381272,
+          "group_count": 85985,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": 0.026262076734024264,
+          "percentile_95_interval": [
+            0.023646483101518272,
+            0.02883541798006476
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        }
+      },
+      "entity_coverage": {
+        "both-seen": {
+          "rows": 15399,
+          "auc": {
+            "tabm-control": 0.8397813890977891,
+            "history-tabm": 0.8399054768747874,
+            "matrix-factorization": 0.6571265358680304,
+            "node-only-tabm": 0.6650592365089986,
+            "graphsage-tabm": 0.7089494890108426,
+            "previous-best-ensemble": 0.8407907231837647
+          }
+        },
+        "left-unseen": {
+          "rows": 289540,
+          "auc": {
+            "tabm-control": 0.8394477884646734,
+            "history-tabm": 0.8394275473829693,
+            "matrix-factorization": 0.6974233509197187,
+            "node-only-tabm": 0.6919390479835807,
+            "graphsage-tabm": 0.7186124532655199,
+            "previous-best-ensemble": 0.8410648293698668
+          }
+        },
+        "right-unseen": {
+          "rows": 24843,
+          "auc": {
+            "tabm-control": 0.8133125598557064,
+            "history-tabm": 0.8134147394725169,
+            "matrix-factorization": 0.5191699807017526,
+            "node-only-tabm": 0.6976409523574122,
+            "graphsage-tabm": 0.7063731424930147,
+            "previous-best-ensemble": 0.8151752543116515
+          }
+        }
+      },
+      "prediction_sources": {
+        "tabm-control": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/primary/tabm-control/validation_predictions.npz",
+          "sha256": "6bf8742ba9f3ae1c5688962804e8c474cbdc12d9baef67be19bd327cc72d12b4"
+        },
+        "history-tabm": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/primary/history-tabm/validation_predictions.npz",
+          "sha256": "31a4070cc07982738bff73b30b741e8c268bfbd4f8c309a3fd760d8309d715a1"
+        },
+        "matrix-factorization": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/primary/matrix-factorization/validation_predictions.npz",
+          "sha256": "fe2ee56e340b34edb12418a05d2b765089d23b093b8daeffdedcc21bd758b60a"
+        },
+        "node-only-tabm": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/primary/node-only-tabm/validation_predictions.npz",
+          "sha256": "a438eed4e0ae9ca71276b1aa598de81b0b05550991b9dea376187ddbec4c6032"
+        },
+        "graphsage-tabm": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/primary/graphsage-tabm/validation_predictions.npz",
+          "sha256": "30d82ead39cd8782f861dff25d881cea7192e4065491629698a1f3bccf649ff7"
+        },
+        "previous-best-ensemble": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/local-t016/validation_predictions.npz",
+          "sha256": "22c6af91319a185bd9f9d65fe8b67c040dd322033404318e281d0f29faf7c73c"
+        }
+      },
+      "training_rows": 1230110,
+      "validation_rows": 307528,
+      "training_seconds": {
+        "tabm-control": 275.85518652500014,
+        "history-tabm": 280.4802267949997,
+        "matrix-factorization": 60.951814083000045,
+        "node-only-tabm": 314.74550257500005,
+        "graphsage-tabm": 332.18292500100006
+      }
+    },
+    "earlier": {
+      "scores": {
+        "tabm-control": 0.8355554816536414,
+        "history-tabm": 0.8356107652171638,
+        "matrix-factorization": 0.6836643575914485,
+        "node-only-tabm": 0.6746812319678804,
+        "graphsage-tabm": 0.6996529262390824
+      },
+      "paired_comparisons": {
+        "history-tabm-minus-tabm-control": {
+          "delta_auc": 5.528356352246799e-05,
+          "group_count": 84631,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": 4.9752806604868585e-05,
+          "percentile_95_interval": [
+            -0.00016818719301184837,
+            0.00031473418600454775
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        },
+        "matrix-factorization-minus-tabm-control": {
+          "delta_auc": -0.15189112406219285,
+          "group_count": 84631,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": -0.15155415091247815,
+          "percentile_95_interval": [
+            -0.1549852105152979,
+            -0.1478489682571075
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        },
+        "node-only-tabm-minus-tabm-control": {
+          "delta_auc": -0.16087424968576092,
+          "group_count": 84631,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": -0.16062727203072413,
+          "percentile_95_interval": [
+            -0.16484951402008105,
+            -0.15666732836651617
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        },
+        "graphsage-tabm-minus-tabm-control": {
+          "delta_auc": -0.13590255541455898,
+          "group_count": 84631,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": -0.13570288366889038,
+          "percentile_95_interval": [
+            -0.13947364738979828,
+            -0.1317559208590186
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        },
+        "graphsage-tabm-minus-node-only-tabm": {
+          "delta_auc": 0.02497169427120194,
+          "group_count": 84631,
+          "repetitions": 200,
+          "excluded_single_class_draws": 0,
+          "mean_delta": 0.02492438836183374,
+          "percentile_95_interval": [
+            0.020926155538577143,
+            0.02884171874949924
+          ],
+          "interpretation": "request-clustered, conditional on selected models/weights; not selection-adjusted or time-block adjusted"
+        }
+      },
+      "entity_coverage": {
+        "both-seen": {
+          "rows": 8533,
+          "auc": {
+            "tabm-control": 0.820815035061384,
+            "history-tabm": 0.8217666415517064,
+            "matrix-factorization": 0.6256250638311812,
+            "node-only-tabm": 0.6501090991308682,
+            "graphsage-tabm": 0.6530114507518752
+          }
+        },
+        "left-unseen": {
+          "rows": 289687,
+          "auc": {
+            "tabm-control": 0.8359064373831977,
+            "history-tabm": 0.8359547647741999,
+            "matrix-factorization": 0.6868200603175163,
+            "node-only-tabm": 0.6786092498498708,
+            "graphsage-tabm": 0.7044746248900648
+          }
+        },
+        "right-unseen": {
+          "rows": 32684,
+          "auc": {
+            "tabm-control": 0.8061887201963195,
+            "history-tabm": 0.805391702083823,
+            "matrix-factorization": 0.5096928908078622,
+            "node-only-tabm": 0.6880170354595967,
+            "graphsage-tabm": 0.670372792617357
+          }
+        }
+      },
+      "prediction_sources": {
+        "tabm-control": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/earlier/tabm-control/validation_predictions.npz",
+          "sha256": "7f9754645f204fb79eb35230733f08c8789c284aec8b8122491ab2e20cd760c9"
+        },
+        "history-tabm": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/earlier/history-tabm/validation_predictions.npz",
+          "sha256": "6f7470aa8772c1d5e10edba218e86f44603936a7c0ec6c3d34026f76665926bb"
+        },
+        "matrix-factorization": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/earlier/matrix-factorization/validation_predictions.npz",
+          "sha256": "6baf808408fdcc64be0826fc649faddb0dc60ab48140f37d7230b60769db90a1"
+        },
+        "node-only-tabm": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/earlier/node-only-tabm/validation_predictions.npz",
+          "sha256": "e55135b3c34d5c69245645e25fa9c7dc78ae5779cf698e68a39c82cc072edcf3"
+        },
+        "graphsage-tabm": {
+          "path": "/Users/gokurockz/workspace/sharechat/artifacts/kaggle-t019-streamed/relational/earlier/graphsage-tabm/validation_predictions.npz",
+          "sha256": "ee46948be636346324894690d1708a852a369d4e71aadf297648f30efe3db479"
+        }
+      },
+      "training_rows": 710330,
+      "validation_rows": 299969,
+      "training_seconds": {
+        "tabm-control": 164.15460063,
+        "history-tabm": 165.71648963100006,
+        "matrix-factorization": 25.90773228900025,
+        "node-only-tabm": 182.46144315899983,
+        "graphsage-tabm": 190.4110458240002
+      }
+    }
+  },
+  "competition_submission": false,
+  "interpretation": "Two complete chronological folds, fixed budgets; bootstrap conditional on selected recipes, not seed/time uncertainty."
+}
