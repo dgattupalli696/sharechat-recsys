@@ -52,3 +52,19 @@ image and package versions. Report no holdout AUC for these refitted models;
 0.8408057533 is selection evidence from T016, not a new evaluation result.
 
 **No new leaderboard submission is approved.**
+
+## Completed
+
+Canonical Kaggle notebook version 14 completed all four refits in 2,853 seconds.
+Both TabM models used 11,621 optimizer steps and DCNv2 used 2,624; LightGBM
+used exactly 140 trees. All 1,537,638 labels were included.
+
+Independent verification confirmed frozen source/image, checkpoint hashes,
+full-training preprocessing/label counts, all 1,037,090 ordered test IDs and
+exact fixed-weight recombination. Both CSVs are ready under
+`artifacts/kaggle-t021/refit/`: `submission-full-tabm.csv` and
+`submission-full-ensemble.csv`. Neither was uploaded to the competition.
+
+See `results.json` and `independent-verification.json`. The separately requested
+T022 checkpoint-only former-holdout check is explicitly in-sample, not a new
+validation result.

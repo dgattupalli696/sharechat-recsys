@@ -1,0 +1,22 @@
+{
+  "status": "PREPARED",
+  "checkpoint_source": "T021",
+  "additional_training": false,
+  "unbiased_validation": false,
+  "competition_submission": false,
+  "source_sha256": {
+    "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+    "tabm_experiment.py": "7ddbb75066fc7b13e784f005b94d4cafb8c1fff4ec1abe9f25c637644b4f4e02",
+    "custom_network.py": "c2c057e1fff475309fcf6840edba4b6a92dc825f0d8b66bf1ff0ae7963e23d74",
+    "feature_models.py": "0ede9a201f776dacf3c474acf55405e1b798b6a8ad43d0588f8e10035b8fc525",
+    "tree_experiments.py": "3881d07c80fab2522b16019f47aa52c535f7171dec5aa55c156f8902308132bc",
+    "lightgbm_worker.py": "48d94ee98e030a54bc4eed25750b6313c66f2c1625d7a16eb08e23f16254269f",
+    "full_experiments.py": "67beb5dc134cfb7adf246fe699d423fbae987fe981f57bd5f5866806afcdc846",
+    "relational_audit.py": "7df2dc9e629659097765ccc4b866358b5f8c1efd4639064188ea7a624532a45c",
+    "relational_experiment.py": "bbe9bc4b0559018bd9c39b736c45683cb84bdd0fe78c323c776ba65339a4c6a2",
+    "refit_finalists.py": "8ec52157eb21604cfe9bee46606eaaaadb5c7f346ee293e8d812535d1a011260",
+    "evaluate_refit.py": "0621406e219db3fb9a9afe52cb958e69b7adec343a2c730058802a7ee4d44e61"
+  },
+  "bundle_manifest_sha256": "da6c33fec33973ba32d6aadbc20a8de50aa16ed526d763691a595d8416231c8e",
+  "notebook_sha256": "d2865ec8790c95e9cb4e70f6146dec2f1c3017962812ca256c53f1b14b5d991c"
+}

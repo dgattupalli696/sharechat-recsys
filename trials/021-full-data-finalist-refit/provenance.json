@@ -1,5 +1,5 @@
 {
-  "status": "PREPARED",
+  "status": "VERIFIED",
   "selection_trial": "T016",
   "source_sha256": {
     "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
@@ -16,5 +16,26 @@
   "notebook_sha256": "08384ca96c8d4a84c61ae6e6e4be2a3063dfdb80ae96ffe62e62b80c2119308e",
   "recipe_sha256": "632d92b6418192b3980b03aab201c7f5124c0042ab1bb275d86556b30bf698a4",
   "full_training_rows": 1537638,
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "e9f933a",
+  "kernel_version": 14,
+  "preprocessing_training_rows": 1537638,
+  "test_rows": 1037090,
+  "validation_auc": null,
+  "component_predictions_sha256": "548472e3afcfd85c9eb8e17cd16848eb07c1e387fa7f34eb358587fed78fdeda",
+  "submissions": {
+    "tabm": {
+      "file": "submission-full-tabm.csv",
+      "sha256": "cf4d079fa31c328ea8702a8bb94d6f8f797cf8421192bdf91648bb2d21c009d6",
+      "rows": 1037090
+    },
+    "ensemble": {
+      "file": "submission-full-ensemble.csv",
+      "sha256": "3aebcff63cb6a5cd9ba265433fc3cba139689a9a5a418ae77688f6978e19187b",
+      "rows": 1037090
+    }
+  },
+  "executed_notebook_sha256": "57fdd4e73586379c656b0c01e60bffaa9962eb826d137e4a843e7d868098065e",
+  "executed_metadata_sha256": "6fc246c1cf4692b010fc22776fe23f8ec22e5d73ab10a37f9a950ff31684f49e",
+  "artifacts": "artifacts/kaggle-t021"
 }
