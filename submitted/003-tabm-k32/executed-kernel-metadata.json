@@ -1,0 +1,25 @@
+{
+  "id": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "id_no": 144588605,
+  "title": "ShareChat Model Experiments GPU",
+  "code_file": "sharechat-model-experiments-gpu.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "gpu"
+  ],
+  "dataset_sources": [
+    "dheerajgattupalli/sharechat-s003-s004-checkpoints"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "sharechat"
+  ],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:de153e6d303881930c51286216393d56f56b26458d0661350305a1e8144eea01",
+  "machine_shape": "NvidiaTeslaT4"
+}

@@ -1,0 +1,102 @@
+[{"stream_name":"stderr","time":8.316896501,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.316945085,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.3169492,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.316951978,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.937043812,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.937071713,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.937075886,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.937079425,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":11.990186931,"data":"Processing /tmp/tmpfqg3ncdg/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":11.999863229,"data":"Processing /tmp/tmpfqg3ncdg/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":12.029073783,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":12.0880032,"data":"\n"}
+,{"stream_name":"stdout","time":12.170581937,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":12.192772563,"data":"Processing /tmp/tmpfqg3ncdg/rtdl_num_embeddings-0.0.12-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":12.192796424,"data":"Processing /tmp/tmpfqg3ncdg/tabm-0.0.3-py3-none-any.whl\n"}
+,{"stream_name":"stdout","time":12.192800355,"data":"Installing collected packages: tabm, rtdl-num-embeddings\n"}
+,{"stream_name":"stdout","time":12.192803854,"data":"\n"}
+,{"stream_name":"stdout","time":12.192806941,"data":"Successfully installed rtdl-num-embeddings-0.0.12 tabm-0.0.3\n"}
+,{"stream_name":"stdout","time":12.244865366,"data":"Pinned offline TabM dependencies verified\n"}
+,{"stream_name":"stdout","time":147.313018853,"data":"Full validation replay passed: {\"tabm32\": {\"validation_auc\": 0.8404542697491089, \"reference_auc\": 0.840454269749109, \"max_probability_error\": 5.960464477539063e-08}, \"tabm8\": {\"validation_auc\": 0.8400069636792696, \"reference_auc\": 0.8400069636792695, \"max_probability_error\": 5.960464477539063e-08}, \"dcn32\": {\"validation_auc\": 0.8389150778143838, \"reference_auc\": 0.8389150778143838, \"max_probability_error\": 1.4901161193847656e-07}, \"lightgbm\": {\"validation_auc\": 0.8255838642764893, \"reference_auc\": 0.8255838642764893, \"max_probability_error\": 5.551115123125783e-17}, \"ensemble\": {\"validation_auc\": 0.8408057533245856, \"reference_auc\": 0.8408057533245856, \"max_probability_error\": 3.352761274166838e-08}}\n"}
+,{"stream_name":"stdout","time":188.297070113,"data":"Test: 163,840/1,037,090\n"}
+,{"stream_name":"stdout","time":225.835181603,"data":"Test: 327,680/1,037,090\n"}
+,{"stream_name":"stdout","time":261.293118407,"data":"Test: 491,520/1,037,090\n"}
+,{"stream_name":"stdout","time":298.635533742,"data":"Test: 655,360/1,037,090\n"}
+,{"stream_name":"stdout","time":336.86804234,"data":"Test: 819,200/1,037,090\n"}
+,{"stream_name":"stdout","time":372.553096501,"data":"Test: 983,040/1,037,090\n"}
+,{"stream_name":"stdout","time":403.07583172,"data":"{\n"}
+,{"stream_name":"stdout","time":403.075871844,"data":"  \"status\": \"COMPLETE\",\n"}
+,{"stream_name":"stdout","time":403.075878194,"data":"  \"refit\": false,\n"}
+,{"stream_name":"stdout","time":403.075894156,"data":"  \"automatic_competition_submission\": false,\n"}
+,{"stream_name":"stdout","time":403.075898238,"data":"  \"bundle_manifest_sha256\": \"5f450f6775b9b3a5ec797b63688a6799bafb6b3f00f6d4bc4b7fdf20fe243649\",\n"}
+,{"stream_name":"stdout","time":403.075902319,"data":"  \"versions\": {\n"}
+,{"stream_name":"stdout","time":403.075905907,"data":"    \"torch\": \"2.11.0+cu130\",\n"}
+,{"stream_name":"stdout","time":403.075911367,"data":"    \"tabm\": \"0.0.3\",\n"}
+,{"stream_name":"stdout","time":403.075919715,"data":"    \"rtdl_num_embeddings\": \"0.0.12\",\n"}
+,{"stream_name":"stdout","time":403.075922418,"data":"    \"numpy\": \"2.1.3\",\n"}
+,{"stream_name":"stdout","time":403.075925015,"data":"    \"polars\": \"1.35.2\",\n"}
+,{"stream_name":"stdout","time":403.075946099,"data":"    \"scikit-learn\": \"1.6.1\",\n"}
+,{"stream_name":"stdout","time":403.075950638,"data":"    \"lightgbm\": \"4.6.0\"\n"}
+,{"stream_name":"stdout","time":403.075954822,"data":"  },\n"}
+,{"stream_name":"stdout","time":403.075958912,"data":"  \"validation_replay\": {\n"}
+,{"stream_name":"stdout","time":403.075962489,"data":"    \"tabm32\": {\n"}
+,{"stream_name":"stdout","time":403.075966425,"data":"      \"validation_auc\": 0.8404542697491089,\n"}
+,{"stream_name":"stdout","time":403.075970777,"data":"      \"reference_auc\": 0.840454269749109,\n"}
+,{"stream_name":"stdout","time":403.075975403,"data":"      \"max_probability_error\": 5.960464477539063e-08\n"}
+,{"stream_name":"stdout","time":403.075979443,"data":"    },\n"}
+,{"stream_name":"stdout","time":403.075983609,"data":"    \"tabm8\": {\n"}
+,{"stream_name":"stdout","time":403.076000549,"data":"      \"validation_auc\": 0.8400069636792696,\n"}
+,{"stream_name":"stdout","time":403.076004402,"data":"      \"reference_auc\": 0.8400069636792695,\n"}
+,{"stream_name":"stdout","time":403.076008154,"data":"      \"max_probability_error\": 5.960464477539063e-08\n"}
+,{"stream_name":"stdout","time":403.076012197,"data":"    },\n"}
+,{"stream_name":"stdout","time":403.076016104,"data":"    \"dcn32\": {\n"}
+,{"stream_name":"stdout","time":403.076019549,"data":"      \"validation_auc\": 0.8389150778143838,\n"}
+,{"stream_name":"stdout","time":403.076023222,"data":"      \"reference_auc\": 0.8389150778143838,\n"}
+,{"stream_name":"stdout","time":403.076026784,"data":"      \"max_probability_error\": 1.4901161193847656e-07\n"}
+,{"stream_name":"stdout","time":403.076030189,"data":"    },\n"}
+,{"stream_name":"stdout","time":403.07603364,"data":"    \"lightgbm\": {\n"}
+,{"stream_name":"stdout","time":403.07603719,"data":"      \"validation_auc\": 0.8255838642764893,\n"}
+,{"stream_name":"stdout","time":403.076040876,"data":"      \"reference_auc\": 0.8255838642764893,\n"}
+,{"stream_name":"stdout","time":403.076044452,"data":"      \"max_probability_error\": 5.551115123125783e-17\n"}
+,{"stream_name":"stdout","time":403.076048291,"data":"    },\n"}
+,{"stream_name":"stdout","time":403.076051967,"data":"    \"ensemble\": {\n"}
+,{"stream_name":"stdout","time":403.076056137,"data":"      \"validation_auc\": 0.8408057533245856,\n"}
+,{"stream_name":"stdout","time":403.076109635,"data":"      \"reference_auc\": 0.8408057533245856,\n"}
+,{"stream_name":"stdout","time":403.076124878,"data":"      \"max_probability_error\": 3.352761274166838e-08\n"}
+,{"stream_name":"stdout","time":403.076128962,"data":"    }\n"}
+,{"stream_name":"stdout","time":403.076132482,"data":"  },\n"}
+,{"stream_name":"stdout","time":403.076135803,"data":"  \"submissions\": {\n"}
+,{"stream_name":"stdout","time":403.07613961,"data":"    \"tabm\": {\n"}
+,{"stream_name":"stdout","time":403.076400429,"data":"      \"file\": \"submission-tabm.csv\",\n"}
+,{"stream_name":"stdout","time":403.076406728,"data":"      \"sha256\": \"18dd803d10569f72bcfa7c90636e066aeff4c66006db8ee1ae75c7a8fb8460cf\",\n"}
+,{"stream_name":"stdout","time":403.076410635,"data":"      \"rows\": 1037090,\n"}
+,{"stream_name":"stdout","time":403.076414144,"data":"      \"minimum\": 7.024924570941948e-07,\n"}
+,{"stream_name":"stdout","time":403.07641792,"data":"      \"mean\": 0.05034592002630234,\n"}
+,{"stream_name":"stdout","time":403.076421438,"data":"      \"maximum\": 0.7691372036933899\n"}
+,{"stream_name":"stdout","time":403.076424835,"data":"    },\n"}
+,{"stream_name":"stdout","time":403.076428445,"data":"    \"ensemble\": {\n"}
+,{"stream_name":"stdout","time":403.076431877,"data":"      \"file\": \"submission-ensemble.csv\",\n"}
+,{"stream_name":"stdout","time":403.076435615,"data":"      \"sha256\": \"1480d46ad1dc53da950968b4b470212c9c9a942b5aa75eaf7478576fb99e57aa\",\n"}
+,{"stream_name":"stdout","time":403.076439097,"data":"      \"rows\": 1037090,\n"}
+,{"stream_name":"stdout","time":403.076442495,"data":"      \"minimum\": 0.00017527672697532885,\n"}
+,{"stream_name":"stdout","time":403.076445928,"data":"      \"mean\": 0.05048866311158736,\n"}
+,{"stream_name":"stdout","time":403.07644962,"data":"      \"maximum\": 0.7298843167804294\n"}
+,{"stream_name":"stdout","time":403.076453086,"data":"    }\n"}
+,{"stream_name":"stdout","time":403.076456588,"data":"  },\n"}
+,{"stream_name":"stdout","time":403.076459823,"data":"  \"ensemble_weights\": {\n"}
+,{"stream_name":"stdout","time":403.076463407,"data":"    \"tabm32\": 0.45,\n"}
+,{"stream_name":"stdout","time":403.076466632,"data":"    \"tabm8\": 0.225,\n"}
+,{"stream_name":"stdout","time":403.076470554,"data":"    \"dcn32\": 0.225,\n"}
+,{"stream_name":"stdout","time":403.076473846,"data":"    \"lightgbm\": 0.1\n"}
+,{"stream_name":"stdout","time":403.076477305,"data":"  },\n"}
+,{"stream_name":"stdout","time":403.076480498,"data":"  \"inference_seconds\": 378.861586526\n"}
+,{"stream_name":"stdout","time":403.076484007,"data":"}\n"}
+,{"stream_name":"stderr","time":408.879328123,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":408.879361093,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":409.065094251,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":409.065121123,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":409.889914133,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":409.969618949,"data":"[NbConvertApp] Writing 143228 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":412.588061093,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":413.41885241,"data":"[NbConvertApp] Writing 696553 bytes to __results__.html\n"}
+]

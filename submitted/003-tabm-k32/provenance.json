@@ -18,5 +18,9 @@
     "predict_finalists.py": "55e4fa93cde6cd0237a69f19e2c8a2a299dcf53405b905c9c3403d73cc9ebbb6"
   },
   "notebook_sha256": "de6a3a11e2c44a4ef0fb227ac3326918806d5488a1e539538765d43f4fc57c73",
-  "configuration_sha256": "a8d0ec99ec5ee8985a97fad09b8a4432e05247d477bb644b0ee3b3f02f4d6989"
+  "configuration_sha256": "a8d0ec99ec5ee8985a97fad09b8a4432e05247d477bb644b0ee3b3f02f4d6989",
+  "source_revision": "667ae811dfb37770e3285106c5977cc896a97011",
+  "inference_kernel_version": 10,
+  "independent_verification": "independent-verification.json",
+  "submission_uploads_completed": false
 }

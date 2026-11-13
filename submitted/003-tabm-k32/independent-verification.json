@@ -1,0 +1,55 @@
+{
+  "status": "VERIFIED",
+  "source_revision": "667ae811dfb37770e3285106c5977cc896a97011",
+  "inference_kernel_version": 10,
+  "refit": false,
+  "full_validation_rows": 307528,
+  "test_rows": 1037090,
+  "validation_replay": {
+    "tabm32": {
+      "validation_auc": 0.8404542697491091,
+      "reference_auc": 0.840454269749109,
+      "max_probability_error": 5.960464477539063e-08
+    },
+    "tabm8": {
+      "validation_auc": 0.8400069636792695,
+      "reference_auc": 0.8400069636792696,
+      "max_probability_error": 5.960464477539063e-08
+    },
+    "dcn32": {
+      "validation_auc": 0.8389150778143839,
+      "reference_auc": 0.8389150778143838,
+      "max_probability_error": 1.4901161193847656e-07
+    },
+    "lightgbm": {
+      "validation_auc": 0.8255838642764893,
+      "reference_auc": 0.8255838642764893,
+      "max_probability_error": 5.551115123125783e-17
+    },
+    "ensemble": {
+      "validation_auc": 0.8408057533245857,
+      "reference_auc": 0.8408057533245857,
+      "max_probability_error": 3.352761274166838e-08
+    }
+  },
+  "submissions": {
+    "tabm": {
+      "file": "submission-tabm.csv",
+      "sha256": "18dd803d10569f72bcfa7c90636e066aeff4c66006db8ee1ae75c7a8fb8460cf",
+      "rows": 1037090,
+      "minimum": 7.024924570941948e-07,
+      "mean": 0.05034592002630234,
+      "maximum": 0.7691372036933899
+    },
+    "ensemble": {
+      "file": "submission-ensemble.csv",
+      "sha256": "1480d46ad1dc53da950968b4b470212c9c9a942b5aa75eaf7478576fb99e57aa",
+      "rows": 1037090,
+      "minimum": 0.00017527672697532885,
+      "mean": 0.05048866311158736,
+      "maximum": 0.7298843167804294
+    }
+  },
+  "executed_notebook_sha256": "3b9ec2694e7f576cdca4fc2b79f2efcb9fa57ce9bd3f8bbdec3798c5c962db81",
+  "executed_metadata_sha256": "82b67b7c3aa58023cce6ee5ead28f1b3b0a823bd87eaec00a3174a27c84b1fc9"
+}
