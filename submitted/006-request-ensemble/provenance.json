@@ -1,0 +1,13 @@
+{
+  "submission_archive": "S006",
+  "shared_inference_archive": "../005-request-tabm-k32",
+  "training_validation_auc": 0.88981812,
+  "ensemble_weights": {
+    "tabm32": 0.45,
+    "tabm8": 0.225,
+    "dcn32": 0.225,
+    "lightgbm": 0.1
+  },
+  "refit": false,
+  "approval_scope": "one approved ensemble upload"
+}

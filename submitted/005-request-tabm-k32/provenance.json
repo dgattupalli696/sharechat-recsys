@@ -1,0 +1,23 @@
+{
+  "submission_archives": [
+    "S005",
+    "S006"
+  ],
+  "approval_scope": "exactly two uploads: best TabM and highest ensemble",
+  "training_trial": "T024 neural plus T024 LightGBM; T016 weights",
+  "inference_kaggle_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "refit": false,
+  "automatic_competition_submission": false,
+  "model_bundle_manifest_sha256": "7a87e6952eb1efde912cdf59af44f0d56d48ee4c16ffe61c32dc20683fb269e2",
+  "inference_source_sha256": {
+    "train.py": "56f286aa9fc3acf25d37e81a2b02e3a928e74c20c7e7e4b96872dba6d7e4ce5b",
+    "tabm_experiment.py": "6ccd2119312084a69a94bb0a27f93925949c50f0237f31c2378d7c4e8f78ef08",
+    "custom_network.py": "c2c057e1fff475309fcf6840edba4b6a92dc825f0d8b66bf1ff0ae7963e23d74",
+    "feature_models.py": "0ede9a201f776dacf3c474acf55405e1b798b6a8ad43d0588f8e10035b8fc525",
+    "lightgbm_worker.py": "48d94ee98e030a54bc4eed25750b6313c66f2c1625d7a16eb08e23f16254269f",
+    "request_features.py": "121e28925610cfb68d21cb8c88976c508c39cb3e72e72bc9532a76e94bef08ee",
+    "predict_finalists.py": "55e4fa93cde6cd0237a69f19e2c8a2a299dcf53405b905c9c3403d73cc9ebbb6"
+  },
+  "notebook_sha256": "e607d7339656835f58f008a25e8049aa416ad0cfada17a2e8487ac4e64be89ae",
+  "configuration_sha256": "7b335f729c328c9874ff43f1c17630f297fa91a93a4c4f6b01e80c66ed823768"
+}
