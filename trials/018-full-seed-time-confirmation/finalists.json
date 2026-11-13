@@ -1,0 +1,112 @@
+{
+  "scope": "validation checkpoints; no competition-test inference or final all-row refit",
+  "competition_submission": false,
+  "submission_requires_explicit_approval": true,
+  "selected_neural_family": {
+    "recipe": {
+      "vector_crosses": true,
+      "drop_high": true,
+      "numerical_encoding": "plr",
+      "members": 32
+    },
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "source_revision": "88c26c4",
+    "source_sha256": {
+      "train.py": "984f09f203ddf8d751e3454a335f7fdfa68c1ed1b2b6b6cdce4467a54ae00bbc",
+      "tabm_experiment.py": "7ddbb75066fc7b13e784f005b94d4cafb8c1fff4ec1abe9f25c637644b4f4e02",
+      "custom_network.py": "c2c057e1fff475309fcf6840edba4b6a92dc825f0d8b66bf1ff0ae7963e23d74",
+      "feature_models.py": "0ede9a201f776dacf3c474acf55405e1b798b6a8ad43d0588f8e10035b8fc525",
+      "lightgbm_worker.py": "c149ead477061216d744a19f26b3b0d1b68a38c8c5bbc49418b140aceb0fd3bd",
+      "tree_experiments.py": "3881d07c80fab2522b16019f47aa52c535f7171dec5aa55c156f8902308132bc",
+      "full_experiments.py": "6df0999773e5bd00d68fcf2d88e0de4f59bc8277fe0ae6234c8a5fbb16fe07c8"
+    },
+    "summary": [
+      {
+        "fold": "primary",
+        "recipe": "tabm-k32-plr-cross-masked",
+        "mean_auc": 0.840305216709306,
+        "std_auc": 0.00015551316770614837,
+        "seed_aucs": [
+          0.840454269749109,
+          0.840317418148127,
+          0.8401439622306823
+        ]
+      },
+      {
+        "fold": "earlier",
+        "recipe": "tabm-k32-plr-cross-masked",
+        "mean_auc": 0.8370326457334203,
+        "std_auc": 5.1045889324546524e-05,
+        "seed_aucs": [
+          0.8370715265976901,
+          0.8369748400616517,
+          0.8370515705409194
+        ]
+      }
+    ]
+  },
+  "best_observed_primary_holdout": {
+    "trial": "T016",
+    "validation_auc": 0.8408057533245857,
+    "flat_weights": {
+      "tabm_k32_seed42": 0.45,
+      "tabm_k8_seed42": 0.225,
+      "dcnv2_r32_seed42": 0.225,
+      "lightgbm_seed42": 0.1
+    },
+    "prediction_sha256": "22c6af91319a185bd9f9d65fe8b67c040dd322033404318e281d0f29faf7c73c",
+    "exact_four_component_mixture_confirmed_on_earlier_fold": false
+  },
+  "two_fold_confirmed_frozen_vote": {
+    "family_weights": {
+      "tabm_k32": 0.75,
+      "dcnv2_r32": 0.25
+    },
+    "seeds_per_family": [
+      42,
+      43,
+      44
+    ],
+    "member_weights": {
+      "tabm-k32-plr-cross-masked-seed-42": 0.25,
+      "tabm-k32-plr-cross-masked-seed-43": 0.25,
+      "tabm-k32-plr-cross-masked-seed-44": 0.25,
+      "dcnv2-r32-plr-cross-masked-seed-42": 0.08333333333333333,
+      "dcnv2-r32-plr-cross-masked-seed-43": 0.08333333333333333,
+      "dcnv2-r32-plr-cross-masked-seed-44": 0.08333333333333333
+    },
+    "folds": {
+      "primary": {
+        "validation_auc": 0.840752511965597,
+        "prediction_path": "artifacts/local-t018-confirmation-analysis/primary/frozen-75-25.npz",
+        "prediction_sha256": "58ab1dbd302380666a0e3bef21ffaf05a8bce83acb98b86b917815fa5692291e",
+        "checkpoint_sha256": {
+          "tabm-k32-plr-cross-masked-seed-42": "b732b1f47a2f33453ac6f203024ce1b9d973a1a199c89951d72b9322b4b43d76",
+          "tabm-k32-plr-cross-masked-seed-43": "3f3aa883c7f002ec9d41cbfc1b382f12aa2ab38ee2ca85968a6d7e1f127df780",
+          "tabm-k32-plr-cross-masked-seed-44": "3091e5e62799229ba17d91e8e5721832db78692116e0455e16ac230d10ca6d3b",
+          "dcnv2-r32-plr-cross-masked-seed-42": "9234f6378b14679e5a7a097f7c0151568eff6c1b71e65a260d94a00f7d4e8113",
+          "dcnv2-r32-plr-cross-masked-seed-43": "6975d92149394d2952be987e36c1860300afa9dd45db15224c4bde09b2b34adb",
+          "dcnv2-r32-plr-cross-masked-seed-44": "bc6e2c867673cc62753b1a3efbb8a06ab36775e7e829e31591da2f8e55822c3b"
+        }
+      },
+      "earlier": {
+        "validation_auc": 0.8375490212414675,
+        "prediction_path": "artifacts/local-t018-confirmation-analysis/earlier/frozen-75-25.npz",
+        "prediction_sha256": "47e9b806cee176c284d4002e0676627c6728dbb94067a933a7bc14e6759284db",
+        "checkpoint_sha256": {
+          "tabm-k32-plr-cross-masked-seed-42": "946a2ec4e6d8296c53c357e4fcbb9515f29af6309b8a2cbaac844de7d963e201",
+          "tabm-k32-plr-cross-masked-seed-43": "5b58a370c3b519423a7210b080f0db55f1baf7700bb7706ce64a0e0ce1b7885c",
+          "tabm-k32-plr-cross-masked-seed-44": "39ee673d81c1489202f0bfa682c52108c3ec769e67e85fc69f87b6445fd88626",
+          "dcnv2-r32-plr-cross-masked-seed-42": "87a611652254838fc45eef35013b733ee57bbf09693bd97f9d5fb1712a60a67f",
+          "dcnv2-r32-plr-cross-masked-seed-43": "cdb1debace262d5a070f6e76ce86183aef42e1e5a6839ac7a1130e95c6f4153a",
+          "dcnv2-r32-plr-cross-masked-seed-44": "4a9045d3f0ed81bc17678bf4b01aae4e375d1b4dc38a91d6afd6eed89c645db2"
+        }
+      }
+    }
+  },
+  "interpretation": "Scores and intervals are conditional, not untouched future-test confirmation."
+}

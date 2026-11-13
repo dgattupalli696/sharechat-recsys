@@ -41,3 +41,57 @@ early stopping still uses each fold's validation labels.
 T017's full two-base stack scored 0.8394886338, below T016's 0.8408057533
 best blend; it does not replace these finalists. The GNN follow-up remains
 deferred. No competition submission.
+
+## Completed full-data results
+
+All 18 fits completed on canonical notebook v9. The original primary
+seed-42 probabilities, targets and identities reproduced exactly for all
+three recipes. Values below are three-seed AUC mean +/- sample standard
+deviation, not confidence intervals.
+
+| Model | Primary | Earlier |
+| --- | ---: | ---: |
+| Reference | 0.829399 +/- 0.000143 | 0.824690 +/- 0.000589 |
+| TabM k32 | **0.840305 +/- 0.000156** | **0.837033 +/- 0.000051** |
+| DCNv2-r32 | 0.838849 +/- 0.000192 | 0.835442 +/- 0.000067 |
+
+| Model | Primary mean logloss | Earlier mean logloss |
+| --- | ---: | ---: |
+| Reference | 0.1586804 | 0.1664664 |
+| TabM k32 | **0.1553804** | **0.1631073** |
+| DCNv2-r32 | 0.1562876 | 0.1637575 |
+
+Total recorded model fitting/prediction time was 2.914 GPU hours, plus
+8.88 minutes preparing the two full folds. The individual per-seed AUC,
+logloss, selected checkpoint and duration are in `results.json`.
+
+## Fixed seed averaging and frozen vote
+
+Average probabilities across the same three seeds, then apply the already
+selected 75% k32 / 25% DCN mixture. No new weight search on either fold.
+
+| Seed-averaged prediction | Primary AUC | Earlier AUC |
+| --- | ---: | ---: |
+| Reference | 0.8305613051 | 0.8258823541 |
+| TabM k32 | 0.8406124465 | 0.8374046118 |
+| DCNv2-r32 | 0.8400306532 | 0.8366054339 |
+| Frozen 75/25 vote | **0.8407525120** | **0.8375490212** |
+
+The frozen vote improves the k32 seed mean by 0.0001400655 on primary
+and 0.0001444094 on earlier. Conditional 500-replicate request-bootstrap
+95% delta intervals are [+0.0000357, +0.0002497] and
+[+0.0000391, +0.0002451], respectively. These intervals are neither
+selection-adjusted nor time-block-adjusted.
+
+T016 remains the best observed primary holdout score, 0.8408057533.
+The frozen six-model vote differs by -0.0000532414, with conditional
+95% delta interval [-0.0002475, +0.0001236]; the difference is inconclusive.
+This confirms the improved model family and complementary errors across
+both periods, not the exact four-component T016 mixture. Preserve both
+candidates; do not claim independent test/leaderboard confirmation.
+
+`finalists.json` freezes the selected k32 recipe, the best observed holdout
+mixture and the two-fold-confirmed vote separately. `analysis-results.json`
+records source fingerprints and bootstrap results.
+From the repository root, `python trials/018-full-seed-time-confirmation/analyze_results.py`
+recreates the fixed postprocessing from the saved model predictions.

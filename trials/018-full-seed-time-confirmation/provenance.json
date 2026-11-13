@@ -29,5 +29,228 @@
     }
   },
   "scope": "three seeds per recipe on the complete primary and predeclared earlier temporal partitions",
-  "competition_submission": false
+  "competition_submission": false,
+  "source_revision": "88c26c4",
+  "kaggle_kernel_version": 9,
+  "kaggle_kernel_id": 144588605,
+  "kaggle_status": "COMPLETE",
+  "artifact_sha256": {
+    "primary/reference-seed-42/best_model.pt": "cb76e8c52b84f929f133df7c29b3c8d525a38133b528396bfcfaccdbce9dd4df",
+    "primary/reference-seed-42/validation_predictions.npz": "8475e8b419d43d19054113c3f16bbfd35ab97d3bd4bec612b502ff2954080d33",
+    "primary/reference-seed-43/best_model.pt": "c8a71c3abf3ba8fabc48a47e4d26157cc365f562de05c6f45c5bd39f795152ee",
+    "primary/reference-seed-43/validation_predictions.npz": "a8618cd9c060855675f1978e6805ed11052ace56168911ebfdaf2465912198af",
+    "primary/reference-seed-44/best_model.pt": "3f841af7c4ba5841525e368ea83be16daf9bc7b6c1c1d64d93031dc18d656440",
+    "primary/reference-seed-44/validation_predictions.npz": "6cdf715d230d7548ae766b10ef33fe23158f9eb36fd36af9d649b0b747ee2c0c",
+    "primary/tabm-k32-plr-cross-masked-seed-42/best_model.pt": "b732b1f47a2f33453ac6f203024ce1b9d973a1a199c89951d72b9322b4b43d76",
+    "primary/tabm-k32-plr-cross-masked-seed-42/validation_predictions.npz": "224ff96a1a50bf867c02c0cf3b01fd58d9e2bdd13b9f5763156441c99b319b53",
+    "primary/tabm-k32-plr-cross-masked-seed-43/best_model.pt": "3f3aa883c7f002ec9d41cbfc1b382f12aa2ab38ee2ca85968a6d7e1f127df780",
+    "primary/tabm-k32-plr-cross-masked-seed-43/validation_predictions.npz": "7c5eb7aa9b0eeb7901d1d1d4046835c5ee1ecce3a4566467080c53d3f7daa329",
+    "primary/tabm-k32-plr-cross-masked-seed-44/best_model.pt": "3091e5e62799229ba17d91e8e5721832db78692116e0455e16ac230d10ca6d3b",
+    "primary/tabm-k32-plr-cross-masked-seed-44/validation_predictions.npz": "cc9ec45afebbf55c17c5df2f17fd6a5876ae604e406ff00b6e7391e320791f8b",
+    "primary/dcnv2-r32-plr-cross-masked-seed-42/best_model.pt": "9234f6378b14679e5a7a097f7c0151568eff6c1b71e65a260d94a00f7d4e8113",
+    "primary/dcnv2-r32-plr-cross-masked-seed-42/validation_predictions.npz": "24ee6a4d522966d5763705b55b3e5c3785fb3daf6dabf3574f4709201c9cc484",
+    "primary/dcnv2-r32-plr-cross-masked-seed-43/best_model.pt": "6975d92149394d2952be987e36c1860300afa9dd45db15224c4bde09b2b34adb",
+    "primary/dcnv2-r32-plr-cross-masked-seed-43/validation_predictions.npz": "6bfb1f69739ee305c9fbacc43cc4bedf4419fe577c5c159af890d1f9b87015f1",
+    "primary/dcnv2-r32-plr-cross-masked-seed-44/best_model.pt": "bc6e2c867673cc62753b1a3efbb8a06ab36775e7e829e31591da2f8e55822c3b",
+    "primary/dcnv2-r32-plr-cross-masked-seed-44/validation_predictions.npz": "68ba3b24954590c24c3b6a4d49678741de764f9015089fb55d6dfb1b546b2487",
+    "earlier/reference-seed-42/best_model.pt": "41552ed0c5c5704a66ce4638fc8eff691af8c6e07441c1b578de443d4f1ddda5",
+    "earlier/reference-seed-42/validation_predictions.npz": "3cf0cd04a164bce05156db48bfe43b80e0ca4a0fd900e980ea695d24c3aa6dd7",
+    "earlier/reference-seed-43/best_model.pt": "b19d9681e34f123a880d579f1c1d271bf4e4c55c2d8f2b1cf1db8cf876e14739",
+    "earlier/reference-seed-43/validation_predictions.npz": "e2915723abbf33fe2eecbe38879cd081a8169dd50100bceac29483c89ddafa3b",
+    "earlier/reference-seed-44/best_model.pt": "12e62a5c8f68c24b902fe1298f8063313c5773b8a2575592b62f515484f1ae62",
+    "earlier/reference-seed-44/validation_predictions.npz": "00fb4bce1a319547ecce500cb59b5516a045ce134f752fbb654b83f0d1217e7b",
+    "earlier/tabm-k32-plr-cross-masked-seed-42/best_model.pt": "946a2ec4e6d8296c53c357e4fcbb9515f29af6309b8a2cbaac844de7d963e201",
+    "earlier/tabm-k32-plr-cross-masked-seed-42/validation_predictions.npz": "ff22928cb1ce7f28bc60f345d48ccfbb721fcd3869fd887ca81a17c83dedc06d",
+    "earlier/tabm-k32-plr-cross-masked-seed-43/best_model.pt": "5b58a370c3b519423a7210b080f0db55f1baf7700bb7706ce64a0e0ce1b7885c",
+    "earlier/tabm-k32-plr-cross-masked-seed-43/validation_predictions.npz": "dfa73926b81e22e15abd7b9448610c8b6ba3c51a0912b8aa8c7b2ba7f7011131",
+    "earlier/tabm-k32-plr-cross-masked-seed-44/best_model.pt": "39ee673d81c1489202f0bfa682c52108c3ec769e67e85fc69f87b6445fd88626",
+    "earlier/tabm-k32-plr-cross-masked-seed-44/validation_predictions.npz": "0839fa230a699dd66161aadab075151e08a5dba837dd7248086f1af51c74c706",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-42/best_model.pt": "87a611652254838fc45eef35013b733ee57bbf09693bd97f9d5fb1712a60a67f",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-42/validation_predictions.npz": "6c885c333a3e3eb9620f092538588d464a09e36048fabf6f784a2abee125833f",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-43/best_model.pt": "cdb1debace262d5a070f6e76ce86183aef42e1e5a6839ac7a1130e95c6f4153a",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-43/validation_predictions.npz": "e3f136dad49fa34c61e8a128c963ed93fd59338f16dfa1fed33e7eb8aea342bc",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-44/best_model.pt": "4a9045d3f0ed81bc17678bf4b01aae4e375d1b4dc38a91d6afd6eed89c645db2",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-44/validation_predictions.npz": "869f267e08db8cb5cc2ed0deab8087434ed0e44057b10292d1bd39d8b92f2aea",
+    "confirmation-specs.json": "67568445298a7d81c82762400982e5c03ba64e88e29d90cea775909ee6db26eb",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-42/category-remappings.joblib": "31ed8e8cac61c5a813cfe1855a5ce43db9f095d0040b262de26b9f8a3303927f",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-42/results.json": "e2de78d1d8c932630bc18d414ffd8bfd7ca57b0a95ef6ee0641ab94e788b20dd",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-43/category-remappings.joblib": "31ed8e8cac61c5a813cfe1855a5ce43db9f095d0040b262de26b9f8a3303927f",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-43/results.json": "cf2b8b8f8000bb58f6ba9f2c64d7f45581e681782b3b534826599db86cec71cd",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-44/category-remappings.joblib": "31ed8e8cac61c5a813cfe1855a5ce43db9f095d0040b262de26b9f8a3303927f",
+    "earlier/dcnv2-r32-plr-cross-masked-seed-44/results.json": "ce50a8ac8c108e91d31c57c1d04be620d2f8447b699124e85cf067c53bedafea",
+    "earlier/preprocessing.joblib": "6eabd21d73c52cda7c45296035db824015d2ada441c27f92ac0a605a907791ef",
+    "earlier/protocol.json": "fe3ce2b0ba89f696f8d062d0e8348c2e9549a9a20e936a8b65b12ab523a386e6",
+    "earlier/reference-seed-42/category-remappings.joblib": "559121ef5c7bfe68675eecfd03a3187692693bd636fce1be05d866b4efac6801",
+    "earlier/reference-seed-42/results.json": "c07bf1f391a7dba109f974df09dc99406ee1bf82f0e7bf01e3b429eadc269cc8",
+    "earlier/reference-seed-43/category-remappings.joblib": "559121ef5c7bfe68675eecfd03a3187692693bd636fce1be05d866b4efac6801",
+    "earlier/reference-seed-43/results.json": "411b8f18e9e13c77c52acf925391e1fc86669ebf9586aaee328f3e3504434375",
+    "earlier/reference-seed-44/category-remappings.joblib": "559121ef5c7bfe68675eecfd03a3187692693bd636fce1be05d866b4efac6801",
+    "earlier/reference-seed-44/results.json": "5c3a43d549faa933639ba13b7c293f87de91626bae5fccec609fc2dcdeed5d0b",
+    "earlier/tabm-k32-plr-cross-masked-seed-42/category-remappings.joblib": "31ed8e8cac61c5a813cfe1855a5ce43db9f095d0040b262de26b9f8a3303927f",
+    "earlier/tabm-k32-plr-cross-masked-seed-42/results.json": "451ae1ea0270bd23f9aa4815aa06bb7088b1d68a5cce47e48be8e90ce3699dcc",
+    "earlier/tabm-k32-plr-cross-masked-seed-43/category-remappings.joblib": "31ed8e8cac61c5a813cfe1855a5ce43db9f095d0040b262de26b9f8a3303927f",
+    "earlier/tabm-k32-plr-cross-masked-seed-43/results.json": "8879c3e6cb8481826cfacf24d3cee19faaa9181e7ed9e3062a11a8562a0c2886",
+    "earlier/tabm-k32-plr-cross-masked-seed-44/category-remappings.joblib": "31ed8e8cac61c5a813cfe1855a5ce43db9f095d0040b262de26b9f8a3303927f",
+    "earlier/tabm-k32-plr-cross-masked-seed-44/results.json": "02c3f5ee2a520b0ea57474cf710862a29185e699eae4e54aa39cde14da0472cd",
+    "earlier/validation-identities.parquet": "a4e7e39622b52c2d3d2a9e29d61649a78fd1283352e262406a08f1207a9eab40",
+    "earlier-results.json": "2dfccf57eb1fc8fec25ea28072daa0b4a9c9b8ed09026f65ce051e1cbbfa6d7e",
+    "experiment-specs.json": "67568445298a7d81c82762400982e5c03ba64e88e29d90cea775909ee6db26eb",
+    "primary/dcnv2-r32-plr-cross-masked-seed-42/category-remappings.joblib": "85c099fbded3f62bc0c52eb7ef97e2499f68fc27061654a41190aaf2bf698aff",
+    "primary/dcnv2-r32-plr-cross-masked-seed-42/results.json": "8608a7edd80c13d73afae8108a308c2f9e7442d183d479da035b1e23691c2269",
+    "primary/dcnv2-r32-plr-cross-masked-seed-43/category-remappings.joblib": "85c099fbded3f62bc0c52eb7ef97e2499f68fc27061654a41190aaf2bf698aff",
+    "primary/dcnv2-r32-plr-cross-masked-seed-43/results.json": "5d299a21d3593d6bcce35d56f8c47af22d1f55ef5c99de335a8037589237656b",
+    "primary/dcnv2-r32-plr-cross-masked-seed-44/category-remappings.joblib": "85c099fbded3f62bc0c52eb7ef97e2499f68fc27061654a41190aaf2bf698aff",
+    "primary/dcnv2-r32-plr-cross-masked-seed-44/results.json": "3e638b89b724351cd1fe1aa67e09a7f793a261037cfe5b2dbabe9f4194f9eb6c",
+    "primary/preprocessing.joblib": "9a7a431961913de4a6e29cd8c21a855c3333560f7d3ea53a501a0377a9587983",
+    "primary/protocol.json": "a2598c757e119562ee8926a83b4d49c8ab4426712c783287f4c8ab76e4e3a7f2",
+    "primary/reference-seed-42/category-remappings.joblib": "219b8318ca8ceed850513cbdbd17a96772ae65c1eda38491f009cc3920541894",
+    "primary/reference-seed-42/results.json": "6edb0786376cc5df85114cd0c211adbcbf4106c8542de16ed2cf17951f39562c",
+    "primary/reference-seed-43/category-remappings.joblib": "219b8318ca8ceed850513cbdbd17a96772ae65c1eda38491f009cc3920541894",
+    "primary/reference-seed-43/results.json": "0672b58d847cdde6462d3949aed86b481b31e314969893704005ab03a3be6473",
+    "primary/reference-seed-44/category-remappings.joblib": "219b8318ca8ceed850513cbdbd17a96772ae65c1eda38491f009cc3920541894",
+    "primary/reference-seed-44/results.json": "cbffef0309ef18559f1f6f1b7abc2359e1aa3bae6b6f72835c9132f41a2e46cf",
+    "primary/tabm-k32-plr-cross-masked-seed-42/category-remappings.joblib": "85c099fbded3f62bc0c52eb7ef97e2499f68fc27061654a41190aaf2bf698aff",
+    "primary/tabm-k32-plr-cross-masked-seed-42/results.json": "482f77b928580541f042a1186bc61afec4da921274775b8529dda28986e45d78",
+    "primary/tabm-k32-plr-cross-masked-seed-43/category-remappings.joblib": "85c099fbded3f62bc0c52eb7ef97e2499f68fc27061654a41190aaf2bf698aff",
+    "primary/tabm-k32-plr-cross-masked-seed-43/results.json": "ae3f85d949942560e67a230f7acbb1e0bf85fadffb33b3e4198e1b3a48592fe9",
+    "primary/tabm-k32-plr-cross-masked-seed-44/category-remappings.joblib": "85c099fbded3f62bc0c52eb7ef97e2499f68fc27061654a41190aaf2bf698aff",
+    "primary/tabm-k32-plr-cross-masked-seed-44/results.json": "89e4627bc759494d06558b2e96faca8a1885e7971a54eb5fee1b07769ff947fb",
+    "primary/validation-identities.parquet": "e4882e41b3e8a039308fcba4dec2e75b503c15c6d2a0dcd182a6876f3369d77e",
+    "primary-results.json": "0ce3e39bba0939ad62b467a04d69e4e0a4adf0bf76b0c575f803fc6dafe0e968",
+    "results.json": "eee4256058bfdc259b4ac43b0a06e7b336a88c396aa837a028eb7815ab445b9a"
+  },
+  "primary_validation_labels_match_t007": true,
+  "results": [
+    {
+      "name": "primary/reference-seed-42",
+      "validation_auc": 0.8292340756398013,
+      "best_fractional_epoch": 0.9983361064891847,
+      "training_seconds": 115.92430083800002
+    },
+    {
+      "name": "primary/reference-seed-43",
+      "validation_auc": 0.829480316185249,
+      "best_fractional_epoch": 0.9983361064891847,
+      "training_seconds": 115.14744755200013
+    },
+    {
+      "name": "primary/reference-seed-44",
+      "validation_auc": 0.8294827299968935,
+      "best_fractional_epoch": 1.0,
+      "training_seconds": 115.18070001299998
+    },
+    {
+      "name": "primary/tabm-k32-plr-cross-masked-seed-42",
+      "validation_auc": 0.840454269749109,
+      "best_fractional_epoch": 7.737104825291182,
+      "training_seconds": 1790.353491681
+    },
+    {
+      "name": "primary/tabm-k32-plr-cross-masked-seed-43",
+      "validation_auc": 0.8403174181481271,
+      "best_fractional_epoch": 8.236272878535774,
+      "training_seconds": 1866.8473093810003
+    },
+    {
+      "name": "primary/tabm-k32-plr-cross-masked-seed-44",
+      "validation_auc": 0.8401439622306823,
+      "best_fractional_epoch": 5.990016638935108,
+      "training_seconds": 1548.015161206
+    },
+    {
+      "name": "primary/dcnv2-r32-plr-cross-masked-seed-42",
+      "validation_auc": 0.8389150778143838,
+      "best_fractional_epoch": 1.7470881863560732,
+      "training_seconds": 255.27514598000016
+    },
+    {
+      "name": "primary/dcnv2-r32-plr-cross-masked-seed-43",
+      "validation_auc": 0.8386333427640148,
+      "best_fractional_epoch": 1.497504159733777,
+      "training_seconds": 243.9254461850005
+    },
+    {
+      "name": "primary/dcnv2-r32-plr-cross-masked-seed-44",
+      "validation_auc": 0.8389992157575368,
+      "best_fractional_epoch": 3.0,
+      "training_seconds": 300.81845737799995
+    },
+    {
+      "name": "earlier/reference-seed-42",
+      "validation_auc": 0.8250895635456785,
+      "best_fractional_epoch": 1.2968299711815563,
+      "training_seconds": 74.56729077199998
+    },
+    {
+      "name": "earlier/reference-seed-43",
+      "validation_auc": 0.824013557511389,
+      "best_fractional_epoch": 1.0,
+      "training_seconds": 68.83190091899996
+    },
+    {
+      "name": "earlier/reference-seed-44",
+      "validation_auc": 0.8249661121904064,
+      "best_fractional_epoch": 1.0,
+      "training_seconds": 68.69200759199975
+    },
+    {
+      "name": "earlier/tabm-k32-plr-cross-masked-seed-42",
+      "validation_auc": 0.8370715265976902,
+      "best_fractional_epoch": 7.780979827089337,
+      "training_seconds": 1087.985000304
+    },
+    {
+      "name": "earlier/tabm-k32-plr-cross-masked-seed-43",
+      "validation_auc": 0.8369748400616516,
+      "best_fractional_epoch": 7.780979827089337,
+      "training_seconds": 1087.0280201189998
+    },
+    {
+      "name": "earlier/tabm-k32-plr-cross-masked-seed-44",
+      "validation_auc": 0.8370515705409194,
+      "best_fractional_epoch": 10.0,
+      "training_seconds": 1272.5043761319994
+    },
+    {
+      "name": "earlier/dcnv2-r32-plr-cross-masked-seed-42",
+      "validation_auc": 0.8354361079360016,
+      "best_fractional_epoch": 1.729106628242075,
+      "training_seconds": 155.182748412999
+    },
+    {
+      "name": "earlier/dcnv2-r32-plr-cross-masked-seed-43",
+      "validation_auc": 0.8353785584890832,
+      "best_fractional_epoch": 2.161383285302594,
+      "training_seconds": 163.89261716500005
+    },
+    {
+      "name": "earlier/dcnv2-r32-plr-cross-masked-seed-44",
+      "validation_auc": 0.835512726272014,
+      "best_fractional_epoch": 2.0,
+      "training_seconds": 158.8665508209997
+    }
+  ],
+  "confirmation_analysis": {
+    "source_sha256": "b4e3d6c80aa069830d0eba025381f8b448b42cc00a7fa7d3e446fd83003e95e8",
+    "analysis_versions": {
+      "numpy": "2.5.4",
+      "polars": "1.44.2",
+      "scikit-learn": "1.9.1"
+    },
+    "scope": "fixed three-seed means and preselected 75% k32 / 25% DCN vote; no weight search",
+    "artifact_sha256": {
+      "earlier/dcnv2-r32-plr-cross-masked.npz": "ae07fa1dfe736c32d479ad94aca80e3e331546c961690716f70967d82058ee39",
+      "earlier/frozen-75-25.npz": "47e9b806cee176c284d4002e0676627c6728dbb94067a933a7bc14e6759284db",
+      "earlier/reference.npz": "c613f09d519c2c12720b9519d88735513a652dedf7669257489867427d6006ba",
+      "earlier/tabm-k32-plr-cross-masked.npz": "5669fae7f771c547378349984b46efea9e19b5474e493e61579c16e365258da9",
+      "finalists.json": "2bd67b012c62711480a0d58c7ae3b57bb0af4dd5a2e548c435b1148f429a8158",
+      "primary/dcnv2-r32-plr-cross-masked.npz": "f29bee759eaf72d0138c06f082f226d00b9ed5f9e4bb592ede3596684b6ae76d",
+      "primary/frozen-75-25.npz": "58ab1dbd302380666a0e3bef21ffaf05a8bce83acb98b86b917815fa5692291e",
+      "primary/reference.npz": "5e9941d81b7b51e0eb32b7b14fe4c36bed0d87cfb8db62f6e9ef7f3363122cce",
+      "primary/tabm-k32-plr-cross-masked.npz": "3473b8d11db75ba41b561116d45d6f62485ca570634f58b47d74d38af30f5254",
+      "results.json": "e75feadd17606a201df1c2b7af17924633fb970b2e26a873b160575fb567f32d"
+    },
+    "primary_seed42_exactly_reproduced": true,
+    "finalists_sha256": "2bd67b012c62711480a0d58c7ae3b57bb0af4dd5a2e548c435b1148f429a8158"
+  }
 }
