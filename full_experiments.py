@@ -41,6 +41,7 @@ def prepare_data(path, output, *, secondary=False, cutoff_override=None, end_ove
         load_sample(path, total, 42, expand_embeddings=True)
         .with_row_index("_row_id").sort("_time")
     )
+    print(f"Loaded and sorted {sample.shape} in {time.monotonic() - started:.0f}s", flush=True)
     if sample["_time"].null_count():
         raise ValueError("Missing timestamps in experiment input")
     cutoff = datetime.fromisoformat(
@@ -62,6 +63,7 @@ def prepare_data(path, output, *, secondary=False, cutoff_override=None, end_ove
         if set(frame[TARGET].unique().to_list()) != {0, 1}:
             raise ValueError(f"{name} requires both binary classes")
     x_train, c_train, x_valid, c_valid, state = prepare_custom_features(train, valid, 10)
+    print(f"Prepared features {tuple(x_train.shape)} in {time.monotonic() - started:.0f}s", flush=True)
     unique_counts = train.select(pl.col(state["numeric_columns"]).n_unique()).row(0)
     continuous = [i for i, count in enumerate(unique_counts) if count > 16]
     original_train, original_valid = [], []
