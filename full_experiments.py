@@ -4,6 +4,7 @@ import hashlib
 from importlib.metadata import version
 import json
 import math
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -41,13 +42,32 @@ def sort_columnwise(frame, key):
     return frame
 
 
+def load_sorted_sample(path, total):
+    sample = None
+    cache = os.environ.get("SHARECHAT_SAMPLE_CACHE")
+    if cache and not os.environ.get("SHARECHAT_SAMPLE_CACHE_CHILD"):
+        # Build the frame in a child process so allocator-retained memory is
+        # released on exit; the memory-mapped result is reclaimable page cache.
+        subprocess.run(
+            [sys.executable, "-c",
+             "import sys; from pathlib import Path; sys.path.insert(0, sys.argv[1]); "
+             "import full_experiments as f; "
+             "f.load_sorted_sample(Path(sys.argv[2]), int(sys.argv[3]))"
+             ".write_ipc(sys.argv[4], compression='uncompressed')",
+             str(Path(__file__).resolve().parent), str(path), str(total), cache],
+            check=True, env={**os.environ, "SHARECHAT_SAMPLE_CACHE_CHILD": "1"},
+        )
+        return pl.read_ipc(cache, memory_map=True)
+    sample = load_sample(path, total, 42, expand_embeddings=True).with_row_index("_row_id")
+    return sort_columnwise(sample, "_time")
+
+
 def prepare_data(path, output, *, secondary=False, cutoff_override=None, end_override=None):
     from datetime import datetime
 
     started = time.monotonic()
     total = pq.ParquetFile(path).metadata.num_rows
-    sample = load_sample(path, total, 42, expand_embeddings=True).with_row_index("_row_id")
-    sample = sort_columnwise(sample, "_time")
+    sample = load_sorted_sample(path, total)
     print(f"Loaded and sorted {sample.shape} in {time.monotonic() - started:.0f}s", flush=True)
     if sample["_time"].null_count():
         raise ValueError("Missing timestamps in experiment input")
