@@ -32,15 +32,22 @@ def sha256(path):
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
+def sort_columnwise(frame, key):
+    # Same order as frame.sort(key), but gathers one column at a time so the
+    # wide frame is never held twice.
+    order = frame.select(pl.int_range(pl.len(), dtype=pl.UInt32).alias("_order"), key).sort(key)["_order"]
+    for name in frame.columns:
+        frame = frame.with_columns(frame.get_column(name).gather(order))
+    return frame
+
+
 def prepare_data(path, output, *, secondary=False, cutoff_override=None, end_override=None):
     from datetime import datetime
 
     started = time.monotonic()
     total = pq.ParquetFile(path).metadata.num_rows
-    sample = (
-        load_sample(path, total, 42, expand_embeddings=True)
-        .with_row_index("_row_id").sort("_time")
-    )
+    sample = load_sample(path, total, 42, expand_embeddings=True).with_row_index("_row_id")
+    sample = sort_columnwise(sample, "_time")
     print(f"Loaded and sorted {sample.shape} in {time.monotonic() - started:.0f}s", flush=True)
     if sample["_time"].null_count():
         raise ValueError("Missing timestamps in experiment input")
