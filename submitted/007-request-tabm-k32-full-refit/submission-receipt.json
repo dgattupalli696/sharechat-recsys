@@ -1,0 +1,15 @@
+{
+  "ref": "58304230",
+  "description": "S007 T025 TabM k32 + request-context, full-data refit (1,537,638 rows, 17.73 epochs)",
+  "model_trial": "T025/tabm32",
+  "training_rows": 1537638,
+  "refit": true,
+  "optimizer_steps": 26629,
+  "test_rows": 1037090,
+  "submission_sha256": "455faaac1fc39a8e44407ee8cdea641a211c22e50e30c9848b4c5b05d23723bf",
+  "inference_kernel": "dheerajgattupalli/sharechat-model-experiments-gpu",
+  "inference_kernel_version": 23,
+  "user_approved_once": true,
+  "approval": "submit t025 now lets see if it helps at all",
+  "public_score": "0.88467"
+}

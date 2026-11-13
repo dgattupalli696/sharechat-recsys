@@ -1,0 +1,123 @@
+{
+  "status": "COMPLETE",
+  "full_training_rows": 1537638,
+  "validation_auc": null,
+  "validation_used_for_refit_selection": false,
+  "selection_reference": "T024 k32 holdout AUC 0.8893497968; not an evaluation of this full-data refit",
+  "neural": {
+    "tabm32": {
+      "training_rows": 1537638,
+      "optimizer_steps": 26629,
+      "selection": "validation-frozen fractional-epoch budget; no refit validation",
+      "history": [
+        {
+          "epoch": 1,
+          "optimizer_steps": 1502,
+          "training_loss": 0.14792927891459193
+        },
+        {
+          "epoch": 2,
+          "optimizer_steps": 3004,
+          "training_loss": 0.14268156272392774
+        },
+        {
+          "epoch": 3,
+          "optimizer_steps": 4506,
+          "training_loss": 0.14198509256077196
+        },
+        {
+          "epoch": 4,
+          "optimizer_steps": 6008,
+          "training_loss": 0.14158300383684316
+        },
+        {
+          "epoch": 5,
+          "optimizer_steps": 7510,
+          "training_loss": 0.14126418123925308
+        },
+        {
+          "epoch": 6,
+          "optimizer_steps": 9012,
+          "training_loss": 0.14099442406793072
+        },
+        {
+          "epoch": 7,
+          "optimizer_steps": 10514,
+          "training_loss": 0.14072674521222567
+        },
+        {
+          "epoch": 8,
+          "optimizer_steps": 12016,
+          "training_loss": 0.14049430247321198
+        },
+        {
+          "epoch": 9,
+          "optimizer_steps": 13518,
+          "training_loss": 0.14029113361116718
+        },
+        {
+          "epoch": 10,
+          "optimizer_steps": 15020,
+          "training_loss": 0.14010818624678836
+        },
+        {
+          "epoch": 11,
+          "optimizer_steps": 16522,
+          "training_loss": 0.13988089578557225
+        },
+        {
+          "epoch": 12,
+          "optimizer_steps": 18024,
+          "training_loss": 0.13973137113960427
+        },
+        {
+          "epoch": 13,
+          "optimizer_steps": 19526,
+          "training_loss": 0.1395122470982334
+        },
+        {
+          "epoch": 14,
+          "optimizer_steps": 21028,
+          "training_loss": 0.13938018504048033
+        },
+        {
+          "epoch": 15,
+          "optimizer_steps": 22530,
+          "training_loss": 0.1391759049256754
+        },
+        {
+          "epoch": 16,
+          "optimizer_steps": 24032,
+          "training_loss": 0.13900609741898487
+        },
+        {
+          "epoch": 17,
+          "optimizer_steps": 25534,
+          "training_loss": 0.13888137952949636
+        },
+        {
+          "epoch": 18,
+          "optimizer_steps": 26629,
+          "training_loss": 0.13847771243417645
+        }
+      ],
+      "training_seconds": 2518.575850526,
+      "checkpoint_sha256": "56d19e44c4d4472e44943f0ad01e003184e460e259649102328bfa91c19fd710"
+    }
+  },
+  "ensemble_weights": null,
+  "preprocessing_training_rows": 1537638,
+  "preprocessing_sha256": "4bf9e845a78b559565cb87091a20f85f00b81bd9b599343ad70045a1be3ad48a",
+  "category_vocabulary_sha256": "4f46922aa29c6c9cb6c0cb62e1231863582efdc8f7eb341b9d39ffc4120e5359",
+  "training_labels_sha256": "f714ef3d1edfab84e7856ec3d23a03140b7ab8698935258abb862507e25c89d2",
+  "lightgbm": null,
+  "submissions": {
+    "tabm": {
+      "file": "submission-full-tabm.csv",
+      "sha256": "455faaac1fc39a8e44407ee8cdea641a211c22e50e30c9848b4c5b05d23723bf",
+      "rows": 1037090
+    }
+  },
+  "competition_submission": false,
+  "seconds": 3480.4061861850005
+}
