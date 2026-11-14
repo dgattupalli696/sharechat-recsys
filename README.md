@@ -48,15 +48,23 @@ submission unless it has an entry in `submitted/`.
 | T034 | [XGBoost GPU tuning](trials/034-xgboost-gpu-tuning/) (`xgb_tune.py`) | Kaggle T4 / original holdout | 0.88849 | Not submitted | leaves511 eta .02 best; leaves63 0.88845, depth12 0.88842; native categorical 0.88532 |
 | T035 | User × item cosine / kNN screen (`embed_screen.py`) | Local LightGBM / original holdout | 0.88488 | Not submitted | +0.0023 from 10 cosines with request rank/dev; embedding context and kNN video rates no extra gain |
 | T036 | [XGBoost + cosines](trials/036-xgboost-cosines/) | Kaggle T4 / original holdout | **0.88967** depth12 | Not submitted | leaves63 0.88961, leaves511 0.88959; rank blend 0.45 T027 + .15/.15/.25 XGB **0.89081** |
-| T037 | [Wide TabM k32 full refit](trials/037-wide-tabm-k32-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No holdout | Not submitted | Complete: 13,496 steps × seeds 42/43/44 (seed Spearman 0.997); seed-mean vs S007 Spearman 0.992 |
-| T038 | [XGBoost + cosines full refit](trials/038-xgboost-cosines-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No holdout | Not submitted | Complete: 6 fits, rounds = best iteration × 1.25; candidates in `artifacts/candidates/` (best holdout-weighted 4-way blend 0.89081) |
+| T037 | [Wide TabM k32 full refit](trials/037-wide-tabm-k32-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No holdout | S008, S010 | Complete: 13,496 steps × seeds 42/43/44 (seed Spearman 0.997); seed-mean vs S007 Spearman 0.992 |
+| T038 | [XGBoost + cosines full refit](trials/038-xgboost-cosines-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No holdout | S008, S009 | Complete: 6 fits, rounds = best iteration × 1.25; candidates in `artifacts/candidates/` (best holdout-weighted 4-way blend 0.89081) |
+| T039 | [XGBoost + cosines train-only test predictions](trials/039-xgboost-cosines-holdout-test/) | Kaggle T4 / original holdout fit rows | Same as T036 | Not submitted | Re-fits the 3 T036 configs (seed 42, best iteration) because T036 saved no models; reference only |
+| T040 | [Wide architecture diversity](trials/040-wide-architecture-diversity/) | Kaggle T4 / original holdout | Running | Not submitted | DCNv2, DCNv2-MoE, FinalMLP ×2, cross-masked PLR/fusion on wide features (T027 protocol) |
+| T041 | [CatBoost + pairwise XGBoost](trials/041-catboost-pairwise-xgboost/) | Kaggle T4 / original holdout | Pending | Not submitted | `rank:pairwise` single-query (global AUC) XGBoost; CatBoost GPU with/without raw ID categoricals |
+| T042 | DeepFM with ID embeddings (`deepfm_screen.py`) | Local MPS / original holdout | Pending | Not submitted | FM over 21 categorical/ID fields + 16 numeric fields, 512-256-128 MLP |
+| T043 | ModernNCA-style retrieval (`nca_screen.py`) | Local MPS / original holdout | Pending | Not submitted | Softmax(-distance) neighbour-label model over learned embeddings |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 | S003 | [Submitted best TabM k32](submitted/003-tabm-k32/README.md) | Unchanged T014 seed-42 checkpoint | **0.840454** | **0.83349** | Submission 58291755; no refit; +0.01444 vs S002 |
 | S004 | [Submitted best frozen ensemble](submitted/004-best-ensemble/README.md) | Unchanged T014/T011 checkpoints | **0.840806** | **0.83365** | Submission 58291773; no refit; +0.00016 vs S003 |
 | S005 | [Submitted request-context TabM k32](submitted/005-request-tabm-k32/README.md) | Unchanged T024 k32 checkpoint | **0.889350** | **0.88394** | Submission 58300770; no refit; +0.05045 vs S003 |
 | S006 | [Submitted request-context ensemble](submitted/006-request-ensemble/README.md) | Unchanged T024 checkpoints, T016 weights | **0.889818** | **0.88438** | Submission 58300782; no refit; +0.05073 vs S004 |
-| S007 | [Submitted request-context TabM k32 full refit](submitted/007-request-tabm-k32-full-refit/README.md) | T025 full-data refit (1,537,638 rows) | No holdout | **0.88467** | Submission 58304230; +0.00073 vs S005; best public score |
+| S007 | [Submitted request-context TabM k32 full refit](submitted/007-request-tabm-k32-full-refit/README.md) | T025 full-data refit (1,537,638 rows) | No holdout | **0.88467** | Submission 58304230; +0.00073 vs S005 |
+| S008 | [Submitted full-refit 4-way blend](submitted/008-full-refit-4way-blend/README.md) | T037 seed mean + T038 XGBoost, holdout rank weights .45/.15/.15/.25 | **0.89081** | **0.88641** | Submission 58332687; +0.00174 vs S007; best public score |
+| S009 | [Submitted full-refit XGBoost blend](submitted/009-full-refit-xgboost-blend/README.md) | T038 XGBoost, rank weights .3/.3/.4 | 0.89001 | 0.88579 | Submission 58332848; diagnostic |
+| S010 | [Submitted full-refit wide TabM seed mean](submitted/010-full-refit-wide-tabm-seed-mean/README.md) | T037 3-seed mean | 0.88985 | 0.88533 | Submission 58332854; diagnostic |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
 comparable. Do not infer that either beats B001: B001 used a different, full-data

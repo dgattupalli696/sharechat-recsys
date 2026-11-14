@@ -124,11 +124,12 @@ def build_matrices(data, wide, rows=0):
     return x_fit, y_fit, x_valid, y_valid, row_ids, columns, categorical
 
 
-def full_matrices(data, wide, rows=0):
+def full_matrices(data, wide, rows=0, fit_only=False):
     """All-train and test matrices of the T029 wide feature set for a full-data refit.
 
-    Categorical codes come from every labeled row; request context is computed per
-    request within each file (requests never cross files). Test rows stay in file order.
+    Categorical codes come from every labeled row (only pre-cutoff rows with `fit_only`);
+    request context is computed per request within each file (requests never cross
+    files). Test rows stay in file order.
     """
     numeric = scalar_numeric(pl.scan_parquet(data / "train.parquet").collect_schema())
     columns = ["feature3", *numeric, *LOW_CATEGORICAL, "rq_size", "rq_items", "rq_item_dup",
@@ -138,6 +139,8 @@ def full_matrices(data, wide, rows=0):
         frame = pl.scan_parquet(data / f"{name}.parquet")
         if rows:
             frame = frame.filter(pl.col("request_id").hash(7) % rows == 0)
+        if fit_only and name == "train":
+            frame = frame.filter(pl.col("feature1") < CUTOFF)
         frame = frame.select(extra, "feature3", "request_id", ITEM,
                              *dict.fromkeys([*LOW_CATEGORICAL, *numeric])).collect()
         frame = frame.with_columns(context(wide))

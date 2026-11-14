@@ -1,0 +1,106 @@
+{
+  "tabm": {
+    "file": "artifacts/candidates/submission-tabm.csv",
+    "weights": {
+      "tabm": 1.0
+    },
+    "holdout_auc": 0.8898504840424368,
+    "test_seeds": {
+      "tabm": 3
+    },
+    "spearman_vs_s007": 0.9923316240409578
+  },
+  "xgb63": {
+    "file": "artifacts/candidates/submission-xgb63.csv",
+    "weights": {
+      "xgb63": 1.0
+    },
+    "holdout_auc": 0.8896141426744537,
+    "test_seeds": {
+      "xgb63": 2
+    },
+    "spearman_vs_s007": 0.9796257945378257
+  },
+  "xgb511": {
+    "file": "artifacts/candidates/submission-xgb511.csv",
+    "weights": {
+      "xgb511": 1.0
+    },
+    "holdout_auc": 0.8895869304369513,
+    "test_seeds": {
+      "xgb511": 2
+    },
+    "spearman_vs_s007": 0.9784082737967771
+  },
+  "xgbd12": {
+    "file": "artifacts/candidates/submission-xgbd12.csv",
+    "weights": {
+      "xgbd12": 1.0
+    },
+    "holdout_auc": 0.8896690710608112,
+    "test_seeds": {
+      "xgbd12": 2
+    },
+    "spearman_vs_s007": 0.9796823201576028
+  },
+  "blend-tabm-xgbd12": {
+    "file": "artifacts/candidates/submission-blend-tabm-xgbd12.csv",
+    "weights": {
+      "tabm": 0.5,
+      "xgbd12": 0.5
+    },
+    "holdout_auc": 0.8907385041292162,
+    "test_seeds": {
+      "tabm": 3,
+      "xgbd12": 2
+    },
+    "spearman_vs_s007": 0.9894642923801641
+  },
+  "blend-tabm-xgb63-xgbd12": {
+    "file": "artifacts/candidates/submission-blend-tabm-xgb63-xgbd12.csv",
+    "weights": {
+      "tabm": 0.5,
+      "xgb63": 0.2,
+      "xgbd12": 0.30000000000000004
+    },
+    "holdout_auc": 0.8907903325558295,
+    "test_seeds": {
+      "tabm": 3,
+      "xgb63": 2,
+      "xgbd12": 2
+    },
+    "spearman_vs_s007": 0.989598288733009
+  },
+  "blend-tabm-xgb63-xgb511-xgbd12": {
+    "file": "artifacts/candidates/submission-blend-tabm-xgb63-xgb511-xgbd12.csv",
+    "weights": {
+      "tabm": 0.45,
+      "xgb63": 0.15,
+      "xgb511": 0.15,
+      "xgbd12": 0.25
+    },
+    "holdout_auc": 0.8908122656190287,
+    "test_seeds": {
+      "tabm": 3,
+      "xgb63": 2,
+      "xgb511": 2,
+      "xgbd12": 2
+    },
+    "spearman_vs_s007": 0.9888774362133588
+  },
+  "blend-xgb63-xgb511-xgbd12": {
+    "file": "artifacts/candidates/submission-blend-xgb63-xgb511-xgbd12.csv",
+    "weights": {
+      "xgb63": 0.3,
+      "xgb511": 0.3,
+      "xgbd12": 0.4
+    },
+    "holdout_auc": 0.8900109905649952,
+    "test_seeds": {
+      "xgb63": 2,
+      "xgb511": 2,
+      "xgbd12": 2
+    },
+    "spearman_vs_s007": 0.9801293834359831
+  }
+}

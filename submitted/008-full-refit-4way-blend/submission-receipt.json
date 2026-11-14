@@ -1,0 +1,22 @@
+{
+  "ref": "58332687",
+  "model_trials": [
+    "T037",
+    "T038"
+  ],
+  "weights": {
+    "tabm": 0.45,
+    "xgb63": 0.15,
+    "xgb511": 0.15,
+    "xgbd12": 0.25
+  },
+  "selection_holdout_auc_train_only_models": 0.8908122656190287,
+  "training_rows": 1537638,
+  "refit": true,
+  "test_rows": 1037090,
+  "submission_sha256": "2e06423492e6dffa2001537cbd426d9917f8dbb0b09099debfc1a7548cb10d04",
+  "spearman_vs_s007": 0.9888774362133588,
+  "user_approved_once": true,
+  "approval": "lets do 2 submission of the 4 way blend with hold out and full data",
+  "public_score": "0.88641"
+}

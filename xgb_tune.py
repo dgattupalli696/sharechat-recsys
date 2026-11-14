@@ -34,12 +34,35 @@ CONFIGS = {
                    "max_cat_to_onehot": 8, "max_cat_threshold": 64, "_categorical": True},
     "subsample06": {"max_leaves": 255, "eta": 0.02, "subsample": 0.6, "colsample_bytree": 0.3,
                     "min_child_weight": 100, "sampling_method": "gradient_based"},
+    "rank_global": {"objective": "rank:pairwise", "max_leaves": 63, "eta": 0.02, "colsample_bytree": 0.4,
+                    "min_child_weight": 50, "lambdarank_pair_method": "mean", "lambdarank_num_pair_per_sample": 8,
+                    "_qid": "none"},
+    "rank_request": {"objective": "rank:pairwise", "max_leaves": 63, "eta": 0.02, "colsample_bytree": 0.4,
+                     "min_child_weight": 50, "lambdarank_pair_method": "mean", "lambdarank_num_pair_per_sample": 8,
+                     "_qid": "request"},
     "lambda50": {"max_leaves": 255, "eta": 0.02, "colsample_bytree": 0.3, "min_child_weight": 100,
                  "lambda": 50, "alpha": 5},
 }
 
 
-def cosine_frame(path, rows=0):
+ID_COLUMNS = ["feature5", "feature18", "feature23", "feature20"]
+
+
+def train_split_columns(data, columns, rows=0):
+    """Pre-cutoff / holdout values of raw train columns, in file order (matches `build_matrices`)."""
+    import polars as pl
+
+    from feature_screen import CUTOFF
+
+    lf = pl.scan_parquet(data / "train.parquet")
+    if rows:
+        lf = lf.filter(pl.col("request_id").hash(7) % rows == 0)
+    frame = lf.select("feature1", *columns).collect()
+    is_valid = (frame["feature1"] >= CUTOFF).to_numpy()
+    return frame.filter(~pl.Series(is_valid)).drop("feature1"), frame.filter(pl.Series(is_valid)).drop("feature1")
+
+
+def cosine_frame(path, rows=0, fit_only=False):
     """User x item cosines (T035 `cos` set) plus within-request rank/deviation, in file order."""
     import polars as pl
 
@@ -48,6 +71,10 @@ def cosine_frame(path, rows=0):
     lf = pl.scan_parquet(path)
     if rows:
         lf = lf.filter(pl.col("request_id").hash(7) % rows == 0)
+    if fit_only:
+        from feature_screen import CUTOFF
+
+        lf = lf.filter(pl.col("feature1") < CUTOFF)
     vectors = lf.select("request_id", *dict.fromkeys(c for pair in COS_PAIRS for c in pair)).collect()
     extra = {}
     for u, i in COS_PAIRS:
@@ -104,12 +131,22 @@ def worker(args):
         began = time.time()
         params = {**BASE, **CONFIGS[name], "device": args.device}
         categorical = params.pop("_categorical", False)
+        qid = params.pop("_qid", None)
         types = dict(feature_types=feature_types, enable_categorical=True) if categorical else {}
+        if qid == "request":
+            fit_rq, _ = train_split_columns(args.data, ["request_id"], args.rows)
+            codes = fit_rq["request_id"].to_numpy()
+            types["qid"] = np.cumsum(np.r_[True, codes[1:] != codes[:-1]]).astype(np.uint32)
+        elif qid == "none":
+            types["qid"] = np.zeros(len(y_fit), dtype=np.uint32)
         fit = xgb.QuantileDMatrix(np.asarray(x_fit), y_fit, max_bin=params["max_bin"], **types)
+        types.pop("qid", None)
         valid = xgb.QuantileDMatrix(np.asarray(x_valid), y_valid, ref=fit, max_bin=params["max_bin"], **types)
         model = xgb.train(params, fit, args.rounds, evals=[(valid, "holdout")],
                           early_stopping_rounds=300, verbose_eval=500)
         predictions = model.predict(valid, iteration_range=(0, model.best_iteration + 1))
+        if qid:
+            predictions = 1 / (1 + np.exp(-predictions))
         auc = float(roc_auc_score(y_valid, predictions))
         np.savez_compressed(args.output / f"{name}-holdout.npz", row_ids=row_ids, y_true=y_valid,
                             probabilities=predictions.astype(np.float32))
@@ -123,14 +160,58 @@ def worker(args):
         del fit, valid, model
 
 
+def catboost_worker(args):
+    """CatBoost (GPU) on the same matrices; low-cardinality codes and optional raw IDs as categoricals."""
+    from catboost import CatBoostClassifier, FeaturesData, Pool
+
+    m = args.matrices
+    meta = json.loads((m / "columns.json").read_text())
+    y_fit, y_valid, row_ids = np.load(m / "y_fit.npy"), np.load(m / "y_valid.npy"), np.load(m / "row_ids.npy")
+    categorical = meta["categorical"]
+    dense = [i for i in range(len(meta["columns"])) if i not in set(categorical)]
+    ids = ID_COLUMNS if args.catboost_ids else []
+    raw = train_split_columns(args.data, ids, args.rows) if ids else None
+
+    def pool(split, y, part):
+        x = np.load(m / f"x_{split}.npy", mmap_mode="r")
+        codes = np.nan_to_num(np.asarray(x[:, categorical]), nan=-1).astype(np.int64).astype(str)
+        if ids:
+            codes = np.hstack([codes, part.fill_null("__NA__").to_numpy().astype(str)])
+        return Pool(FeaturesData(num_feature_data=np.ascontiguousarray(x[:, dense], dtype=np.float32),
+                                 cat_feature_data=codes.astype(object)), y)
+
+    began = time.time()
+    fit = pool("fit", y_fit, raw[0] if ids else None)
+    valid = pool("valid", y_valid, raw[1] if ids else None)
+    name = "catboost_ids" if ids else "catboost"
+    model = CatBoostClassifier(
+        iterations=args.rounds, learning_rate=0.06, depth=8, border_count=128, l2_leaf_reg=10,
+        eval_metric="AUC", metric_period=50, od_type="Iter", od_wait=300, random_seed=42, verbose=500,
+        use_best_model=True, task_type="GPU" if args.device.startswith("cuda") else "CPU",
+        **({"devices": "0"} if args.device.startswith("cuda") else {"thread_count": 6}),
+        max_ctr_complexity=2, gpu_ram_part=0.9 if args.device.startswith("cuda") else None,
+    )
+    model.fit(fit, eval_set=valid)
+    predictions = model.predict_proba(valid)[:, 1]
+    auc = float(roc_auc_score(y_valid, predictions))
+    args.output.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(args.output / f"{name}-holdout.npz", row_ids=row_ids, y_true=y_valid,
+                        probabilities=predictions.astype(np.float32))
+    model.save_model(str(args.output / f"{name}.cbm"))
+    result = {"holdout_auc": auc, "best_iteration": int(model.get_best_iteration()),
+              "seconds": time.time() - began, "ids": ids}
+    (args.output / f"{name}.json").write_text(json.dumps(result, indent=2) + "\n")
+    print(name, json.dumps(result), flush=True)
+
+
 def build_full(args):
     from classic_screen import full_matrices
 
     start = time.time()
     wide = json.loads(args.wide_from.read_text())["wide_features"]
-    x_train, y_train, x_test, test_ids, columns, categorical = full_matrices(args.data, wide, args.rows)
+    x_train, y_train, x_test, test_ids, columns, categorical = full_matrices(args.data, wide, args.rows, args.fit_only)
     if args.cosines:
-        c_train, names = cosine_frame(args.data / "train.parquet", args.rows)
+        c_train, names = cosine_frame(args.data / "train.parquet", args.rows, args.fit_only)
         x_train, columns = np.hstack([x_train, c_train]), columns + names
         del c_train
         c_test, _ = cosine_frame(args.data / "test.parquet", args.rows)
@@ -187,7 +268,7 @@ def refit(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=["build", "worker", "build_full", "refit"])
+    parser.add_argument("mode", choices=["build", "worker", "build_full", "refit", "catboost"])
     parser.add_argument("--data", type=Path, default=Path("data"))
     parser.add_argument("--wide-from", type=Path, default=Path("artifacts/local-t026/results.json"))
     parser.add_argument("--matrices", type=Path, default=Path("artifacts/local-t034/matrices"))
@@ -196,9 +277,12 @@ def main():
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--cosines", action="store_true", help="Append T035 user x item cosine features")
     parser.add_argument("--rounds", type=int, default=20000)
+    parser.add_argument("--catboost-ids", action="store_true", help="catboost: add raw user/item/ID columns")
+    parser.add_argument("--fit-only", action="store_true", help="build_full: train rows before the cutoff only")
     parser.add_argument("--rows", type=int, default=0, help="Keep 1/N of requests for smoke tests")
     args = parser.parse_args()
-    {"build": build, "worker": worker, "build_full": build_full, "refit": refit}[args.mode](args)
+    {"build": build, "worker": worker, "build_full": build_full, "refit": refit,
+     "catboost": catboost_worker}[args.mode](args)
 
 
 if __name__ == "__main__":

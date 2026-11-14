@@ -1,0 +1,19 @@
+{
+  "status": "PREPARED",
+  "baseline_trial": "T036",
+  "configs": [
+    "rank_global",
+    "catboost",
+    "catboost_ids"
+  ],
+  "source_sha256": {
+    "feature_screen.py": "b8ae57d999deaca182375c63c90fadcaa8e0042ca57eef2f259525be416b2315",
+    "request_screen.py": "4a473091fadf8b4d928b01a29c9af143deec94987546ab65c770ee14e8bd56f2",
+    "classic_screen.py": "118cd5462de8a09931448ccfaa5fc8c4dd07552f03d4c68f6c6ebd16cac36fbe",
+    "xgb_tune.py": "a38f551314282435dda39452d71db1d5f4c2c4c1a52ac97a5d09ec05dd106450",
+    "embed_screen.py": "cfe6446b64db7b91e10b781f7aec6042b042671d002593f8b7c3c940296cb48a",
+    "cf_screen.py": "7fe9c68142a12fedeed36ba92ddf181b6cbe033923f7aee8321d53bdec879b3c"
+  },
+  "notebook_sha256": "4899f2d47c24fd3f2e7955b8c52f288231265b300f594bb516501edb7484600a",
+  "competition_submission": false
+}

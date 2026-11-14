@@ -1,0 +1,50 @@
+[
+  {
+    "name": "dcnv2-r32",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "architecture": "dcnv2",
+    "rank": 32
+  },
+  {
+    "name": "dcnv2-moe4",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "architecture": "dcnv2",
+    "rank": 32,
+    "experts": 4
+  },
+  {
+    "name": "finalmlp-alternate-lr",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "architecture": "finalmlp",
+    "gating": true,
+    "learning_rate": 0.0001
+  },
+  {
+    "name": "finalmlp-gated",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "architecture": "finalmlp",
+    "gating": true
+  },
+  {
+    "name": "cross-masked-plr",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr"
+  },
+  {
+    "name": "cross-masked-fusion-cosine",
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "vector_projection": true,
+    "cosine": true
+  }
+]

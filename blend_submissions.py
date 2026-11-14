@@ -31,6 +31,12 @@ TEST = {
     "xgbd12": ["artifacts/kaggle-t038/t038/depth12_node-s42-test.npz:probabilities",
                "artifacts/kaggle-t038/t038/depth12_node-s43-test.npz:probabilities"],
 }
+TRAIN_ONLY_TEST = {
+    "tabm": ["artifacts/kaggle-t027/t027/prediction/submission.csv:watched"],
+    "xgb63": ["artifacts/kaggle-t039/t039/leaves63_eta02-s42-test.npz:probabilities"],
+    "xgb511": ["artifacts/kaggle-t039/t039/leaves511_eta02-s42-test.npz:probabilities"],
+    "xgbd12": ["artifacts/kaggle-t039/t039/depth12_node-s42-test.npz:probabilities"],
+}
 REFERENCE = "artifacts/kaggle-t025/refit/submission-full-tabm.csv"
 
 
@@ -65,11 +71,15 @@ def search(y, components, step):
     return best
 
 
-def test_ranks(name):
-    seeds = []
-    for spec in TEST[name]:
-        path, key = spec.split(":")
-        seeds.append(np.load(path)[key].astype(np.float64))
+def load(spec):
+    path, key = spec.split(":")
+    if path.endswith(".csv"):
+        return pl.read_csv(path)[key].to_numpy().astype(np.float64)
+    return np.load(path)[key].astype(np.float64)
+
+
+def test_ranks(name, sources):
+    seeds = [load(spec) for spec in sources[name]]
     return ranks(np.mean(seeds, axis=0)), len(seeds)
 
 
@@ -78,16 +88,19 @@ def main():
     parser.add_argument("--output", type=Path, default=Path("artifacts/candidates"))
     parser.add_argument("--template", type=Path, default=Path("data/sample_submission.csv"))
     parser.add_argument("--step", type=float, default=0.05)
+    parser.add_argument("--train-only", action="store_true",
+                        help="Use test predictions of the holdout-scored (pre-cutoff) models instead of full refits")
     args = parser.parse_args()
+    sources = TRAIN_ONLY_TEST if args.train_only else TEST
     available = [n for n in HOLDOUT if Path(HOLDOUT[n]).is_file()
-                 and all(Path(s.split(":")[0]).is_file() for s in TEST[n])]
+                 and all(Path(s.split(":")[0]).is_file() for s in sources[n])]
     print("components:", available, flush=True)
     y, holdout = holdout_ranks(available)
     template = pl.read_csv(args.template)
     reference = pl.read_csv(REFERENCE)
     if not template["id"].equals(reference["id"]):
         raise ValueError("Reference submission order differs from the template")
-    tests = {n: test_ranks(n) for n in available}
+    tests = {n: test_ranks(n, sources) for n in available}
     trees = [n for n in available if n.startswith("xgb")]
     candidates = {n: {n: 1.0} for n in available}
     for group in [["tabm", "xgbd12"], ["tabm", "xgb63", "xgbd12"], ["tabm", *trees], trees]:

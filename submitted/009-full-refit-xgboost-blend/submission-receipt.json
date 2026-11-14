@@ -1,0 +1,17 @@
+{
+  "ref": "58332848",
+  "weights": {
+    "xgb63": 0.3,
+    "xgb511": 0.3,
+    "xgbd12": 0.4
+  },
+  "selection_holdout_auc_train_only_models": 0.8900109905649952,
+  "training_rows": 1537638,
+  "refit": true,
+  "test_rows": 1037090,
+  "submission_sha256": "69bcadb8d3f14370132c9d7780d53138b80ac8b201c97287f9257d419bb9ec45",
+  "spearman_vs_s007": 0.9801293834359831,
+  "user_approved_once": true,
+  "approval": "User selected: XGBoost-only full-data blend (holdout 0.89001), TabM k32 wide full-data 3-seed mean (holdout 0.88985)",
+  "public_score": "0.88579"
+}
