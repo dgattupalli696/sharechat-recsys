@@ -1,0 +1,20 @@
+{
+  "status": "PREPARED",
+  "selection_trial": "T036/T041",
+  "configs": [
+    "depth12_node",
+    "leaves511_eta02",
+    "catboost_ids"
+  ],
+  "full_training_rows": 1537638,
+  "source_sha256": {
+    "feature_screen.py": "b8ae57d999deaca182375c63c90fadcaa8e0042ca57eef2f259525be416b2315",
+    "request_screen.py": "4a473091fadf8b4d928b01a29c9af143deec94987546ab65c770ee14e8bd56f2",
+    "classic_screen.py": "118cd5462de8a09931448ccfaa5fc8c4dd07552f03d4c68f6c6ebd16cac36fbe",
+    "xgb_tune.py": "c6197f94d8386095322f5789ff8e57434663b11236044c422704c8291466bf37",
+    "embed_screen.py": "cfe6446b64db7b91e10b781f7aec6042b042671d002593f8b7c3c940296cb48a",
+    "cf_screen.py": "7fe9c68142a12fedeed36ba92ddf181b6cbe033923f7aee8321d53bdec879b3c"
+  },
+  "notebook_sha256": "e4a14d9555ee186b22d2c57bed508b61412677e20d359aadec18f794c46a1abc",
+  "competition_submission": false
+}

@@ -264,6 +264,104 @@ def catboost_refit(args):
         del model
 
 
+def kfold(args):
+    """5-fold (grouped by request) fits on every labeled row with in-fold early stopping.
+
+    `--configs` takes XGBoost config names and/or `catboost_ids`. Saves out-of-fold
+    predictions on the train rows plus per-fold and fold-mean test predictions.
+    """
+    import polars as pl
+    from sklearn.model_selection import GroupKFold
+
+    m = args.matrices
+    meta = json.loads((m / "columns.json").read_text())
+    y_train, test_ids = np.load(m / "y_train.npy"), np.load(m / "test_ids.npy")
+    lf = pl.scan_parquet(args.data / "train.parquet")
+    test_lf = pl.scan_parquet(args.data / "test.parquet")
+    if args.rows:
+        lf = lf.filter(pl.col("request_id").hash(7) % args.rows == 0)
+        test_lf = test_lf.filter(pl.col("request_id").hash(7) % args.rows == 0)
+    train_raw = lf.select("watched", "request_id", *ID_COLUMNS).collect()
+    if not np.array_equal(train_raw["watched"].to_numpy(), y_train):
+        raise ValueError("Train rows are not aligned with the matrices")
+    folds = list(GroupKFold(args.folds).split(y_train, groups=train_raw["request_id"].to_numpy()))
+    x_train, x_test = np.load(m / "x_train.npy", mmap_mode="r"), np.load(m / "x_test.npy", mmap_mode="r")
+    template = None
+    if (args.data / "sample_submission.csv").is_file() and not args.rows:
+        template = pl.read_csv(args.data / "sample_submission.csv")
+        if not np.array_equal(template["id"].to_numpy(), test_ids):
+            raise ValueError("Test ids differ from the submission template")
+    args.output.mkdir(parents=True, exist_ok=True)
+    for name in args.configs.split(","):
+        began = time.time()
+        oof = np.full(len(y_train), np.nan, dtype=np.float32)
+        tests, info = [], []
+        if name == "catboost_ids":
+            from catboost import CatBoostClassifier, FeaturesData, Pool
+
+            test_raw = test_lf.select("id", *ID_COLUMNS).collect()
+            if not np.array_equal(test_raw["id"].to_numpy(), test_ids):
+                raise ValueError("Test rows are not aligned with the matrices")
+            categorical = meta["categorical"]
+            dense = [i for i in range(len(meta["columns"])) if i not in set(categorical)]
+
+            def codes(x, raw):
+                low = np.nan_to_num(np.asarray(x[:, categorical]), nan=-1).astype(np.int64).astype(str)
+                return np.hstack([low, raw.select(ID_COLUMNS).fill_null("__NA__").to_numpy().astype(str)]).astype(object)
+
+            train_codes, test_codes = codes(x_train, train_raw), codes(x_test, test_raw)
+            test_pool = Pool(FeaturesData(num_feature_data=np.ascontiguousarray(x_test[:, dense], dtype=np.float32),
+                                          cat_feature_data=test_codes))
+            gpu = args.device.startswith("cuda")
+            for k, (a, v) in enumerate(folds):
+                def pool(rows):
+                    return Pool(FeaturesData(num_feature_data=np.ascontiguousarray(x_train[rows][:, dense], dtype=np.float32),
+                                             cat_feature_data=train_codes[rows]), y_train[rows])
+                model = CatBoostClassifier(
+                    iterations=args.rounds, learning_rate=0.06, depth=8, border_count=128, l2_leaf_reg=10,
+                    eval_metric="AUC", metric_period=50, od_type="Iter", od_wait=300, random_seed=42 + k,
+                    verbose=500, use_best_model=True, task_type="GPU" if gpu else "CPU",
+                    **({"devices": "0", "gpu_ram_part": 0.9} if gpu else {"thread_count": 6}), max_ctr_complexity=2)
+                fit_pool, valid_pool = pool(a), pool(v)
+                model.fit(fit_pool, eval_set=valid_pool)
+                oof[v] = model.predict_proba(valid_pool)[:, 1]
+                tests.append(model.predict_proba(test_pool)[:, 1].astype(np.float32))
+                info.append({"fold": k, "best_iteration": int(model.get_best_iteration()),
+                             "fold_auc": float(roc_auc_score(y_train[v], oof[v])), "seconds": time.time() - began})
+                print(name, json.dumps(info[-1]), flush=True)
+                del model, fit_pool, valid_pool
+        else:
+            import xgboost as xgb
+
+            params = {**BASE, **CONFIGS[name], "device": args.device}
+            if params.pop("_categorical", False) or params.pop("_qid", None):
+                raise ValueError("Only plain XGBoost configs are supported in kfold")
+            for k, (a, v) in enumerate(folds):
+                params["seed"] = 42 + k
+                fit = xgb.QuantileDMatrix(x_train[a], y_train[a], max_bin=params["max_bin"])
+                valid = xgb.QuantileDMatrix(x_train[v], y_train[v], max_bin=params["max_bin"], ref=fit)
+                model = xgb.train(params, fit, args.rounds, evals=[(valid, "fold")],
+                                  early_stopping_rounds=300, verbose_eval=500)
+                best = model.best_iteration
+                oof[v] = model.predict(valid, iteration_range=(0, best + 1))
+                test = xgb.QuantileDMatrix(x_test, max_bin=params["max_bin"], ref=fit)
+                tests.append(model.predict(test, iteration_range=(0, best + 1)).astype(np.float32))
+                info.append({"fold": k, "best_iteration": int(best),
+                             "fold_auc": float(roc_auc_score(y_train[v], oof[v])), "seconds": time.time() - began})
+                print(name, json.dumps(info[-1]), flush=True)
+                del fit, valid, test, model
+        mean = np.mean(tests, 0).astype(np.float32)
+        if not np.isfinite(mean).all() or np.isnan(oof).any():
+            raise ValueError(f"Incomplete or nonfinite predictions: {name}")
+        np.savez_compressed(args.output / f"{name}-kfold.npz", ids=test_ids, probabilities=mean,
+                            fold_probabilities=np.stack(tests), oof=oof, y_train=y_train)
+        if template is not None:
+            template.with_columns(pl.Series("watched", mean)).write_csv(args.output / f"submission-{name}-kfold.csv")
+        result = {"folds": info, "oof_auc": float(roc_auc_score(y_train, oof)), "seconds": time.time() - began}
+        (args.output / f"{name}-kfold.json").write_text(json.dumps(result, indent=2) + "\n")
+        print(name, "oof", result["oof_auc"], flush=True)
+
+
 def build_full(args):
     from classic_screen import full_matrices
 
@@ -328,7 +426,7 @@ def refit(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=["build", "worker", "build_full", "refit", "catboost", "catboost_refit"])
+    parser.add_argument("mode", choices=["build", "worker", "build_full", "refit", "catboost", "catboost_refit", "kfold"])
     parser.add_argument("--data", type=Path, default=Path("data"))
     parser.add_argument("--wide-from", type=Path, default=Path("artifacts/local-t026/results.json"))
     parser.add_argument("--matrices", type=Path, default=Path("artifacts/local-t034/matrices"))
@@ -339,10 +437,11 @@ def main():
     parser.add_argument("--rounds", type=int, default=20000)
     parser.add_argument("--catboost-ids", action="store_true", help="catboost: add raw user/item/ID columns")
     parser.add_argument("--fit-only", action="store_true", help="build_full: train rows before the cutoff only")
+    parser.add_argument("--folds", type=int, default=5)
     parser.add_argument("--rows", type=int, default=0, help="Keep 1/N of requests for smoke tests")
     args = parser.parse_args()
     {"build": build, "worker": worker, "build_full": build_full, "refit": refit,
-     "catboost": catboost_worker, "catboost_refit": catboost_refit}[args.mode](args)
+     "catboost": catboost_worker, "catboost_refit": catboost_refit, "kfold": kfold}[args.mode](args)
 
 
 if __name__ == "__main__":

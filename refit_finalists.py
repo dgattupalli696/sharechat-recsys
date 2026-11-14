@@ -137,23 +137,27 @@ def prepare(path, cache, output):
     return numeric_array, category_array, labels, order, state, config
 
 
-def train_fixed(model, config, numeric, categorical, labels, order, steps, destination, device, seed=42):
+def train_fixed(model, config, numeric, categorical, labels, order, steps, destination, device, seed=42, rows=None):
+    """Fixed-step training on every labeled row, or only on `rows` (a k-fold training split)."""
     if steps <= 0 or len(numeric) != len(labels) or len(order) != len(labels):
         raise ValueError("Invalid full-training budget or population")
-    if steps < math.ceil(len(labels) / 1024) or not np.array_equal(np.sort(order), np.arange(len(labels))):
-        raise ValueError("Every labeled row must be visited in a complete first epoch")
+    if not np.array_equal(np.sort(order), np.arange(len(labels))):
+        raise ValueError("Training order must be a permutation of the labeled rows")
+    population = len(labels) if rows is None else len(rows)
+    if steps < math.ceil(population / 1024):
+        raise ValueError("Every training row must be visited in a complete first epoch")
     destination.mkdir()
     optimizer = torch.optim.AdamW(model.parameters(), lr=.0005, weight_decay=.01)
     generator = torch.Generator().manual_seed(seed)
     x, c = torch.from_numpy(numeric), torch.from_numpy(categorical)
     y = torch.tensor(labels, dtype=torch.float32)
-    chronological = torch.from_numpy(order)
+    chronological = torch.from_numpy(order if rows is None else np.sort(rows))
     completed, epoch, history = 0, 0, []
     started = time.monotonic()
     while completed < steps:
         epoch += 1
         model.train()
-        indices = chronological[torch.randperm(len(labels), generator=generator)]
+        indices = chronological[torch.randperm(len(chronological), generator=generator)]
         loss_sum, seen = 0., 0
         for batch in indices.split(1024):
             optimizer.zero_grad(set_to_none=True)
@@ -181,7 +185,7 @@ def train_fixed(model, config, numeric, categorical, labels, order, steps, desti
     model.load_state_dict(checkpoint["state_dict"], strict=True)
     np.testing.assert_array_equal(replay_before, predict(model, x[:16], c[:16], device, 16))
     result = {
-        "training_rows": len(labels), "optimizer_steps": completed, "seed": seed,
+        "training_rows": population, "optimizer_steps": completed, "seed": seed,
         "selection": "validation-frozen fractional-epoch budget; no refit validation",
         "history": history, "training_seconds": time.monotonic() - started,
         "checkpoint_sha256": digest(destination / "model.pt"),
@@ -235,6 +239,12 @@ def run(data, output, selected, device="cuda", worker=None):
         if len(labels) != selected["full_training_rows"]:
             raise ValueError("Refit requires every labeled row")
         steps_per_epoch = math.ceil(len(labels) / 1024)
+        folds = None
+        if selected.get("folds"):
+            from sklearn.model_selection import GroupKFold
+
+            requests = pl.scan_parquet(data / "train.parquet").select("request_id").collect()["request_id"].to_numpy()
+            folds = list(GroupKFold(selected["folds"]).split(labels, groups=requests))
         for name, specification in selected["neural"].items():
             seed = specification.get("seed", 42)
             torch.manual_seed(seed)
@@ -242,12 +252,28 @@ def run(data, output, selected, device="cuda", worker=None):
                 **base, **specification.get("model_config", {}),
                 "members": specification["members"], "architecture": specification["architecture"],
             }
-            steps = round(specification["fractional_epochs"] * steps_per_epoch)
+            rows = held = None
+            if "fold" in specification:
+                rows, held = folds[specification["fold"]]
+            population = len(labels) if rows is None else len(rows)
+            steps = round(specification["fractional_epochs"] * math.ceil(population / 1024))
             model = HeterogeneousClassifier(**config).to(device)
-            print(f"START FULL {name}: {len(labels):,} rows, {steps} fixed steps", flush=True)
+            print(f"START FULL {name}: {population:,} rows, {steps} fixed steps", flush=True)
             neural_results[name] = train_fixed(
-                model, config, numeric, categorical, labels, order, steps, output / name, device, seed,
+                model, config, numeric, categorical, labels, order, steps, output / name, device, seed, rows,
             )
+            if held is not None:
+                oof = np.concatenate([
+                    predict(model, torch.from_numpy(numeric[held[i:i + 65536]]),
+                            torch.from_numpy(categorical[held[i:i + 65536]]), device, 1024)
+                    for i in range(0, len(held), 65536)])
+                np.savez_compressed(output / name / "oof.npz", rows=held, probabilities=oof.astype(np.float32),
+                                    y_true=labels[held])
+                from sklearn.metrics import roc_auc_score
+
+                neural_results[name]["fold"] = specification["fold"]
+                neural_results[name]["fold_auc"] = float(roc_auc_score(labels[held], oof))
+                print(f"FOLD {name}: auc {neural_results[name]['fold_auc']:.5f}", flush=True)
             del model
             gc.collect()
             if device == "cuda":

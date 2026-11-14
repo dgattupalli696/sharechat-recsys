@@ -98,6 +98,26 @@ class FullRefitTests(unittest.TestCase):
             self.assertFalse(np.allclose(first, second))
             np.testing.assert_allclose(mean, (first + second) / 2, rtol=1e-5)
 
+    def test_kfold_members_train_on_their_split_and_cover_every_row_out_of_fold(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            output = root / "output"
+            member = {"members": 2, "architecture": "tabm", "fractional_epochs": 2.,
+                      "model_config": {"width": 16, "rank": 4, "gating": False}}
+            selected = {"tabm_only": True, "full_training_rows": 160, "folds": 4,
+                        "neural": {f"tabm32-fold{k}": {**member, "fold": k, "seed": 42 + k} for k in range(4)}}
+            report = run(root, output, selected, device="cpu")
+            rows = []
+            for k in range(4):
+                result = report["neural"][f"tabm32-fold{k}"]
+                self.assertEqual(result["training_rows"], 120)
+                self.assertEqual(result["optimizer_steps"], 2 * 1)
+                oof = np.load(output / f"tabm32-fold{k}" / "oof.npz")
+                rows.append(oof["rows"])
+            np.testing.assert_array_equal(np.sort(np.concatenate(rows)), np.arange(160))
+            self.assertIn("tabm-seed-mean", report["submissions"])
+
     def test_full_refit_exports_ordered_fixed_weight_csvs_without_validation(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
