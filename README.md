@@ -56,7 +56,9 @@ submission unless it has an entry in `submitted/`.
 | T042 | DeepFM with ID embeddings (`deepfm_screen.py`) | Local MPS / original holdout | 0.88426 | Not submitted | FM over 21 categorical/ID fields + 16 numeric fields, 512-256-128 MLP |
 | T043 | ModernNCA-style retrieval (`nca_screen.py`) | Local MPS / original holdout | 0.87923 | Not submitted | Softmax(-distance) neighbour-label model over learned embeddings |
 | T044 | Exposure-graph SVD (`svd_screen.py`) | Local LightGBM / original holdout | Running | Not submitted | Train+test user×item and user×creator degree-normalised SVD (k=32): factors, affinity, request rank/dev |
-| T045 | [CatBoost + IDs full refit](trials/045-catboost-ids-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No holdout | Not submitted | 2925 iterations × seeds 42/43/44; completes the 5-model blend (holdout 0.89102) |
+| T045 | [CatBoost + IDs full refit](trials/045-catboost-ids-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No holdout | S011, S012 | 2925 iterations × seeds 42/43/44; Complete (seed Spearman 0.988); completes the 5-model blend (holdout 0.89102) |
+| T046 | [GBDT 5-fold](trials/046-gbdt-5fold-full/) | Kaggle T4 / GroupKFold(5) by request, all labeled rows | Fold OOF | Pending | xgbd12, xgb511, catboost_ids; fold-mean test predictions to pair with full refits |
+| T047 | [Wide TabM k32 5-fold](trials/047-wide-tabm-k32-5fold/) | Kaggle T4 / same 5 folds | Fold OOF | Pending | T027 recipe, 8.985 epochs per fold, seeds 42-46 |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 | S003 | [Submitted best TabM k32](submitted/003-tabm-k32/README.md) | Unchanged T014 seed-42 checkpoint | **0.840454** | **0.83349** | Submission 58291755; no refit; +0.01444 vs S002 |
@@ -67,6 +69,8 @@ submission unless it has an entry in `submitted/`.
 | S008 | [Submitted full-refit 4-way blend](submitted/008-full-refit-4way-blend/README.md) | T037 seed mean + T038 XGBoost, holdout rank weights .45/.15/.15/.25 | **0.89081** | **0.88641** | Submission 58332687; +0.00174 vs S007; best public score |
 | S009 | [Submitted full-refit XGBoost blend](submitted/009-full-refit-xgboost-blend/README.md) | T038 XGBoost, rank weights .3/.3/.4 | 0.89001 | 0.88579 | Submission 58332848; diagnostic |
 | S010 | [Submitted full-refit wide TabM seed mean](submitted/010-full-refit-wide-tabm-seed-mean/README.md) | T037 3-seed mean | 0.88985 | 0.88533 | Submission 58332854; diagnostic |
+| S011 | [Submitted full-refit 5-way blend + CatBoost-IDs](submitted/011-full-refit-5way-cbids/README.md) | Equal rank: T037 + T025 + T038 xgb511/xgbd12 + T045 | 0.89102 | 0.88646 | Submission 58354017; best |
+| S012 | [Submitted full-refit CatBoost-IDs](submitted/012-full-refit-catboost-ids/README.md) | T045 3-seed mean | 0.88829 | 0.88388 | Submission 58354023; signal run |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
 comparable. Do not infer that either beats B001: B001 used a different, full-data

@@ -1,0 +1,16 @@
+{
+  "ref": "58354023",
+  "file": "artifacts/candidates/submission-cbids-seed-mean.csv",
+  "weights": {
+    "cb_ids_t045": 1
+  },
+  "selection_holdout_auc_train_only_models": 0.88829,
+  "training_rows": 1537638,
+  "refit": true,
+  "test_rows": 1037090,
+  "submission_sha256": "fe074d327cc835a08ae2f94ba253e48d1e38b274e3ff1fdb1fb03bf9daee9c29",
+  "spearman_vs_s008": 0.9845574407811921,
+  "user_approved_once": true,
+  "approval": "User input: \"lets do score wise 1 and other 1 to get some signal for future runs?\"",
+  "public_score": "0.88388"
+}

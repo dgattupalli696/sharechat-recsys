@@ -1,0 +1,20 @@
+{
+  "ref": "58354017",
+  "file": "artifacts/candidates/submission-5way-equal-cbids.csv",
+  "weights": {
+    "tabm_t037": 1,
+    "k32_t025": 1,
+    "xgb511_t038": 1,
+    "xgbd12_t038": 1,
+    "cb_ids_t045": 1
+  },
+  "selection_holdout_auc_train_only_models": 0.89102,
+  "training_rows": 1537638,
+  "refit": true,
+  "test_rows": 1037090,
+  "submission_sha256": "688420a6689c30561a61756d0ab8a38ddda92b6fe89777721fe31790d9ba69a3",
+  "spearman_vs_s008": 0.9990791266543572,
+  "user_approved_once": true,
+  "approval": "User input: \"lets do score wise 1 and other 1 to get some signal for future runs?\"",
+  "public_score": "0.88646"
+}
