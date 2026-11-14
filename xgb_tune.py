@@ -204,6 +204,66 @@ def catboost_worker(args):
     print(name, json.dumps(result), flush=True)
 
 
+def catboost_refit(args):
+    """Fixed-iteration CatBoost (+raw IDs) on every labeled row; `--configs seed:iterations,...`."""
+    import polars as pl
+    from catboost import CatBoostClassifier, FeaturesData, Pool
+
+    m = args.matrices
+    meta = json.loads((m / "columns.json").read_text())
+    y_train, test_ids = np.load(m / "y_train.npy"), np.load(m / "test_ids.npy")
+    categorical = meta["categorical"]
+    dense = [i for i in range(len(meta["columns"])) if i not in set(categorical)]
+
+    def raw(name, extra):
+        lf = pl.scan_parquet(args.data / f"{name}.parquet")
+        if args.rows:
+            lf = lf.filter(pl.col("request_id").hash(7) % args.rows == 0)
+        return lf.select(extra, *ID_COLUMNS).collect()
+
+    def pool(split, ids, y=None):
+        x = np.load(m / f"x_{split}.npy", mmap_mode="r")
+        codes = np.nan_to_num(np.asarray(x[:, categorical]), nan=-1).astype(np.int64).astype(str)
+        codes = np.hstack([codes, ids.select(ID_COLUMNS).fill_null("__NA__").to_numpy().astype(str)])
+        return Pool(FeaturesData(num_feature_data=np.ascontiguousarray(x[:, dense], dtype=np.float32),
+                                 cat_feature_data=codes.astype(object)), y)
+
+    train_ids, test_raw = raw("train", "watched"), raw("test", "id")
+    if not np.array_equal(train_ids["watched"].to_numpy(), y_train):
+        raise ValueError("Train ID columns are not aligned with the matrices")
+    if not np.array_equal(test_raw["id"].to_numpy(), test_ids):
+        raise ValueError("Test ID columns are not aligned with the matrices")
+    template = None
+    if (args.data / "sample_submission.csv").is_file() and not args.rows:
+        template = pl.read_csv(args.data / "sample_submission.csv")
+        if not np.array_equal(template["id"].to_numpy(), test_ids):
+            raise ValueError("Test ids differ from the submission template")
+    train, test = pool("train", train_ids, y_train), pool("test", test_raw)
+    args.output.mkdir(parents=True, exist_ok=True)
+    gpu = args.device.startswith("cuda")
+    for item in args.configs.split(","):
+        began = time.time()
+        seed, iterations = (int(v) for v in item.split(":"))
+        tag = f"catboost_ids-s{seed}"
+        model = CatBoostClassifier(
+            iterations=iterations, learning_rate=0.06, depth=8, border_count=128, l2_leaf_reg=10,
+            random_seed=seed, verbose=500, task_type="GPU" if gpu else "CPU",
+            **({"devices": "0", "gpu_ram_part": 0.9} if gpu else {"thread_count": 6}), max_ctr_complexity=2)
+        model.fit(train)
+        predictions = model.predict_proba(test)[:, 1].astype(np.float32)
+        if not np.isfinite(predictions).all():
+            raise ValueError(f"Nonfinite predictions: {tag}")
+        np.savez_compressed(args.output / f"{tag}-test.npz", ids=test_ids, probabilities=predictions)
+        model.save_model(str(args.output / f"{tag}.cbm"))
+        if template is not None:
+            template.with_columns(pl.Series("watched", predictions)).write_csv(args.output / f"submission-{tag}.csv")
+        result = {"iterations": iterations, "seed": seed, "training_rows": int(len(y_train)),
+                  "ids": ID_COLUMNS, "seconds": time.time() - began}
+        (args.output / f"{tag}-refit.json").write_text(json.dumps(result, indent=2) + "\n")
+        print(tag, json.dumps(result), flush=True)
+        del model
+
+
 def build_full(args):
     from classic_screen import full_matrices
 
@@ -268,7 +328,7 @@ def refit(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=["build", "worker", "build_full", "refit", "catboost"])
+    parser.add_argument("mode", choices=["build", "worker", "build_full", "refit", "catboost", "catboost_refit"])
     parser.add_argument("--data", type=Path, default=Path("data"))
     parser.add_argument("--wide-from", type=Path, default=Path("artifacts/local-t026/results.json"))
     parser.add_argument("--matrices", type=Path, default=Path("artifacts/local-t034/matrices"))
@@ -282,7 +342,7 @@ def main():
     parser.add_argument("--rows", type=int, default=0, help="Keep 1/N of requests for smoke tests")
     args = parser.parse_args()
     {"build": build, "worker": worker, "build_full": build_full, "refit": refit,
-     "catboost": catboost_worker}[args.mode](args)
+     "catboost": catboost_worker, "catboost_refit": catboost_refit}[args.mode](args)
 
 
 if __name__ == "__main__":
