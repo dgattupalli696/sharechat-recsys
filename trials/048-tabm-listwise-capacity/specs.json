@@ -1,0 +1,46 @@
+[
+  {
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "members": 32,
+    "name": "listwise-0.3",
+    "listwise_weight": 0.3
+  },
+  {
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "members": 32,
+    "name": "listwise-1.0",
+    "listwise_weight": 1.0
+  },
+  {
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "members": 32,
+    "name": "w256-b3",
+    "width": 256,
+    "blocks": 3
+  },
+  {
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "members": 32,
+    "name": "w512-b3-lr3e4",
+    "width": 512,
+    "blocks": 3,
+    "learning_rate": 0.0003
+  },
+  {
+    "vector_crosses": true,
+    "drop_high": true,
+    "numerical_encoding": "plr",
+    "members": 32,
+    "name": "w256-b2-do01",
+    "width": 256,
+    "dropout": 0.1
+  }
+]

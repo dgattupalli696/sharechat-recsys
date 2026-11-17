@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 import numpy as np
 import polars as pl
+import torch
 
 from tabm_experiment import main, prepare_features
 
@@ -101,3 +102,26 @@ class TabMExperimentTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ListwiseTrainingTests(unittest.TestCase):
+    def test_grouped_order_keeps_requests_contiguous_and_covers_every_row(self):
+        from tabm_experiment import grouped_order
+
+        groups = torch.tensor([5, 1, 5, 3, 1, 3, 5])
+        order = grouped_order(groups, torch.Generator().manual_seed(0))
+        assert sorted(order.tolist()) == list(range(7))
+        seen = groups[order].tolist()
+        runs = [g for i, g in enumerate(seen) if i == 0 or g != seen[i - 1]]
+        assert len(runs) == 3
+
+
+    def test_listwise_loss_is_softmax_cross_entropy_over_requests_with_a_positive(self):
+        from tabm_experiment import listwise_loss
+
+        logits = torch.tensor([[1.0], [2.0], [0.5], [3.0], [-1.0], [4.0]])
+        targets = torch.tensor([[1.0], [0.0], [0.0], [0.0], [0.0], [1.0]])
+        groups = torch.tensor([7, 7, 7, 9, 9, 11])  # group 9 has no positive, 11 has one row
+        expected = -torch.log_softmax(torch.tensor([1.0, 2.0, 0.5]), 0)[0]
+        assert torch.allclose(listwise_loss(logits, targets, groups), expected)
+        assert listwise_loss(logits[3:5], targets[3:5], groups[3:5]).item() == 0

@@ -1,0 +1,38 @@
+{
+  "status": "PREPARED",
+  "baseline_trial": "T027 / T036",
+  "variants": [
+    [
+      [
+        "full",
+        "content,id,leaf"
+      ],
+      [
+        "leafid",
+        "id,leaf"
+      ]
+    ],
+    [
+      [
+        "noleaf",
+        "content,id"
+      ],
+      [
+        "content",
+        "content"
+      ]
+    ]
+  ],
+  "source_sha256": {
+    "feature_screen.py": "b8ae57d999deaca182375c63c90fadcaa8e0042ca57eef2f259525be416b2315",
+    "request_screen.py": "4a473091fadf8b4d928b01a29c9af143deec94987546ab65c770ee14e8bd56f2",
+    "classic_screen.py": "118cd5462de8a09931448ccfaa5fc8c4dd07552f03d4c68f6c6ebd16cac36fbe",
+    "xgb_tune.py": "4f61be95ccb1bc01d6f7a5f6287296435511741c668359e28313eec6a9d6bca0",
+    "embed_screen.py": "cfe6446b64db7b91e10b781f7aec6042b042671d002593f8b7c3c940296cb48a",
+    "cf_screen.py": "7fe9c68142a12fedeed36ba92ddf181b6cbe033923f7aee8321d53bdec879b3c",
+    "multitower.py": "b8798ce3cff66c9cce58b19970144d4f752e936fd16da34d03b883aca0a2b50e",
+    "multitower_prepare.py": "42b81bbd509937cb4b948b24d85ae8b710b17bbb0ac14d6fb3ddc15f0404c848"
+  },
+  "notebook_sha256": "0e0e443cbac7ff741d78a78a47a2f6264c05b2d48c2b0de94dce7c61a56d789b",
+  "competition_submission": false
+}

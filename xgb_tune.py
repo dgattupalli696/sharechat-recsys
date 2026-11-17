@@ -88,6 +88,45 @@ def cosine_frame(path, rows=0, fit_only=False):
     return frame.to_numpy().astype(np.float32), frame.columns
 
 
+def entity_frame(data, rows=0):
+    """Label-free item/creator features over train+test (file order): upload age, past exposure
+    counts, and the entity's mean centered within-request rank of top predictors. Backward-only
+    windows so rows near the end of test are not truncated."""
+    import polars as pl
+
+    def scan(name):
+        lf = pl.scan_parquet(data / f"{name}.parquet")
+        if rows:
+            lf = lf.filter(pl.col("request_id").hash(7) % rows == 0)
+        return lf.select("request_id", "feature1", "feature18", "feature23", "feature58", "feature59",
+                         "feature54", "feature409", "feature506").collect()
+
+    train, test = scan("train"), scan("test")
+    frame = pl.concat([train, test])
+    hours = frame["feature1"].dt.epoch("ms").to_numpy() / 3.6e6
+    columns = {"age_up": hours - frame["feature58"].to_numpy() / 3600.0,
+               "age_up59": hours - frame["feature59"].to_numpy() / 3.6e6}
+    hours = hours - hours.min()
+    size = pl.len().over("request_id")
+    ranks = frame.select([((pl.col(c).rank("average").over("request_id") - (size + 1) / 2) / size).alias(c)
+                          for c in ["feature54", "feature409", "feature506"]])
+    for key in ["feature18", "feature23"]:
+        codes = frame[key].cast(pl.Categorical).to_physical().to_numpy().astype(np.int64)
+        suffix = key[-2:]
+        stamp = codes * 1e4 + hours
+        ordered = np.sort(stamp)
+        columns[f"since_first_{suffix}"] = hours - pl.DataFrame({"k": codes, "t": hours}).select(
+            pl.col("t").min().over("k"))["t"].to_numpy()
+        for window in (1, 6, 24):
+            columns[f"nb{window}_{suffix}"] = (np.searchsorted(ordered, stamp, "left")
+                                               - np.searchsorted(ordered, stamp - window, "left"))
+        means = ranks.with_columns(k=codes).select(pl.all().exclude("k").mean().over("k"))
+        for c in means.columns:
+            columns[f"ent_crk_{c}_{suffix}"] = means[c].to_numpy()
+    values = np.column_stack(list(columns.values())).astype(np.float32)
+    return values[: train.height], values[train.height:], list(columns)
+
+
 def cosine_columns(data, rows):
     import polars as pl
 
@@ -111,6 +150,18 @@ def build(args):
         c_fit, c_valid, names = cosine_columns(args.data, args.rows)
         x_fit, x_valid, columns = np.hstack([x_fit, c_fit]), np.hstack([x_valid, c_valid]), columns + names
         del c_fit, c_valid
+    if args.entity:
+        from feature_screen import CUTOFF
+        import polars as pl
+
+        values, _, names = entity_frame(args.data, args.rows)
+        lf = pl.scan_parquet(args.data / "train.parquet")
+        if args.rows:
+            lf = lf.filter(pl.col("request_id").hash(7) % args.rows == 0)
+        is_valid = (lf.select("feature1").collect()["feature1"] >= CUTOFF).to_numpy()
+        x_fit, x_valid = np.hstack([x_fit, values[~is_valid]]), np.hstack([x_valid, values[is_valid]])
+        columns = columns + names
+        del values
     args.matrices.mkdir(parents=True, exist_ok=True)
     for name, value in dict(x_fit=x_fit, y_fit=y_fit, x_valid=x_valid, y_valid=y_valid, row_ids=row_ids).items():
         np.save(args.matrices / f"{name}.npy", value)
@@ -434,6 +485,7 @@ def main():
     parser.add_argument("--configs", default=",".join(CONFIGS))
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--cosines", action="store_true", help="Append T035 user x item cosine features")
+    parser.add_argument("--entity", action="store_true", help="build: append label-free item/creator features")
     parser.add_argument("--rounds", type=int, default=20000)
     parser.add_argument("--catboost-ids", action="store_true", help="catboost: add raw user/item/ID columns")
     parser.add_argument("--fit-only", action="store_true", help="build_full: train rows before the cutoff only")

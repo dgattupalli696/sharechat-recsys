@@ -111,6 +111,10 @@ def prepare_data(path, output, *, secondary=False, cutoff_override=None, end_ove
         .with_row_index("_row_id").collect()[validation_row_ids]
     )
     identity.write_parquet(output / "validation-identities.parquet")
+    training_groups = torch.from_numpy(
+        pl.scan_parquet(path).select(pl.col("request_id").cast(pl.Categorical).to_physical())
+        .collect().to_series().to_numpy()[training_row_ids].astype(np.int64)
+    )
     protocol = {
         "source_rows": total, "training_rows": train.height, "validation_rows": valid.height,
         "cutoff": cutoff.isoformat(), "secondary": secondary,
@@ -143,6 +147,7 @@ def prepare_data(path, output, *, secondary=False, cutoff_override=None, end_ove
         "category_counts": category_counts,
         "training_row_ids": training_row_ids,
         "validation_row_ids": validation_row_ids,
+        "training_groups": training_groups,
     }
 
 
@@ -262,6 +267,8 @@ def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed
             "rank": spec.get("rank", 32), "experts": spec.get("experts", 1),
             "gating": spec.get("gating", True),
         }
+        if "blocks" in spec:
+            config["blocks"] = spec["blocks"]
         model = HeterogeneousClassifier(**config).to(device)
     else:
         model = TabMClassifier(**config).to(device)
@@ -283,6 +290,8 @@ def run_tabm(data, spec, output, *, device="cuda", epochs=30, interval=300, seed
         device=device, output=destination, epochs=epochs, patience=5, batch_size=1024,
         validation_interval=interval, seed=seed, scheduler=scheduler,
         fixed_budget=spec.get("fixed_budget", False),
+        groups=data.get("training_groups") if spec.get("listwise_weight") else None,
+        listwise_weight=spec.get("listwise_weight", 0.0),
     )
     saved_predictions = np.load(destination / "validation_predictions.npz")
     np.savez_compressed(

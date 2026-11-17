@@ -216,7 +216,7 @@ class FinalMLPBackbone(nn.Module):
 class HeterogeneousClassifier(nn.Module):
     def __init__(
         self, encoder_config, architecture="tabm", width=128, dropout=0.2,
-        members=8, positive_rate=0.05, rank=32, experts=1, gating=True,
+        members=8, positive_rate=0.05, rank=32, experts=1, gating=True, blocks=2,
     ):
         super().__init__()
         self.encoder = FeatureEncoder(**encoder_config)
@@ -226,7 +226,7 @@ class HeterogeneousClassifier(nn.Module):
 
             self.backbone = TabM.make(
                 n_num_features=dimension, d_out=1, k=members,
-                n_blocks=2, d_block=width, dropout=dropout,
+                n_blocks=blocks, d_block=width, dropout=dropout,
             )
             bias = self.backbone.output.bias
         elif architecture == "dcnv2":

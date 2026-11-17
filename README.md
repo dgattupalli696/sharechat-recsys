@@ -59,6 +59,12 @@ submission unless it has an entry in `submitted/`.
 | T045 | [CatBoost + IDs full refit](trials/045-catboost-ids-full-refit/) | Kaggle T4 / all 1,537,638 labeled rows | No holdout | S011, S012 | 2925 iterations × seeds 42/43/44; Complete (seed Spearman 0.988); completes the 5-model blend (holdout 0.89102) |
 | T046 | [GBDT 5-fold](trials/046-gbdt-5fold-full/) | Kaggle T4 / GroupKFold(5) by request, all labeled rows | OOF xgbd12 0.88902, xgb511 0.88889, catboost_ids 0.88742 | Candidates | Complete; fold-mean vs full-refit Spearman 0.996-0.999 |
 | T047 | [Wide TabM k32 5-fold](trials/047-wide-tabm-k32-5fold/) | Kaggle T4 / same 5 folds | OOF 0.88893 (folds 0.8870-0.8916) | Candidates | Complete, 10,800 steps per fold; OOF 4-family blend 0.89007 equal / 0.89019 TabM×2 |
+| T048 | [TabM listwise + capacity](trials/048-tabm-listwise-capacity/) | Kaggle T4 / holdout | Best w256-b3 0.88978 | Rejected | Blend ≤ 0.89113 vs base 0.89109 |
+| T049 | [XGBoost entity features](trials/049-xgboost-entity-features/) | Kaggle T4 / holdout | — | Rejected | No blend gain |
+| T050 | [Multi-tower](trials/050-multitower/) | Kaggle T4×2 / holdout | content-only 0.88479 | Rejected | In-sample GBDT leaves overfit; blend 0.89098 < base |
+| — | TabICL screen (private kernel) | T4, 50k context, 30k holdout rows | 0.88052 | Rejected | Blend P(gain>0)=0.055; 80k context OOM |
+| — | [Horizon drift screen](horizon_screen.py) | LightGBM fit first 32h, scored 0–40h ahead | 0.870→0.873 by horizon | Rejected | No horizon decay; drop-3 gain (+0.005) was native-categorical overfit, +0.0004 with numeric codes |
+| — | Duration proxy | feature54 = duration seconds (45–300) | watch rate 7.5%→0.07% | Rejected | Already used raw + request rank/dev/gap |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 | S003 | [Submitted best TabM k32](submitted/003-tabm-k32/README.md) | Unchanged T014 seed-42 checkpoint | **0.840454** | **0.83349** | Submission 58291755; no refit; +0.01444 vs S002 |
@@ -71,6 +77,10 @@ submission unless it has an entry in `submitted/`.
 | S010 | [Submitted full-refit wide TabM seed mean](submitted/010-full-refit-wide-tabm-seed-mean/README.md) | T037 3-seed mean | 0.88985 | 0.88533 | Submission 58332854; diagnostic |
 | S011 | [Submitted full-refit 5-way blend + CatBoost-IDs](submitted/011-full-refit-5way-cbids/README.md) | Equal rank: T037 + T025 + T038 xgb511/xgbd12 + T045 | 0.89102 | 0.88646 | Submission 58354017; best |
 | S012 | [Submitted full-refit CatBoost-IDs](submitted/012-full-refit-catboost-ids/README.md) | T045 3-seed mean | 0.88829 | 0.88388 | Submission 58354023; signal run |
+| S013 | [5-fold+full 5-way equal](submitted/013-5way-kfold-equal/README.md) | S011 full refits + T046/T047 5-fold means, equal rank | OOF n/a | **0.88647** | Submission 58451223; best (+0.00001) |
+| S014 | [5-fold+full 5-way TabM×2](submitted/014-5way-kfold-tabm2/README.md) | As S013, TabM ×2 | OOF 0.89019 (4-family) | 0.88647 | Submission 58451231 |
+| S015 | [XGBoost-heavy 5-way](submitted/015-5way-xgb60/README.md) | XGB 60% | — | 0.88637 | Submission 58451238 |
+| S016 | [5-way TabM×2 + CatBoost-IDs](submitted/016-5way-tabm2-cbids/README.md) | S011 components, TabM ×2 | — | 0.88645 | Submission 58451245; blend saturated |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
 comparable. Do not infer that either beats B001: B001 used a different, full-data

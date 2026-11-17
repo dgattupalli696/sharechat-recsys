@@ -250,11 +250,39 @@ def fit_model(
     }
 
 
+def grouped_order(groups, generator):
+    """Shuffle whole requests so each request's rows are contiguous within an epoch."""
+    _, inverse = torch.unique(groups, return_inverse=True)
+    rank = torch.randperm(int(inverse.max()) + 1, generator=generator)[inverse]
+    return torch.argsort(rank * len(groups) + torch.arange(len(groups)))
+
+
+def listwise_loss(logits, targets, groups):
+    """Softmax cross-entropy over each request's candidates (requests with a positive and >1 row)."""
+    _, group = torch.unique(groups, return_inverse=True)
+    count = int(group.max()) + 1
+    index = group.unsqueeze(1).expand_as(logits)
+    peak = torch.full((count, logits.shape[1]), -torch.inf, device=logits.device)
+    peak = peak.scatter_reduce(0, index, logits.detach(), "amax")
+    shifted = logits - peak[group]
+    log_partition = torch.zeros_like(peak).index_add_(0, group, shifted.exp()).log()
+    log_probability = shifted - log_partition[group]
+    positives = torch.zeros_like(peak).index_add_(0, group, targets)
+    sizes = torch.zeros(count, device=logits.device).index_add_(
+        0, group, torch.ones_like(group, dtype=logits.dtype)
+    )
+    valid = (positives > 0) & (sizes.unsqueeze(1) > 1)
+    if not valid.any():
+        return logits.sum() * 0
+    per_group = -torch.zeros_like(peak).index_add_(0, group, targets * log_probability)
+    return (per_group[valid] / positives[valid]).mean()
+
+
 def fit_model_steps(
     model, model_config, optimizer, x_train, c_train, y_train, x_valid, c_valid, y_valid,
     *, device, output, epochs=30, patience=5, batch_size=1024, validation_interval=300,
     seed=42, scheduler=None,
-    fixed_budget=False,
+    fixed_budget=False, groups=None, listwise_weight=0.0,
 ):
     if min(epochs, patience, batch_size, validation_interval) <= 0:
         raise ValueError("Training budgets and validation interval must be positive")
@@ -272,12 +300,19 @@ def fit_model_steps(
     for epoch in range(1, epochs + 1):
         model.train()
         loss_sum, rows_seen, stop = 0.0, 0, False
-        order = torch.randperm(len(y_train), generator=generator)
+        order = (
+            torch.randperm(len(y_train), generator=generator) if groups is None
+            else grouped_order(groups, generator)
+        )
         for batch_index, indices in enumerate(order.split(batch_size), 1):
             optimizer.zero_grad(set_to_none=True)
             logits = model(x_train[indices].to(device), c_train[indices].to(device))
             targets = y_train[indices].to(device).unsqueeze(1).expand_as(logits)
             loss = F.binary_cross_entropy_with_logits(logits, targets)
+            if listwise_weight:
+                loss = loss + listwise_weight * listwise_loss(
+                    logits, targets, groups[indices].to(device)
+                )
             if not torch.isfinite(loss).item():
                 raise ValueError(f"Nonfinite loss at epoch {epoch}, step {global_step}")
             loss.backward()
