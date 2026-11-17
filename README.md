@@ -81,6 +81,7 @@ submission unless it has an entry in `submitted/`.
 | S014 | [5-fold+full 5-way TabM×2](submitted/014-5way-kfold-tabm2/README.md) | As S013, TabM ×2 | OOF 0.89019 (4-family) | 0.88647 | Submission 58451231 |
 | S015 | [XGBoost-heavy 5-way](submitted/015-5way-xgb60/README.md) | XGB 60% | — | 0.88637 | Submission 58451238 |
 | S016 | [5-way TabM×2 + CatBoost-IDs](submitted/016-5way-tabm2-cbids/README.md) | S011 components, TabM ×2 | — | 0.88645 | Submission 58451245; blend saturated |
+| S017 | [S011 + T040 fusion-cosine](submitted/017-s011-fusioncos/README.md) | 5/6 S011 rank + 1/6 T040 train-only checkpoint | 0.89106 | **0.88648** | Submission 58479943; best (+0.00002) |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
 comparable. Do not infer that either beats B001: B001 used a different, full-data
