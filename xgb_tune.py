@@ -523,7 +523,12 @@ def refit(args):
                         return False
                     x, y, w, s = batches[self.i]
                     e = min(s + 262144, len(y))
-                    feed(data=np.ascontiguousarray(x[s:e]), label=y[s:e], weight=np.full(e - s, w, np.float32))
+                    chunk = [np.ascontiguousarray(x[s:e]), np.ascontiguousarray(y[s:e]), np.full(e - s, w, np.float32)]
+                    if args.device == "cuda":
+                        import cupy
+
+                        chunk = [cupy.asarray(a) for a in chunk]
+                    feed(data=chunk[0], label=chunk[1], weight=chunk[2])
                     self.i += 1
                     return True
 
@@ -534,9 +539,15 @@ def refit(args):
         else:
             train = xgb.QuantileDMatrix(x_train, y_train, max_bin=params["max_bin"])
         model = xgb.train(params, train, int(rounds))
-        test = xgb.QuantileDMatrix(np.load(m / "x_test.npy", mmap_mode="r"), max_bin=params["max_bin"], ref=train)
-        predictions = model.predict(test).astype(np.float32)
-        del train, test
+        x_test = np.load(m / "x_test.npy", mmap_mode="r")
+        if args.pseudo:
+            del train
+            predictions = np.concatenate([model.inplace_predict(np.ascontiguousarray(x_test[s:s + 262144]))
+                                          for s in range(0, len(x_test), 262144)]).astype(np.float32)
+        else:
+            test = xgb.QuantileDMatrix(x_test, max_bin=params["max_bin"], ref=train)
+            predictions = model.predict(test).astype(np.float32)
+            del train, test
         if not np.isfinite(predictions).all():
             raise ValueError(f"Nonfinite predictions: {tag}")
         np.savez_compressed(args.output / f"{tag}-test.npz", ids=test_ids, probabilities=predictions)
