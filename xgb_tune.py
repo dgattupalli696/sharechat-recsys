@@ -127,6 +127,37 @@ def entity_frame(data, rows=0):
     return values[: train.height], values[train.height:], list(columns)
 
 
+def age_frame(path, rows=0):
+    """Log item age (hours since upload, from feature58 s and feature59 ms) with within-request
+    rank/deviation; replaces the absolute upload timestamps, which drift between train and test."""
+    import polars as pl
+
+    lf = pl.scan_parquet(path)
+    if rows:
+        lf = lf.filter(pl.col("request_id").hash(7) % rows == 0)
+    ts = pl.col("feature1").dt.epoch("s").cast(pl.Float64)
+    frame = lf.select(
+        "feature1",
+        ((ts - pl.col("feature58").cast(pl.Float64)).clip(1.0, None) / 3600).log1p().alias("log_age"),
+        ((ts - pl.col("feature59").cast(pl.Float64) / 1000).clip(1.0, None) / 3600).log1p().alias("log_age59"),
+        "request_id").with_columns(
+        (pl.col("log_age").rank().over("request_id") / pl.len().over("request_id")).alias("rq_rank_age"),
+        (pl.col("log_age") - pl.col("log_age").mean().over("request_id")).alias("rq_dev_age")).collect()
+    names = ["log_age", "log_age59", "rq_rank_age", "rq_dev_age"]
+    return frame.select(names).to_numpy().astype(np.float32), frame["feature1"], names
+
+
+def replace_upload_time(args, x_fit, x_valid, columns):
+    from feature_screen import CUTOFF
+
+    values, stamp, names = age_frame(args.data / "train.parquet", args.rows)
+    is_valid = (stamp >= CUTOFF).to_numpy()
+    keep = [i for i, c in enumerate(columns) if c not in ("feature58", "feature59")]
+    assert len(keep) == len(columns) - 2, "expected raw feature58/feature59 columns"
+    return (np.hstack([x_fit[:, keep], values[~is_valid]]), np.hstack([x_valid[:, keep], values[is_valid]]),
+            [columns[i] for i in keep] + names)
+
+
 def cosine_columns(data, rows):
     import polars as pl
 
@@ -162,6 +193,8 @@ def build(args):
         x_fit, x_valid = np.hstack([x_fit, values[~is_valid]]), np.hstack([x_valid, values[is_valid]])
         columns = columns + names
         del values
+    if args.age:
+        x_fit, x_valid, columns = replace_upload_time(args, x_fit, x_valid, columns)
     args.matrices.mkdir(parents=True, exist_ok=True)
     for name, value in dict(x_fit=x_fit, y_fit=y_fit, x_valid=x_valid, y_valid=y_valid, row_ids=row_ids).items():
         np.save(args.matrices / f"{name}.npy", value)
@@ -486,6 +519,7 @@ def main():
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--cosines", action="store_true", help="Append T035 user x item cosine features")
     parser.add_argument("--entity", action="store_true", help="build: append label-free item/creator features")
+    parser.add_argument("--age", action="store_true", help="build: replace feature58/59 with log item age")
     parser.add_argument("--rounds", type=int, default=20000)
     parser.add_argument("--catboost-ids", action="store_true", help="catboost: add raw user/item/ID columns")
     parser.add_argument("--fit-only", action="store_true", help="build_full: train rows before the cutoff only")

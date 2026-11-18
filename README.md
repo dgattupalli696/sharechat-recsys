@@ -84,6 +84,9 @@ submission unless it has an entry in `submitted/`.
 | S015 | [XGBoost-heavy 5-way](submitted/015-5way-xgb60/README.md) | XGB 60% | — | 0.88637 | Submission 58451238 |
 | S016 | [5-way TabM×2 + CatBoost-IDs](submitted/016-5way-tabm2-cbids/README.md) | S011 components, TabM ×2 | — | 0.88645 | Submission 58451245; blend saturated |
 | S017 | [S011 + T040 fusion-cosine](submitted/017-s011-fusioncos/README.md) | 5/6 S011 rank + 1/6 T040 train-only checkpoint | 0.89106 | **0.88648** | Submission 58479943; best (+0.00002) |
+| S018 | [T048 listwise-1.0 train-only](submitted/018-t048-listwise1/README.md) | Holdout reliability check | 0.88420 | 0.87973 | Submission 58510176; gap 0.00447 |
+| S019 | [T040 FinalMLP-gated train-only](submitted/019-t040-finalmlp-gated/README.md) | Holdout reliability check | 0.88854 | 0.88377 | Submission 58510194; gap 0.00477 |
+| S020 | [T039 XGBoost depth12 train-only](submitted/020-t039-xgbd12/README.md) | Holdout reliability check | 0.88967 | 0.88482 | Submission 58510206; gap 0.00485 |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
 comparable. Do not infer that either beats B001: B001 used a different, full-data
