@@ -62,6 +62,7 @@ submission unless it has an entry in `submitted/`.
 | T048 | [TabM listwise + capacity](trials/048-tabm-listwise-capacity/) | Kaggle T4 / holdout | Best w256-b3 0.88978 | Rejected | Blend ≤ 0.89113 vs base 0.89109 |
 | T049 | [XGBoost entity features](trials/049-xgboost-entity-features/) | Kaggle T4 / holdout | — | Rejected | No blend gain |
 | T050 | [Multi-tower](trials/050-multitower/) | Kaggle T4×2 / holdout | content-only 0.88479 | Rejected | In-sample GBDT leaves overfit; blend 0.89098 < base |
+| T051 | [XGBoost item age](trials/051-xgboost-item-age/) | Kaggle T4 / holdout | depth12 0.88953, leaves511 0.88958 | Rejected | feature58/59 → log age (+request rank/dev); vs T036 0.88967/0.88959. LightGBM-screen gain (+0.00027) does not transfer; refits cancelled |
 | — | TabICL screen (private kernel) | T4, 50k context, 30k holdout rows | 0.88052 | Rejected | Blend P(gain>0)=0.055; 80k context OOM |
 | — | [Horizon drift screen](horizon_screen.py) | LightGBM fit first 32h, scored 0–40h ahead | 0.870→0.873 by horizon | Rejected | No horizon decay; drop-3 gain (+0.005) was native-categorical overfit, +0.0004 with numeric codes |
 | — | Duration proxy | feature54 = duration seconds (45–300) | watch rate 7.5%→0.07% | Rejected | Already used raw + request rank/dev/gap |
