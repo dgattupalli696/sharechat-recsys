@@ -499,7 +499,22 @@ def refit(args):
             params["seed"] = int(seed)
         if params.pop("_categorical", False):
             raise ValueError("Native categorical configs are not supported in refit")
-        train = xgb.QuantileDMatrix(np.load(m / "x_train.npy", mmap_mode="r"), y_train, max_bin=params["max_bin"])
+        x_train = np.load(m / "x_train.npy", mmap_mode="r")
+        if args.pseudo:
+            z = np.load(args.pseudo)
+            order = np.argsort(z["ids"])
+            pos = order[np.searchsorted(z["ids"], test_ids, sorter=order)]
+            if not np.array_equal(z["ids"][pos], test_ids):
+                raise ValueError("Pseudo-label ids differ from test ids")
+            soft = z["probabilities"][pos].astype(np.float32)
+            weight = np.concatenate([np.ones(len(y_train), np.float32),
+                                     np.full(len(soft), args.pseudo_weight, np.float32)])
+            x_all = np.vstack([x_train, np.load(m / "x_test.npy", mmap_mode="r")])
+            train = xgb.QuantileDMatrix(x_all, np.concatenate([y_train.astype(np.float32), soft]),
+                                        weight=weight, max_bin=params["max_bin"])
+            del x_all
+        else:
+            train = xgb.QuantileDMatrix(x_train, y_train, max_bin=params["max_bin"])
         model = xgb.train(params, train, int(rounds))
         test = xgb.QuantileDMatrix(np.load(m / "x_test.npy", mmap_mode="r"), max_bin=params["max_bin"], ref=train)
         predictions = model.predict(test).astype(np.float32)
@@ -510,7 +525,8 @@ def refit(args):
         model.save_model(args.output / f"{tag}.ubj")
         if template is not None:
             template.with_columns(pl.Series("watched", predictions)).write_csv(args.output / f"submission-{tag}.csv")
-        result = {"rounds": int(rounds), "training_rows": int(len(y_train)), "features": len(meta["columns"]),
+        result = {"rounds": int(rounds), "training_rows": int(len(y_train)), "pseudo": str(args.pseudo or ""),
+                  "pseudo_weight": args.pseudo_weight if args.pseudo else 0, "features": len(meta["columns"]),
                   "seconds": time.time() - began, "params": params}
         (args.output / f"{tag}-refit.json").write_text(json.dumps(result, indent=2) + "\n")
         print(tag, json.dumps({k: result[k] for k in ["rounds", "training_rows", "seconds"]}), flush=True)
@@ -529,7 +545,7 @@ def main():
     parser.add_argument("--cosines", action="store_true", help="Append T035 user x item cosine features")
     parser.add_argument("--entity", action="store_true", help="build: append label-free item/creator features")
     parser.add_argument("--age", action="store_true", help="build: replace feature58/59 with log item age")
-    parser.add_argument("--pseudo", type=Path, help="worker: npz (row_ids, probabilities) soft labels for holdout rows")
+    parser.add_argument("--pseudo", type=Path, help="worker: npz (row_ids, probabilities) soft labels for holdout rows; refit: npz (ids, probabilities) for test rows")
     parser.add_argument("--pseudo-weight", type=float, default=1.0)
     parser.add_argument("--rounds", type=int, default=20000)
     parser.add_argument("--catboost-ids", action="store_true", help="catboost: add raw user/item/ID columns")
