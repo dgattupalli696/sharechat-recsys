@@ -1,0 +1,22 @@
+{
+  "status": "PREPARED",
+  "baseline_trial": "T036",
+  "configs": [
+    "depth12_node"
+  ],
+  "teachers": [
+    "self-w1",
+    "blend-w1",
+    "blend-w05"
+  ],
+  "source_sha256": {
+    "feature_screen.py": "b8ae57d999deaca182375c63c90fadcaa8e0042ca57eef2f259525be416b2315",
+    "request_screen.py": "4a473091fadf8b4d928b01a29c9af143deec94987546ab65c770ee14e8bd56f2",
+    "classic_screen.py": "118cd5462de8a09931448ccfaa5fc8c4dd07552f03d4c68f6c6ebd16cac36fbe",
+    "xgb_tune.py": "68d04b9363814399cead8efe440351fd19cfa457aae88b9a55e03601679d0ed4",
+    "embed_screen.py": "cfe6446b64db7b91e10b781f7aec6042b042671d002593f8b7c3c940296cb48a",
+    "cf_screen.py": "7fe9c68142a12fedeed36ba92ddf181b6cbe033923f7aee8321d53bdec879b3c"
+  },
+  "notebook_sha256": "fc6a4aa8c552cd8111718391f9ca335d4106fb42f9c9dcde630382fd120afd0d",
+  "competition_submission": false
+}

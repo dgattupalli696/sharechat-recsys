@@ -223,7 +223,16 @@ def worker(args):
             types["qid"] = np.cumsum(np.r_[True, codes[1:] != codes[:-1]]).astype(np.uint32)
         elif qid == "none":
             types["qid"] = np.zeros(len(y_fit), dtype=np.uint32)
-        fit = xgb.QuantileDMatrix(np.asarray(x_fit), y_fit, max_bin=params["max_bin"], **types)
+        if args.pseudo:
+            # Self-training: append the unlabeled rows with teacher soft labels; early stopping still uses true labels.
+            z = np.load(args.pseudo)
+            pos = {r: i for i, r in enumerate(z["row_ids"])}
+            soft = z["probabilities"][[pos[r] for r in row_ids]].astype(np.float32)
+            fit = xgb.QuantileDMatrix(np.vstack([x_fit, x_valid]), np.concatenate([y_fit, soft]),
+                                      weight=np.r_[np.ones(len(y_fit)), np.full(len(soft), args.pseudo_weight)],
+                                      max_bin=params["max_bin"], **types)
+        else:
+            fit = xgb.QuantileDMatrix(np.asarray(x_fit), y_fit, max_bin=params["max_bin"], **types)
         types.pop("qid", None)
         valid = xgb.QuantileDMatrix(np.asarray(x_valid), y_valid, ref=fit, max_bin=params["max_bin"], **types)
         model = xgb.train(params, fit, args.rounds, evals=[(valid, "holdout")],
@@ -520,6 +529,8 @@ def main():
     parser.add_argument("--cosines", action="store_true", help="Append T035 user x item cosine features")
     parser.add_argument("--entity", action="store_true", help="build: append label-free item/creator features")
     parser.add_argument("--age", action="store_true", help="build: replace feature58/59 with log item age")
+    parser.add_argument("--pseudo", type=Path, help="worker: npz (row_ids, probabilities) soft labels for holdout rows")
+    parser.add_argument("--pseudo-weight", type=float, default=1.0)
     parser.add_argument("--rounds", type=int, default=20000)
     parser.add_argument("--catboost-ids", action="store_true", help="catboost: add raw user/item/ID columns")
     parser.add_argument("--fit-only", action="store_true", help="build_full: train rows before the cutoff only")
