@@ -87,6 +87,7 @@ submission unless it has an entry in `submitted/`.
 | S018 | [T048 listwise-1.0 train-only](submitted/018-t048-listwise1/README.md) | Holdout reliability check | 0.88420 | 0.87973 | Submission 58510176; gap 0.00447 |
 | S019 | [T040 FinalMLP-gated train-only](submitted/019-t040-finalmlp-gated/README.md) | Holdout reliability check | 0.88854 | 0.88377 | Submission 58510194; gap 0.00477 |
 | S020 | [T039 XGBoost depth12 train-only](submitted/020-t039-xgbd12/README.md) | Holdout reliability check | 0.88967 | 0.88482 | Submission 58510206; gap 0.00485 |
+| S021 | [S017 + listwise-1.0](submitted/021-s017-listwise1/README.md) | 5/6 S017 rank + 1/6 T048 listwise-1.0 | — | 0.88621 | Submission 58510374; −0.00027 vs S017 |
 
 T002-A and T002-B share the same sampled rows and holdout and are directly
 comparable. Do not infer that either beats B001: B001 used a different, full-data
