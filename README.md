@@ -66,7 +66,7 @@ submission unless it has an entry in `submitted/`.
 | — | [Horizon drift screen](horizon_screen.py) | LightGBM fit first 32h, scored 0–40h ahead | 0.870→0.873 by horizon | Rejected | No horizon decay; drop-3 gain (+0.005) was native-categorical overfit, +0.0004 with numeric codes |
 | — | Duration proxy | feature54 = duration seconds (45–300) | watch rate 7.5%→0.07% | Rejected | Already used raw + request rank/dev/gap |
 | — | Item age screen (Kaggle CPU) | LightGBM; log age from f58/f59 + request rank/dev | full holdout base 0.88617 → age-replaces-raw **0.88644** | Candidate | Half data +0.00066; age-normalised counter rates add nothing |
-| — | Tenure / velocity / ranks screen (Kaggle CPU) | Half data; tenure = f1 − f57 (f57 ≈ signup time) | +tenure **0.88412** vs 0.88324 | Tenure candidate | Item counter velocity 0.88289, f252–286 request ranks 0.88307: rejected; full-data tenure kernel running |
+| — | Tenure / velocity / ranks screen (Kaggle CPU) | Half data; tenure = f1 − f57 (f57 ≈ signup time) | +tenure **0.88412** vs 0.88324 | Rejected | Full data: +tenure 0.88569, age+tenure 0.88625 (< age alone 0.88644). Velocity 0.88289, request ranks 0.88307 also rejected |
 | S001 | [Submitted B001](submitted/001-catboost-gpu/README.md) | Full-data refit | 0.816026 | 0.80699 | Submission 58271142; Kaggle notebook version 2 |
 | S002 | [Submitted T006 checkpoint](submitted/002-vector-attention/README.md) | Unchanged epoch-1 checkpoint | 0.827024 | **0.81905** | Submission 58275874; no refit; +0.01206 vs S001 |
 | S003 | [Submitted best TabM k32](submitted/003-tabm-k32/README.md) | Unchanged T014 seed-42 checkpoint | **0.840454** | **0.83349** | Submission 58291755; no refit; +0.01444 vs S002 |
