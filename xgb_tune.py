@@ -507,12 +507,30 @@ def refit(args):
             if not np.array_equal(z["ids"][pos], test_ids):
                 raise ValueError("Pseudo-label ids differ from test ids")
             soft = z["probabilities"][pos].astype(np.float32)
-            weight = np.concatenate([np.ones(len(y_train), np.float32),
-                                     np.full(len(soft), args.pseudo_weight, np.float32)])
-            x_all = np.vstack([x_train, np.load(m / "x_test.npy", mmap_mode="r")])
-            train = xgb.QuantileDMatrix(x_all, np.concatenate([y_train.astype(np.float32), soft]),
-                                        weight=weight, max_bin=params["max_bin"])
-            del x_all
+            parts = [(x_train, y_train.astype(np.float32), 1.0),
+                     (np.load(m / "x_test.npy", mmap_mode="r"), soft, args.pseudo_weight)]
+            batches = [(x, y, w, s) for x, y, w in parts for s in range(0, len(y), 262144)]
+
+            class Batches(xgb.DataIter):
+                """Streams train + pseudo-labelled test in chunks so no stacked copy is materialised."""
+
+                def __init__(self):
+                    self.i = 0
+                    super().__init__()
+
+                def next(self, feed):
+                    if self.i == len(batches):
+                        return False
+                    x, y, w, s = batches[self.i]
+                    e = min(s + 262144, len(y))
+                    feed(data=np.ascontiguousarray(x[s:e]), label=y[s:e], weight=np.full(e - s, w, np.float32))
+                    self.i += 1
+                    return True
+
+                def reset(self):
+                    self.i = 0
+
+            train = xgb.QuantileDMatrix(Batches(), max_bin=params["max_bin"])
         else:
             train = xgb.QuantileDMatrix(x_train, y_train, max_bin=params["max_bin"])
         model = xgb.train(params, train, int(rounds))
