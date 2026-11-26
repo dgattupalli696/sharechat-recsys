@@ -1,0 +1,3 @@
+import json
+from pathlib import Path
+t=Path(__file__).resolve().parent;prev=t.parent/'069-row-only-duration-budget';nb=json.loads((prev/'notebook.ipynb').read_text());code=''.join(nb['cells'][0]['source']).split("for args in [['prepare']]",1)[0]+f"Path('/kaggle/working/t072.py').write_text({(t/'worker.py').read_text()!r})\n";code+="for args in [['prepare']]+[[f,a] for f in ['earlier','primary'] for a in ['xgb-base','xgb-products','cat-base','cat-products']]:\n    subprocess.run([sys.executable,'-u','/kaggle/working/t072.py',*args],check=True)\n";compile(code,'experiment','exec');nb['cells'][0]['source']=code.splitlines(True);(t/'notebook.ipynb').write_text(json.dumps(nb,indent=1)+'\n');(t/'kernel-metadata.json').write_bytes((prev/'kernel-metadata.json').read_bytes())

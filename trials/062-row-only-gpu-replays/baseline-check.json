@@ -1,0 +1,12 @@
+{
+  "ensemble": {
+    "file": "submission-full-ensemble.csv",
+    "sha256": "3aebcff63cb6a5cd9ba265433fc3cba139689a9a5a418ae77688f6978e19187b",
+    "rows": 1037090
+  },
+  "tabm": {
+    "file": "submission-full-tabm.csv",
+    "sha256": "cf4d079fa31c328ea8702a8bb94d6f8f797cf8421192bdf91648bb2d21c009d6",
+    "rows": 1037090
+  }
+}

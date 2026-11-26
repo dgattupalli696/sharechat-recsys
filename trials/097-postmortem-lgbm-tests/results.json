@@ -1,0 +1,9 @@
+{
+  "row_control": 0.8408459691642248,
+  "row_drift_ctrl": 0.8406674320154457,
+  "row_distilled": 0.5,
+  "rq_control": 0.8875701569150053,
+  "rq_plus_margin2_pos": 0.887597929841819,
+  "rq_plus_future_deltas": 0.8881962167841141,
+  "seconds": 1282.534159666975
+}

@@ -1,0 +1,3 @@
+# T064 – pointwise S017 recipe replay
+
+No new fitting or submission. Use all 307,528 aligned chronological holdout predictions. Reconstruct S011's five slots as single-seed row-only T014 k32, T018 three-seed row-only k32, T062 depth12/leaves511 and CatBoost-IDs. The first two are correlated proxies for the old narrow/wide k32 variants; once request features are removed, those are no longer distinct inputs. Tree components use the single-seed row-only validation fits. Add the exact row-only fusion architecture (T014 cross-masked-fusion-cosine) at S017's fixed 1/6 weight. Compare both literal six-slot and fusion-only addition to S022 using pointwise probability arithmetic, never a test-wide rank. Primary screening only. No weight search or inferred public score.

@@ -1,0 +1,8 @@
+{
+  "arm": "C",
+  "standalone_auc": 0.8898638775895927,
+  "blend_auc": 0.891090579035047,
+  "best_round": 863,
+  "seconds": 2621.089267874835,
+  "peak_rss_gib": 7.72265625
+}

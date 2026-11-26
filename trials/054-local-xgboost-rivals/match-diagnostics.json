@@ -1,0 +1,20 @@
+[
+  {
+    "fold": 0,
+    "pairs": 160000,
+    "matched_fraction": 0.9489227843008157,
+    "unseen_request_pair_auc": 0.7268346955555556
+  },
+  {
+    "fold": 1,
+    "pairs": 160000,
+    "matched_fraction": 0.9486839310952554,
+    "unseen_request_pair_auc": 0.727149958888889
+  },
+  {
+    "fold": 2,
+    "pairs": 160000,
+    "matched_fraction": 0.9488909683739564,
+    "unseen_request_pair_auc": 0.727081015
+  }
+]

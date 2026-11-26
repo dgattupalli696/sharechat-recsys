@@ -1,0 +1,74 @@
+{
+  "rows": [
+    153753,
+    153775
+  ],
+  "weights": [
+    0,
+    0.025,
+    0.05,
+    0.1,
+    0.16666666666666666,
+    0.25,
+    0.375,
+    0.5,
+    0.75,
+    1
+  ],
+  "results": {
+    "S022": {
+      "fusion": {
+        "weight": 0,
+        "selection_gain": 0.0,
+        "later_gain": 0.0
+      },
+      "six_slot": {
+        "weight": 0.16666666666666666,
+        "selection_gain": 3.535630034823267e-05,
+        "later_gain": 1.4994165890014344e-06
+      },
+      "leaves511": {
+        "weight": 0.25,
+        "selection_gain": 0.00022475117341624884,
+        "later_gain": 0.00010700712124389611
+      },
+      "catboost_ids": {
+        "weight": 0,
+        "selection_gain": 0.0,
+        "later_gain": 0.0
+      },
+      "T060_priors": {
+        "weight": 0.25,
+        "selection_gain": 0.00026727777686996745,
+        "later_gain": 0.00021352040815791895
+      }
+    },
+    "T065": {
+      "fusion": {
+        "weight": 0,
+        "selection_gain": 0.0,
+        "later_gain": 0.0
+      },
+      "six_slot": {
+        "weight": 0,
+        "selection_gain": 0.0,
+        "later_gain": 0.0
+      },
+      "leaves511": {
+        "weight": 0.16666666666666666,
+        "selection_gain": 4.851819126450163e-05,
+        "later_gain": -5.561930182196306e-06
+      },
+      "catboost_ids": {
+        "weight": 0,
+        "selection_gain": 0.0,
+        "later_gain": 0.0
+      },
+      "T060_priors": {
+        "weight": 0.16666666666666666,
+        "selection_gain": 7.294192874851557e-05,
+        "later_gain": 6.255041189118238e-05
+      }
+    }
+  }
+}

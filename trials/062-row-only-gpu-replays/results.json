@@ -1,0 +1,32 @@
+{
+  "ensemble": {
+    "file": "submission-full-ensemble.csv",
+    "sha256": "3aebcff63cb6a5cd9ba265433fc3cba139689a9a5a418ae77688f6978e19187b",
+    "rows": 1037090
+  },
+  "tabm": {
+    "file": "submission-full-tabm.csv",
+    "sha256": "cf4d079fa31c328ea8702a8bb94d6f8f797cf8421192bdf91648bb2d21c009d6",
+    "rows": 1037090
+  },
+  "depth12": {
+    "auc": 0.8402881964118613,
+    "fixed_blend_auc": 0.8415401938202239,
+    "delta": 0.0007344404956382
+  },
+  "leaves511": {
+    "auc": 0.8399283718343238,
+    "fixed_blend_auc": 0.8414714656387728,
+    "delta": 0.0006657123141871057
+  },
+  "catboost-ids": {
+    "auc": 0.8231255869794663,
+    "fixed_blend_auc": 0.839642786591609,
+    "delta": -0.0011629667329767779
+  },
+  "candidate": {
+    "path": "artifacts/local-t062/submission-full-rowonly-75-25.csv",
+    "sha256": "ee704c42a632686b05fbd4caa1adf4d3b91be7a2ce05fb711f07ed491e336dad",
+    "rows": 1037090
+  }
+}

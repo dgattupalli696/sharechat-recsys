@@ -1,0 +1,21 @@
+{
+  "059": {
+    "primary_gain_vs_T016": 0.0007667131568722674,
+    "primary_gain_vs_matched_T018": 0.0007990482598617676,
+    "earlier_anchor": 0.8375490212414675,
+    "earlier_standalone": 0.836031344493988,
+    "earlier_blend": 0.8382278172247029,
+    "earlier_gain": 0.0006787959832353918,
+    "paired_95pct": [
+      0.0004910209916873437,
+      0.0008724636111008488
+    ],
+    "decision": "confirmed"
+  },
+  "060": {
+    "primary_gain_vs_T016": 0.0007349062995906097,
+    "primary_gain_vs_matched_T018": 0.0007664681769599113,
+    "decision": "did not clear primary gate"
+  },
+  "seconds": 1346.291230916977
+}

@@ -1,0 +1,3 @@
+# T086 – train-only match landmarks
+
+Go beyond T083 linear alignment. For three existing viewer/video vector pairs fit 24 representative points in [normalized viewer, normalized video, coordinate product] space on 32,768 seed-42 training-prefix rows. Feed the 72 squared distances to the same compact T072 tree (1,600 rounds), with an equal-width random training exemplar control. Invalid pairs are missing; no test rows enter fitting. Four fits, both temporal folds; direct additions to frozen T083, weights chosen on earlier fold including zero. Gate: both folds better than T083 and primary >=+0.0003 vs S023. No submission. Timings and reports as T083.

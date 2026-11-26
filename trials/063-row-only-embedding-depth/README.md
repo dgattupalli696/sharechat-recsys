@@ -1,0 +1,8 @@
+# T063 – Row-only embedding features × tree depth
+
+Public target >0.83609 (heuristic benchmark), incumbent S022 0.83466 public / 0.84154019 primary. Frozen 2×2 experiment: matched 900-round XGBoost depths 12 and 6, seed 42, with either T062's 594 inputs or those plus 448 raw vector coordinates, 49 cross-vector dots adjusted by their two neighboring scalar fields, and 14 norms. The dot-plus-bias hypothesis was also reported in [Arsen Zakaryan’s row-independent notebook](https://www.kaggle.com/code/arsen123/sharechat-row-independent-verified-ensemble); the semantics of the anonymous fields are not known. Width/budget fixed across folds; no holdout early stopping. Raw values only. No request ID or test-set transforms.
+
+Eight fits: full primary and predeclared earlier chronological folds, replay depth12 base on both. Fixed 75% original T016 blend + 25% candidate probability on primary; use T018 earlier neural anchor as the same-fold comparison. Reject absent positive earlier matched delta. Require >=0.0003 primary improvement over S022 and improvement over matched control for full-data refit. Local validation cannot certify a public score. Generate frozen notebook with `python build.py`; after remote completion run `python score.py <downloaded t063 folder>`. No automatic competition upload.
+## Results
+
+Kaggle v35 completed all eight fits. The primary control reproduced S022's validation blend exactly. Enriched depth12 changed blend AUC by +0.0000035 primary and −0.0000404 earlier. Depth6 with enriched features was the best standalone tree on both folds but reduced blend AUC by 0.0001028 and 0.0001258 respectively. No variant met the two-fold refit gate. See `results.json` for the full comparison.

@@ -1,0 +1,3 @@
+# T089 – diagnostic on the historical request-context pipeline
+
+T088 tested blending completed models. T089 changes the **inputs** to one S017 component, the original T036 depth-12 XGBoost. Add duration contrasts alone (36), paired-embedding features alone (60), or both. All transforms fit on the chronological training prefix only. Same full split, seed 42, CPU settings, early stopping and five frozen ensemble peers as T054-A. Compare global standalone and blend AUC vs matched CPU control, report paired 400-request bootstrap for each arm. Holdout also selects the best round. This is exploratory validation of feature transfer, not an eligible submission pipeline. No test predictions. Run `python trials/089-offline-s017-feature-transfer/run.py`.

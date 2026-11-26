@@ -1,0 +1,3 @@
+# T090 – Enriched row-only TabM k32 (w128/w256) and DCNv2-r32
+
+Train TabM k32 (PLR + pairwise vector crosses + masked high-cardinality categoricals) and DCNv2-r32 on the enriched row-only feature set: 584 numeric + 49 dot+bias + 49 user×item cosines + 36 duration interactions + 11 stationary age / time-of-day / rate interactions (729 dense features) + 14 vector embeddings (476) + 91×4 pairwise vector crosses + low-cardinality categoricals. Strictly zero `request_id` usage; train-only vocabularies and scalers. Two complete chronological folds (earlier and primary), 5 fits per fold (TabM w128 seeds 42/43, TabM w256 seeds 42/43, DCNv2 w128 seed 42). Evaluated against S024 (T086) on both folds. No submission.

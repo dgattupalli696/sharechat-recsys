@@ -1,0 +1,1 @@
+{"s023":0.83125,"t069_duration_depth6_round2400":0.11875,"t070_gated_epoch8":0.05,"formula":"0.95 * (0.875 * S023 + 0.125 * duration) + 0.05 * gated"}

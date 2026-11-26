@@ -1,0 +1,9 @@
+{
+  "ref": "58677554",
+  "fileName": "submission-rowonly-half-four-trees.csv",
+  "date": "2026-11-21 16:19:08.970000",
+  "description": "S023 full-data row-only probability blend: 50% T021 + 12.5% each of four XGBoost variants (T062/T066); validation 0.8419895",
+  "status": "SubmissionStatus.COMPLETE",
+  "publicScore": "0.83504",
+  "privateScore": ""
+}

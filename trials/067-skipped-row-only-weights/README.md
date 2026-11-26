@@ -1,0 +1,3 @@
+# T067 – revisit skipped row-only blend components
+
+Test additions to both S022 and the frozen T065 winner. Select one probability weight per candidate using only the earlier chronological half of the existing primary holdout, then apply unchanged to the later half. Timestamp ties stay together. Neither half is a new independent model-validation fold; underlying models and architectures were previously assessed on the primary holdout. Screen for whether a costly additional time-fold refit is warranted (target +0.0003 incremental AUC). No test-dependent ranks, refit or submission. Inputs and results: `run.py`, `results.json`.

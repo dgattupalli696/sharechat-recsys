@@ -1,0 +1,3 @@
+# T092 – Super-enriched row-only XGBoost (d5/d6/d7) + CatBoost GPU (d6/d8)
+
+Build a 1,240-feature strictly row-independent matrix adding user×item watch-rate products/logit-sums, top-cosine × rate/duration crosses, user-vs-item watch-time log-ratios, watch-to-skip ratios, stationary ages, 49 dot+bias, 49 cosines, 36 duration interactions, and 448 raw embeddings. Train regularized XGBoost (depths 5, 6, 7) and CatBoost GPU (depths 6, 8 with low-cardinality categoricals only — excluding high-cardinality user/item/creator IDs) on both chronological folds. Zero `request_id` usage; singleton invariance verified. Score individually and jointly with T090 enriched TabM/DCNv2 against S024. No submission.

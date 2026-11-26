@@ -1,0 +1,3 @@
+# T084 – dimensionality of the T083 paired rotation
+
+Predeclare ranks 4 and 24 against T083's original rank 12. Keep the same four leading products, two aggregate summaries per pair, same prefix fitting rows, ridge, seed 42, 1,600 tree rounds and fold protocol. Four GPU fits. Candidate mean across the three ranks tests diversity; include the unmodified rank-12 control with the identical weight grid. Select the recipe on earlier, evaluate frozen on primary relative to the original T083 blend. A candidate must improve over T083 on both and meet the unrounded +0.0003 primary gate vs S023. No public submission. Build freezes source and notebook; scoring and runtime records follow T083.

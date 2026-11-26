@@ -1,0 +1,9 @@
+{
+  "ref": "58816244",
+  "fileName": "submission-full-rowonly-superblend.csv",
+  "date": "2026-11-24 06:43:48.257000",
+  "description": "S025 full-data row-only super-blend (7/11 S024 + 2/11 T092 xgb_d6 + 1/11 T095 q_tabm_2s + 1/11 T094 dcnv2_r64, logit blend); val 0.842412",
+  "status": "SubmissionStatus.COMPLETE",
+  "publicScore": "0.83562",
+  "privateScore": ""
+}

@@ -1,0 +1,23 @@
+{
+  "status": "VERIFIED",
+  "source_revision": "e9f933a",
+  "kernel_version": 14,
+  "full_training_rows": 1537638,
+  "preprocessing_training_rows": 1537638,
+  "test_rows": 1037090,
+  "validation_auc": null,
+  "competition_submission": false,
+  "component_predictions_sha256": "548472e3afcfd85c9eb8e17cd16848eb07c1e387fa7f34eb358587fed78fdeda",
+  "submissions": {
+    "tabm": {
+      "file": "submission-full-tabm.csv",
+      "sha256": "cf4d079fa31c328ea8702a8bb94d6f8f797cf8421192bdf91648bb2d21c009d6",
+      "rows": 1037090
+    },
+    "ensemble": {
+      "file": "submission-full-ensemble.csv",
+      "sha256": "3aebcff63cb6a5cd9ba265433fc3cba139689a9a5a418ae77688f6978e19187b",
+      "rows": 1037090
+    }
+  }
+}

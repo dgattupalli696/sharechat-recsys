@@ -1,0 +1,6 @@
+{
+  "file": "artifacts/local-t096/submission-full-rowonly-superblend.csv",
+  "rows": 1037090,
+  "sha256": "e81c9b772a8f409ebf47767787dd4c7a8f2cbf344bcff78bcec9520990eb6e8f",
+  "mean_pred": 0.047363063657619914
+}

@@ -1,0 +1,11 @@
+{
+  "train_rows": 1230110,
+  "validation_rows": 307528,
+  "features": 594,
+  "standalone_auc": 0.8404230074393567,
+  "T016_auc": 0.8408057533245857,
+  "fixed_blend_auc": 0.8415724664568722,
+  "delta": 0.0007667131322864895,
+  "batch_invariance_probe_rows": 20,
+  "seconds": 2013.0997572501656
+}

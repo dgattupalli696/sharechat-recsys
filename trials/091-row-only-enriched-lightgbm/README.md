@@ -1,0 +1,3 @@
+# T091 – Local CPU enriched row-only LightGBM (standard + extra_trees)
+
+Train two genuinely distinct LightGBM models (standard `num_leaves=63` and `extra_trees=True, num_leaves=127`) with native low-cardinality categoricals (`drop_high=True`, min count 10) on the 729 enriched row-only features from T090 (584 numeric + 49 dot+bias + 49 cosines + 36 duration + 11 age/rate interactions). Strictly zero `request_id` usage. Evaluated on both `earlier` and `primary` chronological folds against S024 (T086). Runs locally on Mac CPU in parallel with Kaggle GPU T090. Temporary dense cache is removed after scoring to preserve local disk space. No submission.

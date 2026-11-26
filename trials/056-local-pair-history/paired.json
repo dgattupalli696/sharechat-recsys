@@ -1,0 +1,18 @@
+{
+  "association": {
+    "control": "popularity",
+    "delta": 1.2355787994966505e-05,
+    "request_bootstrap_95pct": [
+      -3.2261483020626366e-05,
+      5.991614104795259e-05
+    ]
+  },
+  "pair-outcome": {
+    "control": "history",
+    "delta": -5.9125067556342614e-06,
+    "request_bootstrap_95pct": [
+      -4.967241927909815e-05,
+      3.7888085253209854e-05
+    ]
+  }
+}

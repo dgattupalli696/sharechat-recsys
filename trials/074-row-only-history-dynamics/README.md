@@ -1,0 +1,5 @@
+# T074 – row-local time and historical-rate changes
+
+After T073 tied T072, retain T072 as benchmark. Three new arms on both chronological folds, all matched to the previously validated compact seed-42 depth-8 XGB, 1,600 rounds. (1) Three elapsed-time fields, signed timestamp lag, sine/cosine of time of day. (2) Six disjoint-window rates from previously verified numerator/denominator pairs, shrunk toward the previous cumulative rate, plus their six contrasts. (3) Both. Work only within each raw row. Not the T055 unsmoothed rate test on a request-context baseline. Timestamps are proxies; feature semantics are not assumed known. Invalid differences are missing.
+
+Use the unchanged T073 scoring protocol: compare alternatives and a four-model mean vs the T072 frozen blend and weight-only control; select on earlier fold, evaluate without tuning on primary. Promote for positive change vs T072 on both and >=0.0003 primary improvement vs S023. Build freezes exact sources in notebook, score.py consumes downloaded t074 directory, timings recorded by worker. No submission.
